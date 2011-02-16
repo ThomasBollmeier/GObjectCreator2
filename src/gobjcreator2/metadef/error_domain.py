@@ -7,3 +7,9 @@ class ErrorDomain(PackageElement):
                  package = None):
 
         PackageElement.__init__(name, package)
+
+        self.error_codes = []
+
+    def add_error_code(self, error_code):
+
+        self.error_codes.append(error_code)

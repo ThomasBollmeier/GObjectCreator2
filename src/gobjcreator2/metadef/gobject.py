@@ -4,7 +4,7 @@ from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method_info import MethodInfo
 from gobjcreator2.metadef.enums import MethodInheritance
 
-class GClass(PackageElement, Type):
+class GObject(PackageElement, Type):
 
     def __init__(self,
                  name,

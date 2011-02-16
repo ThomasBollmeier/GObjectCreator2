@@ -24,3 +24,15 @@ class Method(object):
     def add_parameter(self, param):
 
         self.parameters.append(param)
+
+class InterfaceMethod(Method):
+
+    def __init__(self,
+                 name,
+                 result = NULL,
+                 result_modifiers = []
+                 ):
+
+        Method.__init__(self, name, result, result_modifiers,
+                        Visibility.PUBLIC, Scope.INSTANCE,
+                        MethodInheritance.ABSTRACT)

@@ -1,0 +1,41 @@
+package demo {
+
+    gobject Animal {
+
+        abstract;
+
+        method walk {
+            inheritance: abstract;
+        }
+
+    }
+
+    ginterface Mammal {
+
+        method feed {
+            parameter child { type: Mammal; }
+        }
+
+    }
+
+    gobject Human {
+
+        super Animal;
+
+        implements Mammal;
+
+        property name {
+            type: string;
+            access: initial-write;
+            auto_create;
+        }
+
+        constructor {
+            parameter name { type: string; bind_property: name; }
+        }
+
+        override walk;
+
+    }
+
+}

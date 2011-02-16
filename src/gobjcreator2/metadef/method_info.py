@@ -21,7 +21,7 @@ class MethodInfo(object):
 
     def __str__(self):
 
-        if self.defined_in.__class__.__name__ == "GClass":
+        if self.defined_in.__class__.__name__ == "GObject":
             def_name = "class"
         else:
             def_name = "interface"
