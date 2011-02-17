@@ -2,7 +2,7 @@ from gobjcreator2.metadef.package import PackageElement
 from gobjcreator2.metadef.types import Type
 from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method_info import MethodInfo
-from gobjcreator2.metadef.enums import MethodInheritance
+from gobjcreator2.metadef.constants import MethodInheritance
 
 class GObject(PackageElement, Type):
 
@@ -27,6 +27,10 @@ class GObject(PackageElement, Type):
     def get_name(self):
 
         return self.name
+
+    def set_super_class(self, super_class):
+
+        self._super_class = super_class
 
     def implement(self, interface):
 

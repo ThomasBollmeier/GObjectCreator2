@@ -192,7 +192,7 @@ attributeElement
 	;
 
 typeName
-	:   absoluteName -> ^(TYPE_NAME absoluteName)
+	:   typePath -> ^(TYPE_NAME typePath)
 	|   'unsigned '? 'integer' -> ^(TYPE_NAME 'unsigned '? 'integer')
 	|   'unsigned '? 'long' -> ^(TYPE_NAME 'unsigned '? 'long')
 	|	(val='boolean'
@@ -208,8 +208,8 @@ typeArg
     |   'list' '(' typeArg ')' -> ^(LIST_OF typeArg)
     ;
 
-absoluteName
-    : (ID '::')* ID
+typePath
+    :   ('::' ID '::')?(ID '::')* ID
     ;
 
 COMMENT

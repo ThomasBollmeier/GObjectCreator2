@@ -1,5 +1,3 @@
-from gobjcreator2.metadef.enums import TypeModifier
-
 class Parameter(object):
 
     def __init__(self,

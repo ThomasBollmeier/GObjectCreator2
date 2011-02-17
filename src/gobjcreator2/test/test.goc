@@ -1,3 +1,13 @@
+gtype MyType;
+
+genum MyConstants {
+
+    code ONE;
+    code TWO;
+    code THREE;
+
+}
+
 package demo {
 
     gobject Animal {

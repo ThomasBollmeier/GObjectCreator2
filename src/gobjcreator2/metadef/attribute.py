@@ -1,4 +1,4 @@
-from enums import Scope, Visibility
+from gobjcreator2.metadef.constants import Scope, Visibility
 
 class Attribute(object):
 

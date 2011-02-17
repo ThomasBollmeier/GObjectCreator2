@@ -66,4 +66,4 @@ class Package(PackageElement):
 
     def __getitem__(self, element_name):
 
-        return self._selements[element_name]
+        return self._elements[element_name]

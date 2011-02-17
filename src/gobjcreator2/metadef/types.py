@@ -60,6 +60,17 @@ class Integer(BuiltInType):
 INT = Integer()
 UNSIGNED_INT = Integer(signed = False)
 
+class Long(BuiltInType):
+
+    def __init__(self, signed = True):
+
+        BuiltInType.__init__(self, "long")
+
+        self.signed = signed
+
+LONG = Long()
+UNSIGNED_LONG = Long(signed = False)
+
 class Float(BuiltInType):
 
     def __init__(self):
@@ -75,3 +86,25 @@ class Double(BuiltInType):
         BuiltInType.__init__(self, "double")
 
 DOUBLE = Double()
+
+class RefType(Type):
+
+    def __init__(self, ref_type):
+
+        Type.__init__(self)
+        self.ref_type = ref_type
+
+    def get_name(self):
+
+        return "Ref_to_%s" % self.ref_type.get_name()
+
+class ListType(Type):
+
+    def __init__(self, line_type):
+
+        Type.__init__(self)
+        self.line_type = line_type
+
+    def get_name(self):
+
+        return "Line_of_%s" % self.line_type.get_name()

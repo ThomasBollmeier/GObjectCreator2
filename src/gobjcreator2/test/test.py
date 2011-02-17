@@ -225,7 +225,24 @@ class Test(GOCVisitor):
         self._indent -= Test._TABSIZE
         self._print('</property>')
 
-reader = Reader()
+from gobjcreator2.input.goc_visitor import VisitorStep1
+from gobjcreator2.metadef.package import Package
 
+def print_types(package, indent=0):
+
+    for element in package._elements.values():
+
+        print " " * indent + element.name
+
+        if isinstance(element, Package):
+            indent += 4
+            print_types(element, indent)
+            indent -= 4
+
+reader = Reader()
 reader.read_file("test.goc")
-reader.walk_syntax_tree(Test())
+
+step1 = VisitorStep1()
+reader.walk_syntax_tree(step1)
+
+print_types(Package.get_top())

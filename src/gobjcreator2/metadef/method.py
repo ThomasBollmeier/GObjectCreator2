@@ -1,4 +1,4 @@
-from gobjcreator2.metadef.enums import \
+from gobjcreator2.metadef.constants import \
     Visibility, Scope, MethodInheritance
 from gobjcreator2.metadef.types import NULL
 
