@@ -10,6 +10,8 @@ class GInterface(PackageElement, Type):
         PackageElement.__init__(self, name, package)
         Type.__init__(self)
 
+        self.prefix = name # prefix used in function names
+
         self._methods = {}
         self._signals = {}
 

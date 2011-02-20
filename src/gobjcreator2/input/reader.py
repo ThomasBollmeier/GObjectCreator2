@@ -146,10 +146,19 @@ class Reader(object):
 
         children = node.getChildren()
         name = children[0].getText()
-
-        visitor.ginterface_begin(name)
+        attrs = {}
+        other_children = []
 
         for child in children[1:]:
+            type = child.getType()
+            if type == PREFIX:
+                attrs["prefix"] = child.getChildren()[0].getText()
+            else:
+                other_children.append(child)
+
+        visitor.ginterface_begin(name, attrs)
+
+        for child in other_children:
             self._walk(child, visitor)
 
         visitor.ginterface_end(name)
@@ -236,6 +245,7 @@ class Reader(object):
     def _walk_constructor(self, node, visitor):
 
         parameters = []
+        prop_inits = {}
 
         for child in node.getChildren():
             type = child.getType()
@@ -255,8 +265,21 @@ class Reader(object):
                 parameters.append(ConstructorParamInfo(
                         param_name, param_type_info, modifiers, bind_to
                         ))
-
-        visitor.constructor_begin()
+            elif type == INIT_PROPERTIES:
+                props = child.getChildren()
+                for prop in props:
+                    name = prop.getChildren()[0].getText()
+                    args = prop.getChildren()[1:]
+                    if len(args) == 1:
+                        value_name = args[0].getText()
+                        is_code = False
+                    else:
+                        value_name = self._get_type_name(args[0])
+                        value_name += "." + args[1].getText()
+                        is_code = True
+                    prop_inits[name] = PropInitValue(value_name, is_code)
+                    
+        visitor.constructor_begin(prop_inits)
 
         for param_info in parameters:
             visitor.parameter(param_info)
@@ -320,7 +343,14 @@ class Reader(object):
             if token_type == PROP_TYPE:
                 attrs["type"] = child.getChildren()[0].getText()
             elif token_type == PROP_GTYPE:
-                attrs["gtype"] = child.getChildren()[0].getText()
+                arg = child.getChildren()[0]
+                if not arg.getType() == GTYPENAME:
+                    type_value = GTypeValue(arg.getText())
+                else:
+                    type_name = self._get_type_name(arg.getChildren()[0])
+                    is_typename = True
+                    type_value = GTypeValue(type_name, is_typename)
+                attrs["gtype"] = type_value
             elif token_type == PROP_ACCESS:
                 attrs["access"] = child.getChildren()[0].getText()
             elif token_type == PROP_DESC:
@@ -331,6 +361,8 @@ class Reader(object):
                 attrs["max"] = child.getChildren()[0].getText()
             elif token_type == PROP_DEFAULT:
                 attrs["default"] = child.getChildren()[0].getText()
+            elif token_type == AUTO_CREATE:
+                attrs["auto_create"] = True
 
         visitor.property(name, attrs)
 
@@ -385,6 +417,10 @@ class RefTypeInfo(TypeInfo):
 
         return "%s*" % self._ref_type.get_name()
 
+    def get_ref_type(self):
+
+        return self._ref_type
+
 class ListTypeInfo(TypeInfo):
 
     def __init__(self, line_type):
@@ -395,6 +431,10 @@ class ListTypeInfo(TypeInfo):
     def get_name(self):
 
         return "%s[]" % self._line_type.get_name()
+
+    def get_line_type(self):
+
+        return self._line_type
 
 class ParamInfo(object):
 
@@ -411,7 +451,25 @@ class ConstructorParamInfo(ParamInfo):
         ParamInfo.__init__(self, name, type_info, modifiers)
         self.bind_to = bind_to
 
+class GTypeValue(object):
+
+    def __init__(self, name, is_typename=False):
+
+        self.name = name
+        self.is_typename = is_typename
+
+class PropInitValue(object):
+
+    def __init__(self, name, is_codename=False):
+
+        self.name = name
+        self.is_codename = is_codename
+
 class GOCVisitor(object):
+
+    def __init__(self):
+
+        pass
 
     def package_begin(self, name):
 
@@ -433,7 +491,7 @@ class GOCVisitor(object):
 
         pass
 
-    def ginterface_begin(self, name):
+    def ginterface_begin(self, name, attrs):
 
         pass
 
@@ -469,7 +527,7 @@ class GOCVisitor(object):
 
         pass
 
-    def constructor_begin(self):
+    def constructor_begin(self, prop_inits):
 
         pass
 

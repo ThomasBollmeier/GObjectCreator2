@@ -1,3 +1,5 @@
+from gobjcreator2.metadef.exceptions import DefinitionError
+
 class PackageElement(object):
 
     def __init__(self,
@@ -31,6 +33,8 @@ class Package(PackageElement):
 
     TOP = None
 
+    _SEPARATOR = "::"
+
     @staticmethod
     def get_top():
 
@@ -58,6 +62,43 @@ class Package(PackageElement):
         
         PackageElement.__init__(self, name, parent)
 
+    def get_element(self, path):
+
+        parts = path.split(Package._SEPARATOR)
+
+        if len(parts) == 1:
+            try:
+                res = self._elements[path]
+                return res
+            except KeyError:
+                if self is not Package.get_top():
+                    try:
+                        return Package.get_top()._elements[path]
+                    except KeyError:
+                        raise DefinitionError("Unknown element: %s" % path)
+                else:
+                    raise DefinitionError("Unknown element: %s" % path)
+        else:
+            packages = parts[:-1]
+            if not packages[0]:
+                # => absolute path
+                abs_path = Package._SEPARATOR.join(parts[1:])
+                return Package.get_top().get_element(abs_path)
+            else:
+                # assume it is a relative path first:
+                try:
+                    sub_package = self._elements[packages[0]]
+                    if not isinstance(sub_package, Package):
+                        raise DefinitionError("Unknown element: %s" % path)
+                    sub_path = Package._SEPARATOR.join(parts[1:])
+                    return sub_package.get_element(sub_path)
+                except (KeyError, DefinitionError):
+                    if self is not Package.get_top():
+                        return Package.get_top().get_element(path)
+                    else:
+                        raise DefinitionError("Unknown element: %s" % path)
+
+
     def _get_elements(self):
 
         return self._elements
@@ -66,4 +107,4 @@ class Package(PackageElement):
 
     def __getitem__(self, element_name):
 
-        return self._elements[element_name]
+        return self.get_element(element_name)

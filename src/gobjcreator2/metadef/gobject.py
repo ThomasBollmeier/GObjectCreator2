@@ -16,9 +16,11 @@ class GObject(PackageElement, Type):
 
         self._super_class = super_class
         self.abstract = False
+        self.prefix = name.lower() # prefix to be used in functions
 
         self._interfaces = {}
         self._attributes = {}
+        self.constructor = None
         self._methods = {}
         self._overridden = {} # method info for overridden methods
         self._properties = {}

@@ -225,7 +225,7 @@ class Test(GOCVisitor):
         self._indent -= Test._TABSIZE
         self._print('</property>')
 
-from gobjcreator2.input.goc_visitor import VisitorStep1
+from gobjcreator2.input.goc_visitor import VisitorStep1, VisitorStep2
 from gobjcreator2.metadef.package import Package
 
 def print_types(package, indent=0):
@@ -245,4 +245,12 @@ reader.read_file("test.goc")
 step1 = VisitorStep1()
 reader.walk_syntax_tree(step1)
 
-print_types(Package.get_top())
+step2 = VisitorStep2()
+reader.walk_syntax_tree(step2)
+
+top = Package.get_top()
+
+print_types(top)
+
+animal = top["demo::Animal"]
+print animal.properties

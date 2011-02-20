@@ -51,6 +51,9 @@ packageElement
 	:	packageDef
 	|	classDef
 	|	intfDef
+	|   errorDomainDef
+	|   enumDef
+	|   flagsDef
 	|   typeDecl
 	;
 
@@ -121,7 +124,8 @@ scope {
 	;
 	
 intfMember
-	:	METHOD ID '{' methodElement* '}' -> ^(METHOD ID methodElement*)
+	:	PREFIX ID ';' -> ^(PREFIX ID)
+	|   METHOD ID '{' methodElement* '}' -> ^(METHOD ID methodElement*)
     |   SIGNAL signalID '{' signalElement* '}' -> ^(SIGNAL signalID signalElement*)
 	;
 	
@@ -143,7 +147,9 @@ methodElement
 	
 constructorElement
 	:	PARAMETER ID '{' 'type' ':' typeArg ';' parameterElement? '}'
-	-> ^(PARAMETER ID typeArg parameterElement?)
+	->  ^(PARAMETER ID typeArg parameterElement?)
+	|   {$classMember::with_constructor}?=> INIT_PROPERTIES '{' init_prop+ '}'
+	->  ^(INIT_PROPERTIES init_prop+)
 	;
 
 parameterElement
@@ -151,19 +157,28 @@ parameterElement
     |   {$classMember::with_constructor}?=> 'bind_property' ':' ID ';' -> ^(BIND_PROPERTY ID)
     ;
 
+init_prop
+    :   name=ID ':' value=STRING ';'
+    ->  ^(INIT_PROPERTY $name $value)
+    |   name=ID ':' enum=typeName '.' code=ID ';'
+    ->  ^(INIT_PROPERTY $name $enum $code)
+    ;
+
 modifiers
 	:	MODIFIERS ':' 'const' ';' -> ^(MODIFIERS 'const')
 	;
 
 propertyElement
-    :   'type' ':' (val='boolean'|val='integer'|val='double'|
+    :   'type' ':' (val='boolean'|val='integer'|val='float'|val='double'|
     val='string'|val='pointer'|val='object'|val='enumeration') ';'
-    -> ^(PROP_TYPE $val)
+    ->  ^(PROP_TYPE $val)
     |   'access' ':' (val='read-only'|val='initial-write'|val='read-write') ';'
-    -> ^(PROP_ACCESS $val)
+    ->  ^(PROP_ACCESS $val)
     |   'description' ':' STRING ';' -> ^(PROP_DESC STRING)
     |   'gtype' ':' ID ';'
-    -> ^(PROP_GTYPE ID)
+    ->  ^(PROP_GTYPE ID)
+    |   'gtype' ':' GTYPENAME '(' typeName ')' ';'
+    ->  ^(PROP_GTYPE ^(GTYPENAME typeName))
     |   'min' ':' STRING ';' -> ^(PROP_MIN STRING)
     |   'max' ':' STRING ';' -> ^(PROP_MAX STRING)
     |   'default' ':' STRING ';' -> ^(PROP_DEFAULT STRING)
@@ -245,6 +260,10 @@ GTYPE
     :   'gtype'
     ;
 
+GTYPENAME
+    :   'gtypename'
+    ;
+
 ERROR_DOMAIN
     :   'gerror'
     ;
@@ -292,6 +311,10 @@ ATTRIBUTE
 PROPERTY
 	:	'property'
 	;
+
+INIT_PROPERTIES
+    :   'init_properties'
+    ;
 	
 SIGNAL
 	:	'signal'

@@ -1,50 +1,46 @@
-gtype MyType;
+package glib {
 
-genum MyConstants {
-
-    code ONE;
-    code TWO;
-    code THREE;
+    gtype GList;
+    gtype GHashTable;
 
 }
 
 package demo {
 
+    genum AnimalCatg {
+
+        code BIRD;
+        code MAMMAL;
+
+    }
+
     gobject Animal {
 
         abstract;
 
-        method walk {
-            inheritance: abstract;
+        property category {
+            type: enumeration;
+            gtype: gtypename( AnimalCatg );
+            access: initial-write;
         }
 
     }
 
-    ginterface Mammal {
-
-        method feed {
-            parameter child { type: Mammal; }
-        }
-
-    }
-
-    gobject Human {
+    gobject Bird {
 
         super Animal;
 
-        implements Mammal;
-
-        property name {
-            type: string;
-            access: initial-write;
-            auto_create;
-        }
-
         constructor {
-            parameter name { type: string; bind_property: name; }
+
+            init_properties {
+                category: AnimalCatg.BIRD;
+            }
+
         }
 
-        override walk;
+        method fly {
+            visibility: public;
+        }
 
     }
 
