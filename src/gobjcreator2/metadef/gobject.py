@@ -115,3 +115,9 @@ class GObject(PackageElement, Type):
         return [value for value in self._signals.values()]
 
     signals = property(_get_signals)
+
+    def _get_overridden(self):
+
+        return [method_info for method_info in self._overridden.values()]
+
+    overridden_methods = property(_get_overridden)

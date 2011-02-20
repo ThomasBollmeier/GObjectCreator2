@@ -9,6 +9,7 @@ from gobjcreator2.metadef.genum import GEnum
 from gobjcreator2.metadef.gflags import GFlags
 from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method import Method
+from gobjcreator2.metadef.signal import Signal, SignalType
 from gobjcreator2.metadef.constructor import Constructor
 from gobjcreator2.metadef.constants import Scope, Visibility, \
     MethodInheritance, TypeModifier
@@ -126,6 +127,18 @@ class VisitorStep2(GOCVisitor):
             "read-only": PropAccess.READ_ONLY,
             "initial-write": PropAccess.INITIAL_WRITE,
             "read-write": PropAccess.READ_WRITE
+        }
+
+        self._signal_types = {
+            "null": SignalType.NULL,
+            "integer": SignalType.INTEGER,
+            "boolean": SignalType.BOOLEAN,
+            "float": SignalType.FLOAT,
+            "double": SignalType.DOUBLE,
+            "string": SignalType.STRING,
+            "pointer": SignalType.POINTER,
+            "object": SignalType.OBJECT,
+            "enumeration": SignalType.ENUMERATION     
         }
 
     def _get_parent(self, cls):
@@ -323,8 +336,19 @@ class VisitorStep2(GOCVisitor):
 
     def signal(self, name, result_type, args):
 
-        pass
+        result = self._signal_types[result_type]
+        sig = Signal(name, result)
 
+        for arg in args:
+            sig.add_parameter(arg[0], self._signal_types[arg[1]])
+
+        cls = self._get_parent(GObject)
+        if cls:
+            cls.add_signal(sig)
+        else:
+            interface = self._get_parent(GInterface)
+            interface.add_signal(sig)
+        
     def override(self, name):
 
         pass
@@ -364,7 +388,7 @@ class VisitorStep2(GOCVisitor):
 
         cls = self._get_parent(GObject)
         cls.add_attribute(attribute)
-        
+
     def property(self,
                  name,
                  attrs):
@@ -403,3 +427,57 @@ class VisitorStep2(GOCVisitor):
 
         cls = self._get_parent(GObject)
         cls.add_property(prop)
+
+class VisitorStep3(GOCVisitor):
+
+    def __init__(self):
+
+        GOCVisitor.__init__(self)
+        self._stack = []
+
+    def _get_parent(self, cls):
+
+        idx = len(self._stack) - 1
+
+        while idx >= 0:
+            parent = self._stack[idx]
+            if isinstance(parent, cls):
+                return parent
+            else:
+                idx -= 1
+
+        if not cls == Package:
+            return None
+        else:
+            return Package.get_top()
+
+    def package_begin(self, name):
+
+        parent = self._get_parent(Package)
+        package = parent[name]
+
+        self._stack.append(package)
+
+    def package_end(self, name):
+
+        self._stack.pop()
+
+    def gobject_begin(self,
+                      name,
+                      super,
+                      interfaces,
+                      attrs):
+
+        parent = self._get_parent(Package)
+        cls = parent[name]
+
+        self._stack.append(cls)
+
+    def gobject_end(self, name):
+
+        self._stack.pop()
+
+    def override(self, name):
+
+        cls = self._get_parent(GObject)
+        cls.override(name)

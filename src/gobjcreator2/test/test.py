@@ -225,7 +225,7 @@ class Test(GOCVisitor):
         self._indent -= Test._TABSIZE
         self._print('</property>')
 
-from gobjcreator2.input.goc_visitor import VisitorStep1, VisitorStep2
+from gobjcreator2.input.goc_recognizer import GOCRecognizer
 from gobjcreator2.metadef.package import Package
 
 def print_types(package, indent=0):
@@ -239,18 +239,12 @@ def print_types(package, indent=0):
             print_types(element, indent)
             indent -= 4
 
-reader = Reader()
-reader.read_file("test.goc")
+recognizer = GOCRecognizer()
 
-step1 = VisitorStep1()
-reader.walk_syntax_tree(step1)
-
-step2 = VisitorStep2()
-reader.walk_syntax_tree(step2)
-
-top = Package.get_top()
+top = recognizer.process_file("test.goc")
 
 print_types(top)
 
-animal = top["demo::Animal"]
-print animal.properties
+bird = top["demo::Bird"]
+for info in bird.overridden_methods:
+    print info.method.name, info.defined_in.name

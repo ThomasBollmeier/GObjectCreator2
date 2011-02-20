@@ -1,16 +1,26 @@
-from gobjcreator2.metadef.types import NULL
-
 class Signal(object):
 
     def __init__(self,
                  name,
-                 result = NULL):
+                 result):
 
         self.name = name
         self.internal_name = name.replace("-", "_")
         self.result = result
         self.parameters = []
 
-    def add_parameter(self, param):
+    def add_parameter(self, name, type):
 
-        self.parameters.append(param)
+        self.parameters.append((name, type))
+
+class SignalType:
+
+    NULL = 1
+    BOOLEAN = 2
+    INTEGER = 3
+    FLOAT = 4
+    DOUBLE = 5
+    STRING = 6
+    POINTER = 7
+    OBJECT = 8
+    ENUMERATION = 9

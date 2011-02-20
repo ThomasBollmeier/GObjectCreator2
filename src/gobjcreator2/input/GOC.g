@@ -197,6 +197,7 @@ signalType
     |   'float'
     |   'double'
     |   'string'
+    |   'pointer'
     |   'object'
     |   'enumeration'
     ;

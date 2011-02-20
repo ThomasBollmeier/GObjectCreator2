@@ -1,4 +1,4 @@
-# $ANTLR 3.1.3 Mar 18, 2009 10:09:25 GOC.g 2011-02-20 12:15:45
+# $ANTLR 3.1.3 Mar 18, 2009 10:09:25 GOC.g 2011-02-20 18:48:37
 
 import sys
 from antlr3 import *
@@ -4991,7 +4991,7 @@ class GOCParser(Parser):
 
 
     # $ANTLR start "signalType"
-    # GOC.g:193:1: signalType : ( 'null' | 'integer' | 'boolean' | 'float' | 'double' | 'string' | 'object' | 'enumeration' );
+    # GOC.g:193:1: signalType : ( 'null' | 'integer' | 'boolean' | 'float' | 'double' | 'string' | 'pointer' | 'object' | 'enumeration' );
     def signalType(self, ):
 
         retval = self.signalType_return()
@@ -5005,13 +5005,13 @@ class GOCParser(Parser):
 
         try:
             try:
-                # GOC.g:194:5: ( 'null' | 'integer' | 'boolean' | 'float' | 'double' | 'string' | 'object' | 'enumeration' )
+                # GOC.g:194:5: ( 'null' | 'integer' | 'boolean' | 'float' | 'double' | 'string' | 'pointer' | 'object' | 'enumeration' )
                 # GOC.g:
                 pass 
                 root_0 = self._adaptor.nil()
 
                 set218 = self.input.LT(1)
-                if (73 <= self.input.LA(1) <= 77) or (79 <= self.input.LA(1) <= 80) or self.input.LA(1) == 91:
+                if (73 <= self.input.LA(1) <= 80) or self.input.LA(1) == 91:
                     self.input.consume()
                     self._adaptor.addChild(root_0, self._adaptor.createWithPayload(set218))
                     self._state.errorRecovery = False
@@ -5052,7 +5052,7 @@ class GOCParser(Parser):
 
 
     # $ANTLR start "attributeElement"
-    # GOC.g:204:1: attributeElement : ( SCOPE ':' (val= 'static' | val= 'instance' ) ';' -> ^( SCOPE $val) | VISIBILITY ':' (val= 'public' | val= 'protected' | val= 'private' ) ';' -> ^( VISIBILITY $val) );
+    # GOC.g:205:1: attributeElement : ( SCOPE ':' (val= 'static' | val= 'instance' ) ';' -> ^( SCOPE $val) | VISIBILITY ':' (val= 'public' | val= 'protected' | val= 'private' ) ';' -> ^( VISIBILITY $val) );
     def attributeElement(self, ):
 
         retval = self.attributeElement_return()
@@ -5087,7 +5087,7 @@ class GOCParser(Parser):
 
         try:
             try:
-                # GOC.g:205:2: ( SCOPE ':' (val= 'static' | val= 'instance' ) ';' -> ^( SCOPE $val) | VISIBILITY ':' (val= 'public' | val= 'protected' | val= 'private' ) ';' -> ^( VISIBILITY $val) )
+                # GOC.g:206:2: ( SCOPE ':' (val= 'static' | val= 'instance' ) ';' -> ^( SCOPE $val) | VISIBILITY ':' (val= 'public' | val= 'protected' | val= 'private' ) ';' -> ^( VISIBILITY $val) )
                 alt38 = 2
                 LA38_0 = self.input.LA(1)
 
@@ -5101,13 +5101,13 @@ class GOCParser(Parser):
                     raise nvae
 
                 if alt38 == 1:
-                    # GOC.g:205:4: SCOPE ':' (val= 'static' | val= 'instance' ) ';'
+                    # GOC.g:206:4: SCOPE ':' (val= 'static' | val= 'instance' ) ';'
                     pass 
-                    SCOPE219=self.match(self.input, SCOPE, self.FOLLOW_SCOPE_in_attributeElement1867) 
+                    SCOPE219=self.match(self.input, SCOPE, self.FOLLOW_SCOPE_in_attributeElement1877) 
                     stream_SCOPE.add(SCOPE219)
-                    char_literal220=self.match(self.input, 62, self.FOLLOW_62_in_attributeElement1869) 
+                    char_literal220=self.match(self.input, 62, self.FOLLOW_62_in_attributeElement1879) 
                     stream_62.add(char_literal220)
-                    # GOC.g:205:14: (val= 'static' | val= 'instance' )
+                    # GOC.g:206:14: (val= 'static' | val= 'instance' )
                     alt36 = 2
                     LA36_0 = self.input.LA(1)
 
@@ -5121,21 +5121,21 @@ class GOCParser(Parser):
                         raise nvae
 
                     if alt36 == 1:
-                        # GOC.g:205:15: val= 'static'
+                        # GOC.g:206:15: val= 'static'
                         pass 
-                        val=self.match(self.input, 67, self.FOLLOW_67_in_attributeElement1874) 
+                        val=self.match(self.input, 67, self.FOLLOW_67_in_attributeElement1884) 
                         stream_67.add(val)
 
 
                     elif alt36 == 2:
-                        # GOC.g:205:28: val= 'instance'
+                        # GOC.g:206:28: val= 'instance'
                         pass 
-                        val=self.match(self.input, 66, self.FOLLOW_66_in_attributeElement1878) 
+                        val=self.match(self.input, 66, self.FOLLOW_66_in_attributeElement1888) 
                         stream_66.add(val)
 
 
 
-                    char_literal221=self.match(self.input, 57, self.FOLLOW_57_in_attributeElement1881) 
+                    char_literal221=self.match(self.input, 57, self.FOLLOW_57_in_attributeElement1891) 
                     stream_57.add(char_literal221)
 
                     # AST Rewrite
@@ -5156,8 +5156,8 @@ class GOCParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 205:48: -> ^( SCOPE $val)
-                    # GOC.g:205:51: ^( SCOPE $val)
+                    # 206:48: -> ^( SCOPE $val)
+                    # GOC.g:206:51: ^( SCOPE $val)
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(stream_SCOPE.nextNode(), root_1)
 
@@ -5171,13 +5171,13 @@ class GOCParser(Parser):
 
 
                 elif alt38 == 2:
-                    # GOC.g:206:4: VISIBILITY ':' (val= 'public' | val= 'protected' | val= 'private' ) ';'
+                    # GOC.g:207:4: VISIBILITY ':' (val= 'public' | val= 'protected' | val= 'private' ) ';'
                     pass 
-                    VISIBILITY222=self.match(self.input, VISIBILITY, self.FOLLOW_VISIBILITY_in_attributeElement1895) 
+                    VISIBILITY222=self.match(self.input, VISIBILITY, self.FOLLOW_VISIBILITY_in_attributeElement1905) 
                     stream_VISIBILITY.add(VISIBILITY222)
-                    char_literal223=self.match(self.input, 62, self.FOLLOW_62_in_attributeElement1897) 
+                    char_literal223=self.match(self.input, 62, self.FOLLOW_62_in_attributeElement1907) 
                     stream_62.add(char_literal223)
-                    # GOC.g:206:19: (val= 'public' | val= 'protected' | val= 'private' )
+                    # GOC.g:207:19: (val= 'public' | val= 'protected' | val= 'private' )
                     alt37 = 3
                     LA37 = self.input.LA(1)
                     if LA37 == 63:
@@ -5192,28 +5192,28 @@ class GOCParser(Parser):
                         raise nvae
 
                     if alt37 == 1:
-                        # GOC.g:206:20: val= 'public'
+                        # GOC.g:207:20: val= 'public'
                         pass 
-                        val=self.match(self.input, 63, self.FOLLOW_63_in_attributeElement1902) 
+                        val=self.match(self.input, 63, self.FOLLOW_63_in_attributeElement1912) 
                         stream_63.add(val)
 
 
                     elif alt37 == 2:
-                        # GOC.g:206:33: val= 'protected'
+                        # GOC.g:207:33: val= 'protected'
                         pass 
-                        val=self.match(self.input, 64, self.FOLLOW_64_in_attributeElement1906) 
+                        val=self.match(self.input, 64, self.FOLLOW_64_in_attributeElement1916) 
                         stream_64.add(val)
 
 
                     elif alt37 == 3:
-                        # GOC.g:206:49: val= 'private'
+                        # GOC.g:207:49: val= 'private'
                         pass 
-                        val=self.match(self.input, 65, self.FOLLOW_65_in_attributeElement1910) 
+                        val=self.match(self.input, 65, self.FOLLOW_65_in_attributeElement1920) 
                         stream_65.add(val)
 
 
 
-                    char_literal224=self.match(self.input, 57, self.FOLLOW_57_in_attributeElement1913) 
+                    char_literal224=self.match(self.input, 57, self.FOLLOW_57_in_attributeElement1923) 
                     stream_57.add(char_literal224)
 
                     # AST Rewrite
@@ -5234,8 +5234,8 @@ class GOCParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 206:68: -> ^( VISIBILITY $val)
-                    # GOC.g:206:71: ^( VISIBILITY $val)
+                    # 207:68: -> ^( VISIBILITY $val)
+                    # GOC.g:207:71: ^( VISIBILITY $val)
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(stream_VISIBILITY.nextNode(), root_1)
 
@@ -5276,7 +5276,7 @@ class GOCParser(Parser):
 
 
     # $ANTLR start "typeName"
-    # GOC.g:209:1: typeName : ( typePath -> ^( TYPE_NAME typePath ) | ( 'unsigned ' )? 'integer' -> ^( TYPE_NAME ( 'unsigned ' )? 'integer' ) | ( 'unsigned ' )? 'long' -> ^( TYPE_NAME ( 'unsigned ' )? 'long' ) | (val= 'boolean' | val= 'string' | val= 'float' | val= 'double' | val= 'pointer' ) -> ^( TYPE_NAME $val) );
+    # GOC.g:210:1: typeName : ( typePath -> ^( TYPE_NAME typePath ) | ( 'unsigned ' )? 'integer' -> ^( TYPE_NAME ( 'unsigned ' )? 'integer' ) | ( 'unsigned ' )? 'long' -> ^( TYPE_NAME ( 'unsigned ' )? 'long' ) | (val= 'boolean' | val= 'string' | val= 'float' | val= 'double' | val= 'pointer' ) -> ^( TYPE_NAME $val) );
     def typeName(self, ):
 
         retval = self.typeName_return()
@@ -5308,7 +5308,7 @@ class GOCParser(Parser):
         stream_typePath = RewriteRuleSubtreeStream(self._adaptor, "rule typePath")
         try:
             try:
-                # GOC.g:210:2: ( typePath -> ^( TYPE_NAME typePath ) | ( 'unsigned ' )? 'integer' -> ^( TYPE_NAME ( 'unsigned ' )? 'integer' ) | ( 'unsigned ' )? 'long' -> ^( TYPE_NAME ( 'unsigned ' )? 'long' ) | (val= 'boolean' | val= 'string' | val= 'float' | val= 'double' | val= 'pointer' ) -> ^( TYPE_NAME $val) )
+                # GOC.g:211:2: ( typePath -> ^( TYPE_NAME typePath ) | ( 'unsigned ' )? 'integer' -> ^( TYPE_NAME ( 'unsigned ' )? 'integer' ) | ( 'unsigned ' )? 'long' -> ^( TYPE_NAME ( 'unsigned ' )? 'long' ) | (val= 'boolean' | val= 'string' | val= 'float' | val= 'double' | val= 'pointer' ) -> ^( TYPE_NAME $val) )
                 alt42 = 4
                 LA42 = self.input.LA(1)
                 if LA42 == ID or LA42 == 96:
@@ -5337,9 +5337,9 @@ class GOCParser(Parser):
                     raise nvae
 
                 if alt42 == 1:
-                    # GOC.g:210:6: typePath
+                    # GOC.g:211:6: typePath
                     pass 
-                    self._state.following.append(self.FOLLOW_typePath_in_typeName1935)
+                    self._state.following.append(self.FOLLOW_typePath_in_typeName1945)
                     typePath225 = self.typePath()
 
                     self._state.following.pop()
@@ -5362,8 +5362,8 @@ class GOCParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 210:15: -> ^( TYPE_NAME typePath )
-                    # GOC.g:210:18: ^( TYPE_NAME typePath )
+                    # 211:15: -> ^( TYPE_NAME typePath )
+                    # GOC.g:211:18: ^( TYPE_NAME typePath )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(self._adaptor.createFromType(TYPE_NAME, "TYPE_NAME"), root_1)
 
@@ -5377,23 +5377,23 @@ class GOCParser(Parser):
 
 
                 elif alt42 == 2:
-                    # GOC.g:211:6: ( 'unsigned ' )? 'integer'
+                    # GOC.g:212:6: ( 'unsigned ' )? 'integer'
                     pass 
-                    # GOC.g:211:6: ( 'unsigned ' )?
+                    # GOC.g:212:6: ( 'unsigned ' )?
                     alt39 = 2
                     LA39_0 = self.input.LA(1)
 
                     if (LA39_0 == 92) :
                         alt39 = 1
                     if alt39 == 1:
-                        # GOC.g:211:6: 'unsigned '
+                        # GOC.g:212:6: 'unsigned '
                         pass 
-                        string_literal226=self.match(self.input, 92, self.FOLLOW_92_in_typeName1950) 
+                        string_literal226=self.match(self.input, 92, self.FOLLOW_92_in_typeName1960) 
                         stream_92.add(string_literal226)
 
 
 
-                    string_literal227=self.match(self.input, 74, self.FOLLOW_74_in_typeName1953) 
+                    string_literal227=self.match(self.input, 74, self.FOLLOW_74_in_typeName1963) 
                     stream_74.add(string_literal227)
 
                     # AST Rewrite
@@ -5413,12 +5413,12 @@ class GOCParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 211:29: -> ^( TYPE_NAME ( 'unsigned ' )? 'integer' )
-                    # GOC.g:211:32: ^( TYPE_NAME ( 'unsigned ' )? 'integer' )
+                    # 212:29: -> ^( TYPE_NAME ( 'unsigned ' )? 'integer' )
+                    # GOC.g:212:32: ^( TYPE_NAME ( 'unsigned ' )? 'integer' )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(self._adaptor.createFromType(TYPE_NAME, "TYPE_NAME"), root_1)
 
-                    # GOC.g:211:44: ( 'unsigned ' )?
+                    # GOC.g:212:44: ( 'unsigned ' )?
                     if stream_92.hasNext():
                         self._adaptor.addChild(root_1, stream_92.nextNode())
 
@@ -5434,23 +5434,23 @@ class GOCParser(Parser):
 
 
                 elif alt42 == 3:
-                    # GOC.g:212:6: ( 'unsigned ' )? 'long'
+                    # GOC.g:213:6: ( 'unsigned ' )? 'long'
                     pass 
-                    # GOC.g:212:6: ( 'unsigned ' )?
+                    # GOC.g:213:6: ( 'unsigned ' )?
                     alt40 = 2
                     LA40_0 = self.input.LA(1)
 
                     if (LA40_0 == 92) :
                         alt40 = 1
                     if alt40 == 1:
-                        # GOC.g:212:6: 'unsigned '
+                        # GOC.g:213:6: 'unsigned '
                         pass 
-                        string_literal228=self.match(self.input, 92, self.FOLLOW_92_in_typeName1971) 
+                        string_literal228=self.match(self.input, 92, self.FOLLOW_92_in_typeName1981) 
                         stream_92.add(string_literal228)
 
 
 
-                    string_literal229=self.match(self.input, 93, self.FOLLOW_93_in_typeName1974) 
+                    string_literal229=self.match(self.input, 93, self.FOLLOW_93_in_typeName1984) 
                     stream_93.add(string_literal229)
 
                     # AST Rewrite
@@ -5470,12 +5470,12 @@ class GOCParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 212:26: -> ^( TYPE_NAME ( 'unsigned ' )? 'long' )
-                    # GOC.g:212:29: ^( TYPE_NAME ( 'unsigned ' )? 'long' )
+                    # 213:26: -> ^( TYPE_NAME ( 'unsigned ' )? 'long' )
+                    # GOC.g:213:29: ^( TYPE_NAME ( 'unsigned ' )? 'long' )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(self._adaptor.createFromType(TYPE_NAME, "TYPE_NAME"), root_1)
 
-                    # GOC.g:212:41: ( 'unsigned ' )?
+                    # GOC.g:213:41: ( 'unsigned ' )?
                     if stream_92.hasNext():
                         self._adaptor.addChild(root_1, stream_92.nextNode())
 
@@ -5491,9 +5491,9 @@ class GOCParser(Parser):
 
 
                 elif alt42 == 4:
-                    # GOC.g:213:4: (val= 'boolean' | val= 'string' | val= 'float' | val= 'double' | val= 'pointer' )
+                    # GOC.g:214:4: (val= 'boolean' | val= 'string' | val= 'float' | val= 'double' | val= 'pointer' )
                     pass 
-                    # GOC.g:213:4: (val= 'boolean' | val= 'string' | val= 'float' | val= 'double' | val= 'pointer' )
+                    # GOC.g:214:4: (val= 'boolean' | val= 'string' | val= 'float' | val= 'double' | val= 'pointer' )
                     alt41 = 5
                     LA41 = self.input.LA(1)
                     if LA41 == 73:
@@ -5512,37 +5512,37 @@ class GOCParser(Parser):
                         raise nvae
 
                     if alt41 == 1:
-                        # GOC.g:213:5: val= 'boolean'
+                        # GOC.g:214:5: val= 'boolean'
                         pass 
-                        val=self.match(self.input, 73, self.FOLLOW_73_in_typeName1993) 
+                        val=self.match(self.input, 73, self.FOLLOW_73_in_typeName2003) 
                         stream_73.add(val)
 
 
                     elif alt41 == 2:
-                        # GOC.g:214:4: val= 'string'
+                        # GOC.g:215:4: val= 'string'
                         pass 
-                        val=self.match(self.input, 77, self.FOLLOW_77_in_typeName2000) 
+                        val=self.match(self.input, 77, self.FOLLOW_77_in_typeName2010) 
                         stream_77.add(val)
 
 
                     elif alt41 == 3:
-                        # GOC.g:215:4: val= 'float'
+                        # GOC.g:216:4: val= 'float'
                         pass 
-                        val=self.match(self.input, 75, self.FOLLOW_75_in_typeName2007) 
+                        val=self.match(self.input, 75, self.FOLLOW_75_in_typeName2017) 
                         stream_75.add(val)
 
 
                     elif alt41 == 4:
-                        # GOC.g:216:4: val= 'double'
+                        # GOC.g:217:4: val= 'double'
                         pass 
-                        val=self.match(self.input, 76, self.FOLLOW_76_in_typeName2014) 
+                        val=self.match(self.input, 76, self.FOLLOW_76_in_typeName2024) 
                         stream_76.add(val)
 
 
                     elif alt41 == 5:
-                        # GOC.g:217:6: val= 'pointer'
+                        # GOC.g:218:6: val= 'pointer'
                         pass 
-                        val=self.match(self.input, 78, self.FOLLOW_78_in_typeName2023) 
+                        val=self.match(self.input, 78, self.FOLLOW_78_in_typeName2033) 
                         stream_78.add(val)
 
 
@@ -5566,8 +5566,8 @@ class GOCParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 217:21: -> ^( TYPE_NAME $val)
-                    # GOC.g:217:24: ^( TYPE_NAME $val)
+                    # 218:21: -> ^( TYPE_NAME $val)
+                    # GOC.g:218:24: ^( TYPE_NAME $val)
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(self._adaptor.createFromType(TYPE_NAME, "TYPE_NAME"), root_1)
 
@@ -5608,7 +5608,7 @@ class GOCParser(Parser):
 
 
     # $ANTLR start "typeArg"
-    # GOC.g:220:1: typeArg : ( typeName | 'ref' '(' typeArg ')' -> ^( REF_TO typeArg ) | 'list' '(' typeArg ')' -> ^( LIST_OF typeArg ) );
+    # GOC.g:221:1: typeArg : ( typeName | 'ref' '(' typeArg ')' -> ^( REF_TO typeArg ) | 'list' '(' typeArg ')' -> ^( LIST_OF typeArg ) );
     def typeArg(self, ):
 
         retval = self.typeArg_return()
@@ -5642,7 +5642,7 @@ class GOCParser(Parser):
         stream_typeArg = RewriteRuleSubtreeStream(self._adaptor, "rule typeArg")
         try:
             try:
-                # GOC.g:221:5: ( typeName | 'ref' '(' typeArg ')' -> ^( REF_TO typeArg ) | 'list' '(' typeArg ')' -> ^( LIST_OF typeArg ) )
+                # GOC.g:222:5: ( typeName | 'ref' '(' typeArg ')' -> ^( REF_TO typeArg ) | 'list' '(' typeArg ')' -> ^( LIST_OF typeArg ) )
                 alt43 = 3
                 LA43 = self.input.LA(1)
                 if LA43 == ID or LA43 == 73 or LA43 == 74 or LA43 == 75 or LA43 == 76 or LA43 == 77 or LA43 == 78 or LA43 == 92 or LA43 == 93 or LA43 == 96:
@@ -5657,11 +5657,11 @@ class GOCParser(Parser):
                     raise nvae
 
                 if alt43 == 1:
-                    # GOC.g:221:9: typeName
+                    # GOC.g:222:9: typeName
                     pass 
                     root_0 = self._adaptor.nil()
 
-                    self._state.following.append(self.FOLLOW_typeName_in_typeArg2049)
+                    self._state.following.append(self.FOLLOW_typeName_in_typeArg2059)
                     typeName230 = self.typeName()
 
                     self._state.following.pop()
@@ -5669,18 +5669,18 @@ class GOCParser(Parser):
 
 
                 elif alt43 == 2:
-                    # GOC.g:222:9: 'ref' '(' typeArg ')'
+                    # GOC.g:223:9: 'ref' '(' typeArg ')'
                     pass 
-                    string_literal231=self.match(self.input, 94, self.FOLLOW_94_in_typeArg2059) 
+                    string_literal231=self.match(self.input, 94, self.FOLLOW_94_in_typeArg2069) 
                     stream_94.add(string_literal231)
-                    char_literal232=self.match(self.input, 86, self.FOLLOW_86_in_typeArg2061) 
+                    char_literal232=self.match(self.input, 86, self.FOLLOW_86_in_typeArg2071) 
                     stream_86.add(char_literal232)
-                    self._state.following.append(self.FOLLOW_typeArg_in_typeArg2063)
+                    self._state.following.append(self.FOLLOW_typeArg_in_typeArg2073)
                     typeArg233 = self.typeArg()
 
                     self._state.following.pop()
                     stream_typeArg.add(typeArg233.tree)
-                    char_literal234=self.match(self.input, 87, self.FOLLOW_87_in_typeArg2065) 
+                    char_literal234=self.match(self.input, 87, self.FOLLOW_87_in_typeArg2075) 
                     stream_87.add(char_literal234)
 
                     # AST Rewrite
@@ -5700,8 +5700,8 @@ class GOCParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 222:31: -> ^( REF_TO typeArg )
-                    # GOC.g:222:34: ^( REF_TO typeArg )
+                    # 223:31: -> ^( REF_TO typeArg )
+                    # GOC.g:223:34: ^( REF_TO typeArg )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(self._adaptor.createFromType(REF_TO, "REF_TO"), root_1)
 
@@ -5715,18 +5715,18 @@ class GOCParser(Parser):
 
 
                 elif alt43 == 3:
-                    # GOC.g:223:9: 'list' '(' typeArg ')'
+                    # GOC.g:224:9: 'list' '(' typeArg ')'
                     pass 
-                    string_literal235=self.match(self.input, 95, self.FOLLOW_95_in_typeArg2083) 
+                    string_literal235=self.match(self.input, 95, self.FOLLOW_95_in_typeArg2093) 
                     stream_95.add(string_literal235)
-                    char_literal236=self.match(self.input, 86, self.FOLLOW_86_in_typeArg2085) 
+                    char_literal236=self.match(self.input, 86, self.FOLLOW_86_in_typeArg2095) 
                     stream_86.add(char_literal236)
-                    self._state.following.append(self.FOLLOW_typeArg_in_typeArg2087)
+                    self._state.following.append(self.FOLLOW_typeArg_in_typeArg2097)
                     typeArg237 = self.typeArg()
 
                     self._state.following.pop()
                     stream_typeArg.add(typeArg237.tree)
-                    char_literal238=self.match(self.input, 87, self.FOLLOW_87_in_typeArg2089) 
+                    char_literal238=self.match(self.input, 87, self.FOLLOW_87_in_typeArg2099) 
                     stream_87.add(char_literal238)
 
                     # AST Rewrite
@@ -5746,8 +5746,8 @@ class GOCParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 223:32: -> ^( LIST_OF typeArg )
-                    # GOC.g:223:35: ^( LIST_OF typeArg )
+                    # 224:32: -> ^( LIST_OF typeArg )
+                    # GOC.g:224:35: ^( LIST_OF typeArg )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(self._adaptor.createFromType(LIST_OF, "LIST_OF"), root_1)
 
@@ -5788,7 +5788,7 @@ class GOCParser(Parser):
 
 
     # $ANTLR start "typePath"
-    # GOC.g:226:1: typePath : ( '::' ID '::' )? ( ID '::' )* ID ;
+    # GOC.g:227:1: typePath : ( '::' ID '::' )? ( ID '::' )* ID ;
     def typePath(self, ):
 
         retval = self.typePath_return()
@@ -5812,31 +5812,31 @@ class GOCParser(Parser):
 
         try:
             try:
-                # GOC.g:227:5: ( ( '::' ID '::' )? ( ID '::' )* ID )
-                # GOC.g:227:9: ( '::' ID '::' )? ( ID '::' )* ID
+                # GOC.g:228:5: ( ( '::' ID '::' )? ( ID '::' )* ID )
+                # GOC.g:228:9: ( '::' ID '::' )? ( ID '::' )* ID
                 pass 
                 root_0 = self._adaptor.nil()
 
-                # GOC.g:227:9: ( '::' ID '::' )?
+                # GOC.g:228:9: ( '::' ID '::' )?
                 alt44 = 2
                 LA44_0 = self.input.LA(1)
 
                 if (LA44_0 == 96) :
                     alt44 = 1
                 if alt44 == 1:
-                    # GOC.g:227:10: '::' ID '::'
+                    # GOC.g:228:10: '::' ID '::'
                     pass 
-                    string_literal239=self.match(self.input, 96, self.FOLLOW_96_in_typePath2117)
+                    string_literal239=self.match(self.input, 96, self.FOLLOW_96_in_typePath2127)
 
                     string_literal239_tree = self._adaptor.createWithPayload(string_literal239)
                     self._adaptor.addChild(root_0, string_literal239_tree)
 
-                    ID240=self.match(self.input, ID, self.FOLLOW_ID_in_typePath2119)
+                    ID240=self.match(self.input, ID, self.FOLLOW_ID_in_typePath2129)
 
                     ID240_tree = self._adaptor.createWithPayload(ID240)
                     self._adaptor.addChild(root_0, ID240_tree)
 
-                    string_literal241=self.match(self.input, 96, self.FOLLOW_96_in_typePath2121)
+                    string_literal241=self.match(self.input, 96, self.FOLLOW_96_in_typePath2131)
 
                     string_literal241_tree = self._adaptor.createWithPayload(string_literal241)
                     self._adaptor.addChild(root_0, string_literal241_tree)
@@ -5844,7 +5844,7 @@ class GOCParser(Parser):
 
 
 
-                # GOC.g:227:24: ( ID '::' )*
+                # GOC.g:228:24: ( ID '::' )*
                 while True: #loop45
                     alt45 = 2
                     LA45_0 = self.input.LA(1)
@@ -5859,14 +5859,14 @@ class GOCParser(Parser):
 
 
                     if alt45 == 1:
-                        # GOC.g:227:25: ID '::'
+                        # GOC.g:228:25: ID '::'
                         pass 
-                        ID242=self.match(self.input, ID, self.FOLLOW_ID_in_typePath2125)
+                        ID242=self.match(self.input, ID, self.FOLLOW_ID_in_typePath2135)
 
                         ID242_tree = self._adaptor.createWithPayload(ID242)
                         self._adaptor.addChild(root_0, ID242_tree)
 
-                        string_literal243=self.match(self.input, 96, self.FOLLOW_96_in_typePath2127)
+                        string_literal243=self.match(self.input, 96, self.FOLLOW_96_in_typePath2137)
 
                         string_literal243_tree = self._adaptor.createWithPayload(string_literal243)
                         self._adaptor.addChild(root_0, string_literal243_tree)
@@ -5875,7 +5875,7 @@ class GOCParser(Parser):
 
                     else:
                         break #loop45
-                ID244=self.match(self.input, ID, self.FOLLOW_ID_in_typePath2131)
+                ID244=self.match(self.input, ID, self.FOLLOW_ID_in_typePath2141)
 
                 ID244_tree = self._adaptor.createWithPayload(ID244)
                 self._adaptor.addChild(root_0, ID244_tree)
@@ -5911,7 +5911,7 @@ class GOCParser(Parser):
 
 
     # $ANTLR start "signalID"
-    # GOC.g:356:1: signalID : part1= ID ( '-' part2+= ID )* -> ^( SIGNAL_ID $part1 ( $part2)* ) ;
+    # GOC.g:357:1: signalID : part1= ID ( '-' part2+= ID )* -> ^( SIGNAL_ID $part1 ( $part2)* ) ;
     def signalID(self, ):
 
         retval = self.signalID_return()
@@ -5932,12 +5932,12 @@ class GOCParser(Parser):
 
         try:
             try:
-                # GOC.g:357:5: (part1= ID ( '-' part2+= ID )* -> ^( SIGNAL_ID $part1 ( $part2)* ) )
-                # GOC.g:357:9: part1= ID ( '-' part2+= ID )*
+                # GOC.g:358:5: (part1= ID ( '-' part2+= ID )* -> ^( SIGNAL_ID $part1 ( $part2)* ) )
+                # GOC.g:358:9: part1= ID ( '-' part2+= ID )*
                 pass 
-                part1=self.match(self.input, ID, self.FOLLOW_ID_in_signalID2734) 
+                part1=self.match(self.input, ID, self.FOLLOW_ID_in_signalID2744) 
                 stream_ID.add(part1)
-                # GOC.g:357:18: ( '-' part2+= ID )*
+                # GOC.g:358:18: ( '-' part2+= ID )*
                 while True: #loop46
                     alt46 = 2
                     LA46_0 = self.input.LA(1)
@@ -5947,11 +5947,11 @@ class GOCParser(Parser):
 
 
                     if alt46 == 1:
-                        # GOC.g:357:19: '-' part2+= ID
+                        # GOC.g:358:19: '-' part2+= ID
                         pass 
-                        char_literal245=self.match(self.input, 97, self.FOLLOW_97_in_signalID2737) 
+                        char_literal245=self.match(self.input, 97, self.FOLLOW_97_in_signalID2747) 
                         stream_97.add(char_literal245)
-                        part2=self.match(self.input, ID, self.FOLLOW_ID_in_signalID2741) 
+                        part2=self.match(self.input, ID, self.FOLLOW_ID_in_signalID2751) 
                         stream_ID.add(part2)
                         if list_part2 is None:
                             list_part2 = []
@@ -5981,13 +5981,13 @@ class GOCParser(Parser):
 
 
                 root_0 = self._adaptor.nil()
-                # 357:35: -> ^( SIGNAL_ID $part1 ( $part2)* )
-                # GOC.g:357:38: ^( SIGNAL_ID $part1 ( $part2)* )
+                # 358:35: -> ^( SIGNAL_ID $part1 ( $part2)* )
+                # GOC.g:358:38: ^( SIGNAL_ID $part1 ( $part2)* )
                 root_1 = self._adaptor.nil()
                 root_1 = self._adaptor.becomeRoot(self._adaptor.createFromType(SIGNAL_ID, "SIGNAL_ID"), root_1)
 
                 self._adaptor.addChild(root_1, stream_part1.nextNode())
-                # GOC.g:357:57: ( $part2)*
+                # GOC.g:358:57: ( $part2)*
                 while stream_part2.hasNext():
                     self._adaptor.addChild(root_1, stream_part2.nextNode())
 
@@ -6307,7 +6307,7 @@ class GOCParser(Parser):
     FOLLOW_RESULT_in_signalElement1710 = frozenset([58])
     FOLLOW_58_in_signalElement1712 = frozenset([36])
     FOLLOW_TYPE_in_signalElement1714 = frozenset([62])
-    FOLLOW_62_in_signalElement1716 = frozenset([73, 74, 75, 76, 77, 79, 80, 91])
+    FOLLOW_62_in_signalElement1716 = frozenset([73, 74, 75, 76, 77, 78, 79, 80, 91])
     FOLLOW_signalType_in_signalElement1718 = frozenset([57])
     FOLLOW_57_in_signalElement1720 = frozenset([59])
     FOLLOW_59_in_signalElement1722 = frozenset([1])
@@ -6315,50 +6315,50 @@ class GOCParser(Parser):
     FOLLOW_ID_in_signalElement1742 = frozenset([58])
     FOLLOW_58_in_signalElement1744 = frozenset([36])
     FOLLOW_TYPE_in_signalElement1746 = frozenset([62])
-    FOLLOW_62_in_signalElement1748 = frozenset([73, 74, 75, 76, 77, 79, 80, 91])
+    FOLLOW_62_in_signalElement1748 = frozenset([73, 74, 75, 76, 77, 78, 79, 80, 91])
     FOLLOW_signalType_in_signalElement1750 = frozenset([57])
     FOLLOW_57_in_signalElement1752 = frozenset([59])
     FOLLOW_59_in_signalElement1754 = frozenset([1])
     FOLLOW_set_in_signalType0 = frozenset([1])
-    FOLLOW_SCOPE_in_attributeElement1867 = frozenset([62])
-    FOLLOW_62_in_attributeElement1869 = frozenset([66, 67])
-    FOLLOW_67_in_attributeElement1874 = frozenset([57])
-    FOLLOW_66_in_attributeElement1878 = frozenset([57])
-    FOLLOW_57_in_attributeElement1881 = frozenset([1])
-    FOLLOW_VISIBILITY_in_attributeElement1895 = frozenset([62])
-    FOLLOW_62_in_attributeElement1897 = frozenset([63, 64, 65])
-    FOLLOW_63_in_attributeElement1902 = frozenset([57])
-    FOLLOW_64_in_attributeElement1906 = frozenset([57])
-    FOLLOW_65_in_attributeElement1910 = frozenset([57])
-    FOLLOW_57_in_attributeElement1913 = frozenset([1])
-    FOLLOW_typePath_in_typeName1935 = frozenset([1])
-    FOLLOW_92_in_typeName1950 = frozenset([74])
-    FOLLOW_74_in_typeName1953 = frozenset([1])
-    FOLLOW_92_in_typeName1971 = frozenset([93])
-    FOLLOW_93_in_typeName1974 = frozenset([1])
-    FOLLOW_73_in_typeName1993 = frozenset([1])
-    FOLLOW_77_in_typeName2000 = frozenset([1])
-    FOLLOW_75_in_typeName2007 = frozenset([1])
-    FOLLOW_76_in_typeName2014 = frozenset([1])
-    FOLLOW_78_in_typeName2023 = frozenset([1])
-    FOLLOW_typeName_in_typeArg2049 = frozenset([1])
-    FOLLOW_94_in_typeArg2059 = frozenset([86])
-    FOLLOW_86_in_typeArg2061 = frozenset([20, 73, 74, 75, 76, 77, 78, 92, 93, 94, 95, 96])
-    FOLLOW_typeArg_in_typeArg2063 = frozenset([87])
-    FOLLOW_87_in_typeArg2065 = frozenset([1])
-    FOLLOW_95_in_typeArg2083 = frozenset([86])
-    FOLLOW_86_in_typeArg2085 = frozenset([20, 73, 74, 75, 76, 77, 78, 92, 93, 94, 95, 96])
-    FOLLOW_typeArg_in_typeArg2087 = frozenset([87])
-    FOLLOW_87_in_typeArg2089 = frozenset([1])
-    FOLLOW_96_in_typePath2117 = frozenset([20])
-    FOLLOW_ID_in_typePath2119 = frozenset([96])
-    FOLLOW_96_in_typePath2121 = frozenset([20])
-    FOLLOW_ID_in_typePath2125 = frozenset([96])
+    FOLLOW_SCOPE_in_attributeElement1877 = frozenset([62])
+    FOLLOW_62_in_attributeElement1879 = frozenset([66, 67])
+    FOLLOW_67_in_attributeElement1884 = frozenset([57])
+    FOLLOW_66_in_attributeElement1888 = frozenset([57])
+    FOLLOW_57_in_attributeElement1891 = frozenset([1])
+    FOLLOW_VISIBILITY_in_attributeElement1905 = frozenset([62])
+    FOLLOW_62_in_attributeElement1907 = frozenset([63, 64, 65])
+    FOLLOW_63_in_attributeElement1912 = frozenset([57])
+    FOLLOW_64_in_attributeElement1916 = frozenset([57])
+    FOLLOW_65_in_attributeElement1920 = frozenset([57])
+    FOLLOW_57_in_attributeElement1923 = frozenset([1])
+    FOLLOW_typePath_in_typeName1945 = frozenset([1])
+    FOLLOW_92_in_typeName1960 = frozenset([74])
+    FOLLOW_74_in_typeName1963 = frozenset([1])
+    FOLLOW_92_in_typeName1981 = frozenset([93])
+    FOLLOW_93_in_typeName1984 = frozenset([1])
+    FOLLOW_73_in_typeName2003 = frozenset([1])
+    FOLLOW_77_in_typeName2010 = frozenset([1])
+    FOLLOW_75_in_typeName2017 = frozenset([1])
+    FOLLOW_76_in_typeName2024 = frozenset([1])
+    FOLLOW_78_in_typeName2033 = frozenset([1])
+    FOLLOW_typeName_in_typeArg2059 = frozenset([1])
+    FOLLOW_94_in_typeArg2069 = frozenset([86])
+    FOLLOW_86_in_typeArg2071 = frozenset([20, 73, 74, 75, 76, 77, 78, 92, 93, 94, 95, 96])
+    FOLLOW_typeArg_in_typeArg2073 = frozenset([87])
+    FOLLOW_87_in_typeArg2075 = frozenset([1])
+    FOLLOW_95_in_typeArg2093 = frozenset([86])
+    FOLLOW_86_in_typeArg2095 = frozenset([20, 73, 74, 75, 76, 77, 78, 92, 93, 94, 95, 96])
+    FOLLOW_typeArg_in_typeArg2097 = frozenset([87])
+    FOLLOW_87_in_typeArg2099 = frozenset([1])
     FOLLOW_96_in_typePath2127 = frozenset([20])
-    FOLLOW_ID_in_typePath2131 = frozenset([1])
-    FOLLOW_ID_in_signalID2734 = frozenset([1, 97])
-    FOLLOW_97_in_signalID2737 = frozenset([20])
-    FOLLOW_ID_in_signalID2741 = frozenset([1, 97])
+    FOLLOW_ID_in_typePath2129 = frozenset([96])
+    FOLLOW_96_in_typePath2131 = frozenset([20])
+    FOLLOW_ID_in_typePath2135 = frozenset([96])
+    FOLLOW_96_in_typePath2137 = frozenset([20])
+    FOLLOW_ID_in_typePath2141 = frozenset([1])
+    FOLLOW_ID_in_signalID2744 = frozenset([1, 97])
+    FOLLOW_97_in_signalID2747 = frozenset([20])
+    FOLLOW_ID_in_signalID2751 = frozenset([1, 97])
 
 
 

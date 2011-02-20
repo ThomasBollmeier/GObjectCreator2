@@ -14,18 +14,6 @@ package demo {
 
     }
 
-    gobject Animal {
-
-        abstract;
-
-        property category {
-            type: enumeration;
-            gtype: gtypename( AnimalCatg );
-            access: initial-write;
-        }
-
-    }
-
     gobject Bird {
 
         super Animal;
@@ -38,9 +26,25 @@ package demo {
 
         }
 
+        override eat;
+
         method fly {
             visibility: public;
         }
+
+    }
+
+    gobject Animal {
+
+        abstract;
+
+        property category {
+            type: enumeration;
+            gtype: gtypename( AnimalCatg );
+            access: initial-write;
+        }
+
+        method eat { inheritance: abstract; }
 
     }
 
