@@ -34,6 +34,12 @@ class GObject(PackageElement, Type):
 
         self._super_class = super_class
 
+    def get_super_class(self):
+
+        return self._super_class
+
+    super_class = property(get_super_class, set_super_class)
+
     def implement(self, interface):
 
         self._interfaces[interface.name] = interface
