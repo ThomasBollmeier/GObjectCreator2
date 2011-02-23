@@ -90,6 +90,14 @@ class GObject(PackageElement, Type):
         else:
             return None
 
+    def has_attributes(self, visibility):
+
+        for value in self._attributes.values():
+            if value.visibility == visibility:
+                return True
+            
+        return False
+
     # Properties:
 
     def _get_interfaces(self):

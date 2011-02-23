@@ -14,9 +14,16 @@ package demo {
 
     }
 
+    ginterface FlyingAnimal {
+
+        method fly {}
+
+    }
+
     gobject Bird {
 
         super Animal;
+        implements FlyingAnimal;
 
         constructor {
 
@@ -28,9 +35,9 @@ package demo {
 
         override eat;
 
-        method fly {
-            visibility: public;
-        }
+        method breed { visibility: public; }
+
+        attribute weight { type: double; }
 
     }
 
