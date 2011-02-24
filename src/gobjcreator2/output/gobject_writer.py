@@ -1,5 +1,5 @@
 from gobjcreator2.output.writer import Writer
-from gobjcreator2.metadef.constants import Visibility
+from gobjcreator2.metadef.constants import Visibility, Scope
 
 class GObjectWriter(Writer):
 
@@ -35,15 +35,16 @@ class GObjectWriter(Writer):
             self.writeln('#include "%s.h"' % self._clifname(intf).lower())
         self.writeln()
 
-        self.user_section("header_top")
+        self.user_section("header_top", "/* add includes here... */")
         self.writeln()
 
         if self._gobj.has_attributes(Visibility.PRIVATE):
             self.writeln("typedef struct _%(Class)sPriv %(Class)sPriv;" % self._vars)
-        if self._gobj.has_attributes(Visibility.PRIVATE):
+        if self._gobj.has_attributes(Visibility.PROTECTED):
             self.writeln("typedef struct _%(Class)sProt %(Class)sProt;" % self._vars)
         self.writeln()
 
+        self._write_struct()
         self.writeln("G_END_DECLS")
         self.writeln()
         self.writeln("#endif")
@@ -54,6 +55,44 @@ class GObjectWriter(Writer):
         self.writeln("* (see http://www.bollmeier.de/GObjectCreator for details).")
         self.writeln("* Please modify user sections only!")
         self.writeln("*/")
+
+    def _write_struct(self):
+
+        self.writeln("typedef struct _%(Class)s {" % self._vars)
+        self.indent()
+        self.writeln()
+
+        if self._gobj.super_class is None:
+            self.writeln("GObject super;")
+        else:
+            self.writeln("%s super;" % self._clifname(self._gobj.super_class))
+        self.writeln()
+
+        has_attrs = False
+        for attr in self._gobj.attributes:
+            if attr.visibility == Visibility.PUBLIC and \
+               attr.scope == Scope.INSTANCE:
+                has_attrs = True
+                self.writeln("%s %s;" % \
+                             (self.typename(attr.type), attr.name)
+                             )
+        if has_attrs:
+            self.writeln()
+
+        self.user_section("public_members",
+                          "/* add further public members...*/"
+                          )
+        self.writeln()
+
+        if self._gobj.has_attributes(Visibility.PROTECTED):
+            self.writeln("%(Class)sProt* prot;" % self._vars)
+        if self._gobj.has_attributes(Visibility.PRIVATE):
+            self.writeln("%(Class)sPriv* priv;" % self._vars)
+
+        self.writeln()
+        self.unindent()
+        self.writeln("} %(Class)s;" % self._vars)
+        self.writeln()
 
     def _clifname(self, clif):
 

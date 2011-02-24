@@ -382,7 +382,7 @@ class VisitorStep2(GOCVisitor):
             if attr == "scope":
                 scope = self._scope[attrs[attr]]
             elif attr == "visibility":
-                scope = self._visi[attrs[attr]]
+                visibility = self._visi[attrs[attr]]
 
         attribute = Attribute(name, type, scope, visibility)
 

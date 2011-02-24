@@ -37,6 +37,7 @@ package demo {
 
         method breed { visibility: public; }
 
+        attribute name { type: string; visibility: public; }
         attribute weight { type: double; }
 
     }

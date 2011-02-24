@@ -44,10 +44,19 @@ class Writer(object):
         tmp = " " * self._indent + text
         self._output.wrt(tmp, line_break=True)
 
-    def user_section(self, name):
+    def user_section(self, name, default_code=""):
 
         self.writeln("/* UserCode %s { */" % name)
-        self.writeln()
+        if default_code:
+            self.writeln()
+            self.indent()
+            lines = default_code.split("\n")
+            for line in lines:
+                self.writeln(line)
+            self.unindent()
+            self.writeln()
+        else:
+            self.writeln()
         self.writeln("/* } UserCode */")
 
     def indent(self):
