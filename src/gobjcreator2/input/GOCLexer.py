@@ -1,4 +1,4 @@
-# $ANTLR 3.1.3 Mar 18, 2009 10:09:25 GOC.g 2011-02-20 18:48:38
+# $ANTLR 3.1.3 Mar 18, 2009 10:09:25 GOC.g 2011-02-26 12:46:49
 
 import sys
 from antlr3 import *
@@ -1016,10 +1016,10 @@ class GOCLexer(Lexer):
             _type = T__91
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:42:7: ( 'null' )
-            # GOC.g:42:9: 'null'
+            # GOC.g:42:7: ( 'unsigned ' )
+            # GOC.g:42:9: 'unsigned '
             pass 
-            self.match("null")
+            self.match("unsigned ")
 
 
 
@@ -1041,10 +1041,10 @@ class GOCLexer(Lexer):
             _type = T__92
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:43:7: ( 'unsigned ' )
-            # GOC.g:43:9: 'unsigned '
+            # GOC.g:43:7: ( 'long' )
+            # GOC.g:43:9: 'long'
             pass 
-            self.match("unsigned ")
+            self.match("long")
 
 
 
@@ -1066,10 +1066,10 @@ class GOCLexer(Lexer):
             _type = T__93
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:44:7: ( 'long' )
-            # GOC.g:44:9: 'long'
+            # GOC.g:44:7: ( 'null' )
+            # GOC.g:44:9: 'null'
             pass 
-            self.match("long")
+            self.match("null")
 
 
 
@@ -1191,7 +1191,7 @@ class GOCLexer(Lexer):
             _type = COMMENT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:232:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
+            # GOC.g:221:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
             alt4 = 2
             LA4_0 = self.input.LA(1)
 
@@ -1213,10 +1213,10 @@ class GOCLexer(Lexer):
                 raise nvae
 
             if alt4 == 1:
-                # GOC.g:232:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                # GOC.g:221:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                 pass 
                 self.match("//")
-                # GOC.g:232:14: (~ ( '\\n' | '\\r' ) )*
+                # GOC.g:221:14: (~ ( '\\n' | '\\r' ) )*
                 while True: #loop1
                     alt1 = 2
                     LA1_0 = self.input.LA(1)
@@ -1226,7 +1226,7 @@ class GOCLexer(Lexer):
 
 
                     if alt1 == 1:
-                        # GOC.g:232:14: ~ ( '\\n' | '\\r' )
+                        # GOC.g:221:14: ~ ( '\\n' | '\\r' )
                         pass 
                         if (0 <= self.input.LA(1) <= 9) or (11 <= self.input.LA(1) <= 12) or (14 <= self.input.LA(1) <= 65535):
                             self.input.consume()
@@ -1239,14 +1239,14 @@ class GOCLexer(Lexer):
 
                     else:
                         break #loop1
-                # GOC.g:232:28: ( '\\r' )?
+                # GOC.g:221:28: ( '\\r' )?
                 alt2 = 2
                 LA2_0 = self.input.LA(1)
 
                 if (LA2_0 == 13) :
                     alt2 = 1
                 if alt2 == 1:
-                    # GOC.g:232:28: '\\r'
+                    # GOC.g:221:28: '\\r'
                     pass 
                     self.match(13)
 
@@ -1259,10 +1259,10 @@ class GOCLexer(Lexer):
 
 
             elif alt4 == 2:
-                # GOC.g:233:9: '/*' ( options {greedy=false; } : . )* '*/'
+                # GOC.g:222:9: '/*' ( options {greedy=false; } : . )* '*/'
                 pass 
                 self.match("/*")
-                # GOC.g:233:14: ( options {greedy=false; } : . )*
+                # GOC.g:222:14: ( options {greedy=false; } : . )*
                 while True: #loop3
                     alt3 = 2
                     LA3_0 = self.input.LA(1)
@@ -1281,7 +1281,7 @@ class GOCLexer(Lexer):
 
 
                     if alt3 == 1:
-                        # GOC.g:233:42: .
+                        # GOC.g:222:42: .
                         pass 
                         self.matchAny()
 
@@ -1312,8 +1312,8 @@ class GOCLexer(Lexer):
             _type = WS
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:236:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            # GOC.g:236:9: ( ' ' | '\\t' | '\\r' | '\\n' )
+            # GOC.g:225:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            # GOC.g:225:9: ( ' ' | '\\t' | '\\r' | '\\n' )
             pass 
             if (9 <= self.input.LA(1) <= 10) or self.input.LA(1) == 13 or self.input.LA(1) == 32:
                 self.input.consume()
@@ -1346,7 +1346,7 @@ class GOCLexer(Lexer):
             _type = BOOLVALUE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:244:5: ( 'true' | 'false' )
+            # GOC.g:233:5: ( 'true' | 'false' )
             alt5 = 2
             LA5_0 = self.input.LA(1)
 
@@ -1360,13 +1360,13 @@ class GOCLexer(Lexer):
                 raise nvae
 
             if alt5 == 1:
-                # GOC.g:244:9: 'true'
+                # GOC.g:233:9: 'true'
                 pass 
                 self.match("true")
 
 
             elif alt5 == 2:
-                # GOC.g:245:9: 'false'
+                # GOC.g:234:9: 'false'
                 pass 
                 self.match("false")
 
@@ -1389,8 +1389,8 @@ class GOCLexer(Lexer):
             _type = PACKAGE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:249:5: ( 'package' )
-            # GOC.g:249:9: 'package'
+            # GOC.g:238:5: ( 'package' )
+            # GOC.g:238:9: 'package'
             pass 
             self.match("package")
 
@@ -1414,8 +1414,8 @@ class GOCLexer(Lexer):
             _type = GOBJECT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:253:2: ( 'gobject' )
-            # GOC.g:253:4: 'gobject'
+            # GOC.g:242:2: ( 'gobject' )
+            # GOC.g:242:4: 'gobject'
             pass 
             self.match("gobject")
 
@@ -1439,8 +1439,8 @@ class GOCLexer(Lexer):
             _type = GINTERFACE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:257:2: ( 'ginterface' )
-            # GOC.g:257:4: 'ginterface'
+            # GOC.g:246:2: ( 'ginterface' )
+            # GOC.g:246:4: 'ginterface'
             pass 
             self.match("ginterface")
 
@@ -1464,8 +1464,8 @@ class GOCLexer(Lexer):
             _type = GTYPE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:261:5: ( 'gtype' )
-            # GOC.g:261:9: 'gtype'
+            # GOC.g:250:5: ( 'gtype' )
+            # GOC.g:250:9: 'gtype'
             pass 
             self.match("gtype")
 
@@ -1489,8 +1489,8 @@ class GOCLexer(Lexer):
             _type = GTYPENAME
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:265:5: ( 'gtypename' )
-            # GOC.g:265:9: 'gtypename'
+            # GOC.g:254:5: ( 'gtypename' )
+            # GOC.g:254:9: 'gtypename'
             pass 
             self.match("gtypename")
 
@@ -1514,8 +1514,8 @@ class GOCLexer(Lexer):
             _type = ERROR_DOMAIN
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:269:5: ( 'gerror' )
-            # GOC.g:269:9: 'gerror'
+            # GOC.g:258:5: ( 'gerror' )
+            # GOC.g:258:9: 'gerror'
             pass 
             self.match("gerror")
 
@@ -1539,8 +1539,8 @@ class GOCLexer(Lexer):
             _type = ENUMERATION
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:273:5: ( 'genum' )
-            # GOC.g:273:9: 'genum'
+            # GOC.g:262:5: ( 'genum' )
+            # GOC.g:262:9: 'genum'
             pass 
             self.match("genum")
 
@@ -1564,8 +1564,8 @@ class GOCLexer(Lexer):
             _type = FLAGS
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:277:5: ( 'gflags' )
-            # GOC.g:277:9: 'gflags'
+            # GOC.g:266:5: ( 'gflags' )
+            # GOC.g:266:9: 'gflags'
             pass 
             self.match("gflags")
 
@@ -1589,8 +1589,8 @@ class GOCLexer(Lexer):
             _type = SUPER
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:281:2: ( 'super' )
-            # GOC.g:281:4: 'super'
+            # GOC.g:270:2: ( 'super' )
+            # GOC.g:270:4: 'super'
             pass 
             self.match("super")
 
@@ -1614,8 +1614,8 @@ class GOCLexer(Lexer):
             _type = PREFIX
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:285:5: ( 'prefix' )
-            # GOC.g:285:9: 'prefix'
+            # GOC.g:274:5: ( 'prefix' )
+            # GOC.g:274:9: 'prefix'
             pass 
             self.match("prefix")
 
@@ -1639,8 +1639,8 @@ class GOCLexer(Lexer):
             _type = IMPLEMENTS
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:289:2: ( 'implements' )
-            # GOC.g:289:4: 'implements'
+            # GOC.g:278:2: ( 'implements' )
+            # GOC.g:278:4: 'implements'
             pass 
             self.match("implements")
 
@@ -1664,8 +1664,8 @@ class GOCLexer(Lexer):
             _type = CONSTRUCTOR
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:293:2: ( 'constructor' )
-            # GOC.g:293:4: 'constructor'
+            # GOC.g:282:2: ( 'constructor' )
+            # GOC.g:282:4: 'constructor'
             pass 
             self.match("constructor")
 
@@ -1689,8 +1689,8 @@ class GOCLexer(Lexer):
             _type = METHOD
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:297:2: ( 'method' )
-            # GOC.g:297:4: 'method'
+            # GOC.g:286:2: ( 'method' )
+            # GOC.g:286:4: 'method'
             pass 
             self.match("method")
 
@@ -1714,8 +1714,8 @@ class GOCLexer(Lexer):
             _type = OVERRIDE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:301:2: ( 'override' )
-            # GOC.g:301:4: 'override'
+            # GOC.g:290:2: ( 'override' )
+            # GOC.g:290:4: 'override'
             pass 
             self.match("override")
 
@@ -1739,8 +1739,8 @@ class GOCLexer(Lexer):
             _type = PARAMETER
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:305:2: ( 'parameter' )
-            # GOC.g:305:4: 'parameter'
+            # GOC.g:294:2: ( 'parameter' )
+            # GOC.g:294:4: 'parameter'
             pass 
             self.match("parameter")
 
@@ -1764,8 +1764,8 @@ class GOCLexer(Lexer):
             _type = ATTRIBUTE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:309:2: ( 'attribute' )
-            # GOC.g:309:4: 'attribute'
+            # GOC.g:298:2: ( 'attribute' )
+            # GOC.g:298:4: 'attribute'
             pass 
             self.match("attribute")
 
@@ -1789,8 +1789,8 @@ class GOCLexer(Lexer):
             _type = PROPERTY
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:313:2: ( 'property' )
-            # GOC.g:313:4: 'property'
+            # GOC.g:302:2: ( 'property' )
+            # GOC.g:302:4: 'property'
             pass 
             self.match("property")
 
@@ -1814,8 +1814,8 @@ class GOCLexer(Lexer):
             _type = INIT_PROPERTIES
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:317:5: ( 'init_properties' )
-            # GOC.g:317:9: 'init_properties'
+            # GOC.g:306:5: ( 'init_properties' )
+            # GOC.g:306:9: 'init_properties'
             pass 
             self.match("init_properties")
 
@@ -1839,8 +1839,8 @@ class GOCLexer(Lexer):
             _type = SIGNAL
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:321:2: ( 'signal' )
-            # GOC.g:321:4: 'signal'
+            # GOC.g:310:2: ( 'signal' )
+            # GOC.g:310:4: 'signal'
             pass 
             self.match("signal")
 
@@ -1864,8 +1864,8 @@ class GOCLexer(Lexer):
             _type = RESULT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:325:2: ( 'result' )
-            # GOC.g:325:4: 'result'
+            # GOC.g:314:2: ( 'result' )
+            # GOC.g:314:4: 'result'
             pass 
             self.match("result")
 
@@ -1889,8 +1889,8 @@ class GOCLexer(Lexer):
             _type = TYPE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:328:5: ( 'type' )
-            # GOC.g:328:7: 'type'
+            # GOC.g:317:5: ( 'type' )
+            # GOC.g:317:7: 'type'
             pass 
             self.match("type")
 
@@ -1914,8 +1914,8 @@ class GOCLexer(Lexer):
             _type = MODIFIERS
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:331:2: ( 'modifiers' )
-            # GOC.g:331:4: 'modifiers'
+            # GOC.g:320:2: ( 'modifiers' )
+            # GOC.g:320:4: 'modifiers'
             pass 
             self.match("modifiers")
 
@@ -1939,8 +1939,8 @@ class GOCLexer(Lexer):
             _type = SCOPE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:335:2: ( 'scope' )
-            # GOC.g:335:4: 'scope'
+            # GOC.g:324:2: ( 'scope' )
+            # GOC.g:324:4: 'scope'
             pass 
             self.match("scope")
 
@@ -1964,8 +1964,8 @@ class GOCLexer(Lexer):
             _type = VISIBILITY
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:339:2: ( 'visibility' )
-            # GOC.g:339:4: 'visibility'
+            # GOC.g:328:2: ( 'visibility' )
+            # GOC.g:328:4: 'visibility'
             pass 
             self.match("visibility")
 
@@ -1989,8 +1989,8 @@ class GOCLexer(Lexer):
             _type = INHERITANCE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:343:2: ( 'inheritance' )
-            # GOC.g:343:4: 'inheritance'
+            # GOC.g:332:2: ( 'inheritance' )
+            # GOC.g:332:4: 'inheritance'
             pass 
             self.match("inheritance")
 
@@ -2014,8 +2014,8 @@ class GOCLexer(Lexer):
             _type = ABSTRACT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:347:5: ( 'abstract' )
-            # GOC.g:347:9: 'abstract'
+            # GOC.g:336:5: ( 'abstract' )
+            # GOC.g:336:9: 'abstract'
             pass 
             self.match("abstract")
 
@@ -2039,8 +2039,8 @@ class GOCLexer(Lexer):
             _type = AUTO_CREATE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:351:5: ( 'auto_create' )
-            # GOC.g:351:9: 'auto_create'
+            # GOC.g:340:5: ( 'auto_create' )
+            # GOC.g:340:9: 'auto_create'
             pass 
             self.match("auto_create")
 
@@ -2064,8 +2064,8 @@ class GOCLexer(Lexer):
             _type = ID
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:354:5: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            # GOC.g:354:7: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            # GOC.g:343:5: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            # GOC.g:343:7: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             pass 
             if (65 <= self.input.LA(1) <= 90) or self.input.LA(1) == 95 or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
@@ -2074,7 +2074,7 @@ class GOCLexer(Lexer):
                 self.recover(mse)
                 raise mse
 
-            # GOC.g:354:31: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            # GOC.g:343:31: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             while True: #loop6
                 alt6 = 2
                 LA6_0 = self.input.LA(1)
@@ -2118,11 +2118,11 @@ class GOCLexer(Lexer):
             _type = STRING
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:362:5: ( '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"' )
-            # GOC.g:362:8: '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"'
+            # GOC.g:351:5: ( '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"' )
+            # GOC.g:351:8: '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"'
             pass 
             self.match(34)
-            # GOC.g:362:12: ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )*
+            # GOC.g:351:12: ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )*
             while True: #loop7
                 alt7 = 3
                 LA7_0 = self.input.LA(1)
@@ -2134,13 +2134,13 @@ class GOCLexer(Lexer):
 
 
                 if alt7 == 1:
-                    # GOC.g:362:14: ESC_SEQ
+                    # GOC.g:351:14: ESC_SEQ
                     pass 
                     self.mESC_SEQ()
 
 
                 elif alt7 == 2:
-                    # GOC.g:362:24: ~ ( '\\\\' | '\"' )
+                    # GOC.g:351:24: ~ ( '\\\\' | '\"' )
                     pass 
                     if (0 <= self.input.LA(1) <= 33) or (35 <= self.input.LA(1) <= 91) or (93 <= self.input.LA(1) <= 65535):
                         self.input.consume()
@@ -2175,17 +2175,17 @@ class GOCLexer(Lexer):
             _type = INT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:365:5: ( ( '1' .. '9' ) ( '0' .. '9' )* )
-            # GOC.g:365:9: ( '1' .. '9' ) ( '0' .. '9' )*
+            # GOC.g:354:5: ( ( '1' .. '9' ) ( '0' .. '9' )* )
+            # GOC.g:354:9: ( '1' .. '9' ) ( '0' .. '9' )*
             pass 
-            # GOC.g:365:9: ( '1' .. '9' )
-            # GOC.g:365:10: '1' .. '9'
+            # GOC.g:354:9: ( '1' .. '9' )
+            # GOC.g:354:10: '1' .. '9'
             pass 
             self.matchRange(49, 57)
 
 
 
-            # GOC.g:365:19: ( '0' .. '9' )*
+            # GOC.g:354:19: ( '0' .. '9' )*
             while True: #loop8
                 alt8 = 2
                 LA8_0 = self.input.LA(1)
@@ -2195,7 +2195,7 @@ class GOCLexer(Lexer):
 
 
                 if alt8 == 1:
-                    # GOC.g:365:20: '0' .. '9'
+                    # GOC.g:354:20: '0' .. '9'
                     pass 
                     self.matchRange(48, 57)
 
@@ -2220,8 +2220,8 @@ class GOCLexer(Lexer):
     def mHEX_DIGIT(self, ):
 
         try:
-            # GOC.g:369:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
-            # GOC.g:369:13: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
+            # GOC.g:358:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            # GOC.g:358:13: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
             pass 
             if (48 <= self.input.LA(1) <= 57) or (65 <= self.input.LA(1) <= 70) or (97 <= self.input.LA(1) <= 102):
                 self.input.consume()
@@ -2246,7 +2246,7 @@ class GOCLexer(Lexer):
     def mESC_SEQ(self, ):
 
         try:
-            # GOC.g:373:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
+            # GOC.g:362:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
             alt9 = 3
             LA9_0 = self.input.LA(1)
 
@@ -2269,7 +2269,7 @@ class GOCLexer(Lexer):
                 raise nvae
 
             if alt9 == 1:
-                # GOC.g:373:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
+                # GOC.g:362:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
                 pass 
                 self.match(92)
                 if self.input.LA(1) == 34 or self.input.LA(1) == 39 or self.input.LA(1) == 92 or self.input.LA(1) == 98 or self.input.LA(1) == 102 or self.input.LA(1) == 110 or self.input.LA(1) == 114 or self.input.LA(1) == 116:
@@ -2282,13 +2282,13 @@ class GOCLexer(Lexer):
 
 
             elif alt9 == 2:
-                # GOC.g:374:9: UNICODE_ESC
+                # GOC.g:363:9: UNICODE_ESC
                 pass 
                 self.mUNICODE_ESC()
 
 
             elif alt9 == 3:
-                # GOC.g:375:9: OCTAL_ESC
+                # GOC.g:364:9: OCTAL_ESC
                 pass 
                 self.mOCTAL_ESC()
 
@@ -2306,7 +2306,7 @@ class GOCLexer(Lexer):
     def mOCTAL_ESC(self, ):
 
         try:
-            # GOC.g:380:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
+            # GOC.g:369:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
             alt10 = 3
             LA10_0 = self.input.LA(1)
 
@@ -2343,25 +2343,25 @@ class GOCLexer(Lexer):
                 raise nvae
 
             if alt10 == 1:
-                # GOC.g:380:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                # GOC.g:369:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                 pass 
                 self.match(92)
-                # GOC.g:380:14: ( '0' .. '3' )
-                # GOC.g:380:15: '0' .. '3'
+                # GOC.g:369:14: ( '0' .. '3' )
+                # GOC.g:369:15: '0' .. '3'
                 pass 
                 self.matchRange(48, 51)
 
 
 
-                # GOC.g:380:25: ( '0' .. '7' )
-                # GOC.g:380:26: '0' .. '7'
+                # GOC.g:369:25: ( '0' .. '7' )
+                # GOC.g:369:26: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
 
 
-                # GOC.g:380:36: ( '0' .. '7' )
-                # GOC.g:380:37: '0' .. '7'
+                # GOC.g:369:36: ( '0' .. '7' )
+                # GOC.g:369:37: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
@@ -2370,18 +2370,18 @@ class GOCLexer(Lexer):
 
 
             elif alt10 == 2:
-                # GOC.g:381:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
+                # GOC.g:370:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
                 pass 
                 self.match(92)
-                # GOC.g:381:14: ( '0' .. '7' )
-                # GOC.g:381:15: '0' .. '7'
+                # GOC.g:370:14: ( '0' .. '7' )
+                # GOC.g:370:15: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
 
 
-                # GOC.g:381:25: ( '0' .. '7' )
-                # GOC.g:381:26: '0' .. '7'
+                # GOC.g:370:25: ( '0' .. '7' )
+                # GOC.g:370:26: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
@@ -2390,11 +2390,11 @@ class GOCLexer(Lexer):
 
 
             elif alt10 == 3:
-                # GOC.g:382:9: '\\\\' ( '0' .. '7' )
+                # GOC.g:371:9: '\\\\' ( '0' .. '7' )
                 pass 
                 self.match(92)
-                # GOC.g:382:14: ( '0' .. '7' )
-                # GOC.g:382:15: '0' .. '7'
+                # GOC.g:371:14: ( '0' .. '7' )
+                # GOC.g:371:15: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
@@ -2415,8 +2415,8 @@ class GOCLexer(Lexer):
     def mUNICODE_ESC(self, ):
 
         try:
-            # GOC.g:387:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
-            # GOC.g:387:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+            # GOC.g:376:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            # GOC.g:376:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
             pass 
             self.match(92)
             self.match(117)
@@ -2900,23 +2900,23 @@ class GOCLexer(Lexer):
     DFA11_eot = DFA.unpack(
         u"\1\uffff\1\35\3\uffff\2\35\1\46\4\35\1\uffff\5\35\2\uffff\4\35"
         u"\3\uffff\2\35\3\uffff\5\35\2\uffff\115\35\1\u00ae\1\35\1\u00b0"
-        u"\1\u00b1\24\35\1\u00c7\41\35\1\uffff\1\35\2\uffff\2\35\1\u00ec"
-        u"\1\35\1\u00ee\1\u00ef\1\u00f0\1\u00f1\15\35\1\uffff\1\u0100\1\u0101"
+        u"\1\u00b1\24\35\1\u00c7\41\35\1\uffff\1\35\2\uffff\3\35\1\u00ed"
+        u"\1\u00ee\1\u00ef\1\u00f0\1\u00f1\15\35\1\uffff\1\u0100\1\u0101"
         u"\14\35\1\u010e\1\35\1\u0110\1\u0111\1\u0112\1\u00f0\14\35\1\uffff"
-        u"\3\35\1\uffff\1\35\4\uffff\2\35\1\u0128\1\35\1\u012a\11\35\2\uffff"
-        u"\2\35\1\u0136\3\35\1\u013a\3\35\1\u013e\1\u013f\1\uffff\1\u0140"
-        u"\3\uffff\2\35\1\u0143\2\35\1\u0146\2\35\1\u0149\3\35\2\uffff\1"
-        u"\u014d\1\u014e\5\35\1\uffff\1\u0154\1\uffff\1\u0155\1\u0156\1\35"
-        u"\1\u0158\5\35\1\u015e\1\35\1\uffff\2\35\1\u0162\1\uffff\1\u0163"
-        u"\1\u0164\1\35\3\uffff\1\35\1\u0167\1\uffff\1\35\1\u0169\1\uffff"
-        u"\2\35\1\uffff\3\35\2\uffff\2\35\1\u0171\2\35\3\uffff\1\u0174\2"
-        u"\uffff\4\35\1\uffff\2\35\1\u017b\3\uffff\2\35\1\uffff\1\35\1\uffff"
-        u"\1\u017f\2\35\1\u0182\3\35\1\uffff\2\35\1\uffff\5\35\1\u018d\1"
-        u"\uffff\1\u018e\2\35\1\uffff\1\35\1\u0192\1\uffff\1\35\1\u0194\1"
-        u"\uffff\1\35\1\u0196\2\35\1\u0199\1\35\1\u019b\2\uffff\3\35\1\uffff"
-        u"\1\35\1\uffff\1\u01a0\1\uffff\1\35\1\u01a2\1\uffff\1\u01a3\1\uffff"
-        u"\1\35\1\u01a5\1\u01a6\1\u01a7\1\uffff\1\35\2\uffff\1\35\3\uffff"
-        u"\1\35\1\u01ab\1\35\1\uffff\1\u01ad\1\uffff"
+        u"\4\35\5\uffff\2\35\1\u0128\1\35\1\u012a\11\35\2\uffff\2\35\1\u0136"
+        u"\3\35\1\u013a\3\35\1\u013e\1\u013f\1\uffff\1\u0140\3\uffff\2\35"
+        u"\1\u0143\2\35\1\u0146\2\35\1\u0149\3\35\2\uffff\1\u014d\1\u014e"
+        u"\5\35\1\uffff\1\u0154\1\uffff\1\u0155\1\u0156\1\35\1\u0158\5\35"
+        u"\1\u015e\1\35\1\uffff\2\35\1\u0162\1\uffff\1\u0163\1\u0164\1\35"
+        u"\3\uffff\1\35\1\u0167\1\uffff\1\35\1\u0169\1\uffff\2\35\1\uffff"
+        u"\3\35\2\uffff\2\35\1\u0171\2\35\3\uffff\1\u0174\2\uffff\4\35\1"
+        u"\uffff\2\35\1\u017b\3\uffff\2\35\1\uffff\1\35\1\uffff\1\u017f\2"
+        u"\35\1\u0182\3\35\1\uffff\2\35\1\uffff\5\35\1\u018d\1\uffff\1\u018e"
+        u"\2\35\1\uffff\1\35\1\u0192\1\uffff\1\35\1\u0194\1\uffff\1\35\1"
+        u"\u0196\2\35\1\u0199\1\35\1\u019b\2\uffff\3\35\1\uffff\1\35\1\uffff"
+        u"\1\u01a0\1\uffff\1\35\1\u01a2\1\uffff\1\u01a3\1\uffff\1\35\1\u01a5"
+        u"\1\u01a6\1\u01a7\1\uffff\1\35\2\uffff\1\35\3\uffff\1\35\1\u01ab"
+        u"\1\35\1\uffff\1\u01ad\1\uffff"
         )
 
     DFA11_eof = DFA.unpack(
@@ -2925,95 +2925,94 @@ class GOCLexer(Lexer):
 
     DFA11_min = DFA.unpack(
         u"\1\11\1\155\3\uffff\1\157\1\141\1\72\1\141\1\143\1\141\1\151\1"
-        u"\uffff\1\145\1\142\1\156\1\142\1\145\2\uffff\1\141\1\165\1\156"
-        u"\1\151\3\uffff\1\162\1\145\3\uffff\1\143\1\160\1\144\1\154\1\162"
+        u"\uffff\1\145\1\142\1\156\1\142\1\145\2\uffff\1\141\1\156\1\151"
+        u"\1\165\3\uffff\1\162\1\145\3\uffff\1\143\1\160\1\144\1\154\1\162"
         u"\2\uffff\1\142\1\145\1\151\1\143\1\141\1\160\1\147\1\157\1\156"
         u"\1\157\1\154\1\156\1\157\1\165\1\146\1\152\1\145\1\165\1\143\1"
-        u"\164\1\163\1\164\1\141\1\156\1\170\1\164\1\144\1\154\1\163\1\156"
-        u"\1\163\1\165\1\160\1\142\1\156\1\171\1\156\2\154\1\164\1\145\1"
+        u"\164\1\163\1\164\1\141\1\156\1\170\1\164\1\144\1\163\1\156\1\163"
+        u"\1\154\1\165\1\160\1\142\1\156\1\171\1\156\2\154\1\164\1\145\1"
         u"\164\1\145\1\154\1\145\1\163\1\165\1\164\1\151\1\154\1\160\1\166"
         u"\1\146\1\156\1\153\1\141\1\164\1\151\1\145\1\156\1\160\2\141\1"
         u"\163\1\144\1\154\1\142\1\143\1\141\1\145\1\162\1\155\1\145\1\162"
-        u"\1\164\1\157\1\144\1\60\1\165\2\60\1\150\1\151\1\154\1\151\1\147"
-        u"\1\164\2\145\1\152\1\164\1\160\1\162\1\165\1\141\1\165\1\141\1"
-        u"\147\1\137\1\162\1\145\1\60\1\164\1\145\1\165\1\142\1\151\2\145"
-        u"\1\141\1\151\1\164\1\141\1\155\1\151\1\156\1\162\1\141\1\145\1"
-        u"\154\1\164\1\145\1\137\1\145\1\154\1\162\1\165\1\143\1\162\1\145"
-        u"\1\163\1\151\1\162\1\137\1\55\1\uffff\1\154\2\uffff\1\157\1\146"
-        u"\1\60\1\147\4\60\3\145\1\157\1\155\1\147\1\144\1\156\1\145\1\141"
-        u"\1\160\1\151\1\155\1\uffff\2\60\1\141\1\151\2\143\1\162\1\164\1"
-        u"\170\1\145\1\147\1\145\1\143\1\147\1\60\1\154\4\60\1\160\1\141"
-        u"\1\145\1\151\1\154\1\164\1\151\1\162\1\163\1\142\1\141\1\143\1"
-        u"\157\1\164\1\144\1\151\1\uffff\1\156\4\uffff\1\143\1\162\1\60\1"
-        u"\162\1\60\1\163\1\145\1\143\1\162\1\154\1\162\1\164\1\145\1\165"
-        u"\2\uffff\2\154\1\60\2\164\1\145\1\60\1\162\1\145\1\164\2\60\1\uffff"
-        u"\1\60\3\uffff\1\162\1\156\1\60\1\160\1\164\1\60\1\144\1\141\1\60"
-        u"\1\165\1\143\1\162\2\uffff\2\60\2\145\1\164\1\146\1\141\1\uffff"
-        u"\1\60\1\uffff\2\60\1\145\1\60\1\55\1\157\1\141\1\156\1\143\1\60"
-        u"\1\151\1\uffff\1\145\1\171\1\60\1\uffff\2\60\1\145\3\uffff\1\157"
-        u"\1\60\1\uffff\1\164\1\60\1\uffff\1\145\1\164\1\uffff\2\164\1\145"
-        u"\2\uffff\1\162\1\144\1\60\1\141\1\155\3\uffff\1\60\2\uffff\1\160"
-        u"\1\156\2\164\1\uffff\1\164\1\144\1\60\3\uffff\1\162\1\160\1\uffff"
-        u"\1\151\1\uffff\1\60\1\151\1\145\1\60\1\141\1\163\1\40\1\uffff\1"
-        u"\143\1\145\1\uffff\1\145\1\143\1\163\1\157\1\171\1\60\1\uffff\1"
-        u"\60\1\145\1\157\1\uffff\1\157\1\60\1\uffff\1\164\1\60\1\uffff\1"
-        u"\145\1\60\1\162\1\145\1\60\1\162\1\60\2\uffff\1\162\2\156\1\uffff"
-        u"\1\145\1\uffff\1\60\1\uffff\1\164\1\60\1\uffff\1\60\1\uffff\1\164"
-        u"\3\60\1\uffff\1\151\2\uffff\1\171\3\uffff\1\145\1\60\1\163\1\uffff"
-        u"\1\60\1\uffff"
+        u"\1\164\1\157\1\144\1\60\1\165\2\60\1\150\2\151\1\147\1\164\1\154"
+        u"\2\145\1\152\1\164\1\160\1\162\1\165\1\141\1\165\1\141\1\147\1"
+        u"\137\1\162\1\145\1\60\1\164\1\145\1\165\1\142\1\151\2\145\1\141"
+        u"\1\151\1\164\1\141\1\155\1\151\1\156\1\162\1\141\1\145\1\154\1"
+        u"\164\1\145\1\137\1\145\1\154\1\162\1\165\1\143\1\162\1\145\1\163"
+        u"\1\151\1\162\1\137\1\55\1\uffff\1\154\2\uffff\1\157\1\146\1\147"
+        u"\5\60\3\145\1\157\1\155\1\147\1\144\1\156\1\145\1\141\1\160\1\151"
+        u"\1\155\1\uffff\2\60\1\141\1\151\2\143\1\162\1\164\1\170\1\145\1"
+        u"\147\1\145\1\143\1\147\1\60\1\154\4\60\1\160\1\141\1\145\1\151"
+        u"\1\154\1\164\1\151\1\162\1\163\1\142\1\141\1\143\1\157\1\164\1"
+        u"\144\1\151\1\156\5\uffff\1\143\1\162\1\60\1\162\1\60\1\163\1\145"
+        u"\1\143\1\162\1\154\1\162\1\164\1\145\1\165\2\uffff\2\154\1\60\2"
+        u"\164\1\145\1\60\1\162\1\145\1\164\2\60\1\uffff\1\60\3\uffff\1\162"
+        u"\1\156\1\60\1\160\1\164\1\60\1\144\1\141\1\60\1\165\1\143\1\162"
+        u"\2\uffff\2\60\2\145\1\164\1\146\1\141\1\uffff\1\60\1\uffff\2\60"
+        u"\1\145\1\60\1\55\1\157\1\141\1\156\1\143\1\60\1\151\1\uffff\1\145"
+        u"\1\171\1\60\1\uffff\2\60\1\145\3\uffff\1\157\1\60\1\uffff\1\164"
+        u"\1\60\1\uffff\1\145\1\164\1\uffff\2\164\1\145\2\uffff\1\162\1\144"
+        u"\1\60\1\141\1\155\3\uffff\1\60\2\uffff\1\160\1\156\2\164\1\uffff"
+        u"\1\164\1\144\1\60\3\uffff\1\162\1\160\1\uffff\1\151\1\uffff\1\60"
+        u"\1\151\1\145\1\60\1\141\1\163\1\40\1\uffff\1\143\1\145\1\uffff"
+        u"\1\145\1\143\1\163\1\157\1\171\1\60\1\uffff\1\60\1\145\1\157\1"
+        u"\uffff\1\157\1\60\1\uffff\1\164\1\60\1\uffff\1\145\1\60\1\162\1"
+        u"\145\1\60\1\162\1\60\2\uffff\1\162\2\156\1\uffff\1\145\1\uffff"
+        u"\1\60\1\uffff\1\164\1\60\1\uffff\1\60\1\uffff\1\164\3\60\1\uffff"
+        u"\1\151\2\uffff\1\171\3\uffff\1\145\1\60\1\163\1\uffff\1\60\1\uffff"
         )
 
     DFA11_max = DFA.unpack(
         u"\1\175\1\156\3\uffff\1\157\1\151\1\72\2\165\1\154\1\157\1\uffff"
-        u"\1\157\1\166\1\156\1\165\1\145\2\uffff\1\157\1\165\1\156\1\157"
+        u"\1\157\1\166\1\156\1\165\1\145\2\uffff\1\157\1\156\1\157\1\165"
         u"\3\uffff\1\171\1\164\3\uffff\1\164\1\160\1\156\1\154\1\163\2\uffff"
         u"\1\142\1\157\1\151\2\162\1\160\1\147\1\157\1\156\1\157\1\154\1"
         u"\156\1\157\1\165\1\163\1\152\1\145\1\165\1\143\1\164\1\163\1\164"
-        u"\1\163\1\156\1\170\1\164\1\144\1\154\1\163\1\156\1\163\1\165\1"
+        u"\1\163\1\156\1\170\1\164\1\144\1\163\1\156\1\163\1\154\1\165\1"
         u"\160\1\142\1\156\1\171\1\162\2\154\1\164\1\145\1\164\1\145\1\154"
         u"\1\145\1\163\1\165\1\164\1\151\1\154\1\164\1\166\1\146\1\156\1"
         u"\153\1\141\1\164\1\151\1\145\1\156\1\160\2\141\1\163\1\144\1\154"
         u"\1\142\1\143\1\141\1\145\1\162\1\155\1\145\1\162\1\164\1\157\1"
-        u"\144\1\172\1\165\2\172\1\150\1\151\1\154\1\151\1\147\1\164\2\145"
-        u"\1\152\1\164\1\160\1\162\1\165\1\141\1\165\1\141\1\147\1\151\1"
-        u"\162\1\145\1\172\1\164\1\145\1\165\1\142\1\151\2\145\1\141\1\151"
-        u"\1\164\1\141\1\155\1\151\1\156\1\162\1\141\1\145\1\154\1\164\1"
-        u"\145\1\137\1\145\1\154\1\162\1\165\1\143\1\162\1\145\1\163\1\151"
-        u"\1\162\1\137\1\55\1\uffff\1\154\2\uffff\1\157\1\146\1\172\1\147"
-        u"\4\172\3\145\1\157\1\155\1\147\1\144\1\156\1\145\1\141\1\160\1"
-        u"\151\1\155\1\uffff\2\172\1\141\1\151\2\143\1\162\1\164\1\170\1"
-        u"\145\1\147\1\145\1\143\1\147\1\172\1\154\4\172\1\160\1\141\1\145"
-        u"\1\151\1\154\1\164\1\151\1\162\1\163\1\142\1\141\1\143\1\167\1"
-        u"\164\1\144\1\151\1\uffff\1\156\4\uffff\1\143\1\162\1\172\1\162"
-        u"\1\172\1\163\1\145\1\143\1\162\1\154\1\162\1\164\1\145\1\165\2"
-        u"\uffff\2\154\1\172\2\164\1\145\1\172\1\162\1\145\1\164\2\172\1"
-        u"\uffff\1\172\3\uffff\1\162\1\156\1\172\1\160\1\164\1\172\1\144"
-        u"\1\141\1\172\1\165\1\143\1\162\2\uffff\2\172\2\145\1\164\1\146"
-        u"\1\141\1\uffff\1\172\1\uffff\2\172\1\145\1\172\1\55\1\157\1\141"
-        u"\1\156\1\143\1\172\1\151\1\uffff\1\145\1\171\1\172\1\uffff\2\172"
-        u"\1\145\3\uffff\1\157\1\172\1\uffff\1\164\1\172\1\uffff\1\145\1"
-        u"\164\1\uffff\2\164\1\145\2\uffff\1\162\1\144\1\172\1\141\1\155"
-        u"\3\uffff\1\172\2\uffff\1\160\1\156\2\164\1\uffff\1\164\1\144\1"
-        u"\172\3\uffff\1\162\1\160\1\uffff\1\151\1\uffff\1\172\1\151\1\145"
-        u"\1\172\1\141\1\163\1\40\1\uffff\1\143\1\145\1\uffff\1\145\1\143"
-        u"\1\163\1\157\1\171\1\172\1\uffff\1\172\1\145\1\157\1\uffff\1\157"
-        u"\1\172\1\uffff\1\164\1\172\1\uffff\1\145\1\172\1\162\1\145\1\172"
-        u"\1\162\1\172\2\uffff\1\162\2\156\1\uffff\1\145\1\uffff\1\172\1"
-        u"\uffff\1\164\1\172\1\uffff\1\172\1\uffff\1\164\3\172\1\uffff\1"
-        u"\151\2\uffff\1\171\3\uffff\1\145\1\172\1\163\1\uffff\1\172\1\uffff"
+        u"\144\1\172\1\165\2\172\1\150\2\151\1\147\1\164\1\154\2\145\1\152"
+        u"\1\164\1\160\1\162\1\165\1\141\1\165\1\141\1\147\1\151\1\162\1"
+        u"\145\1\172\1\164\1\145\1\165\1\142\1\151\2\145\1\141\1\151\1\164"
+        u"\1\141\1\155\1\151\1\156\1\162\1\141\1\145\1\154\1\164\1\145\1"
+        u"\137\1\145\1\154\1\162\1\165\1\143\1\162\1\145\1\163\1\151\1\162"
+        u"\1\137\1\55\1\uffff\1\154\2\uffff\1\157\1\146\1\147\5\172\3\145"
+        u"\1\157\1\155\1\147\1\144\1\156\1\145\1\141\1\160\1\151\1\155\1"
+        u"\uffff\2\172\1\141\1\151\2\143\1\162\1\164\1\170\1\145\1\147\1"
+        u"\145\1\143\1\147\1\172\1\154\4\172\1\160\1\141\1\145\1\151\1\154"
+        u"\1\164\1\151\1\162\1\163\1\142\1\141\1\143\1\167\1\164\1\144\1"
+        u"\151\1\156\5\uffff\1\143\1\162\1\172\1\162\1\172\1\163\1\145\1"
+        u"\143\1\162\1\154\1\162\1\164\1\145\1\165\2\uffff\2\154\1\172\2"
+        u"\164\1\145\1\172\1\162\1\145\1\164\2\172\1\uffff\1\172\3\uffff"
+        u"\1\162\1\156\1\172\1\160\1\164\1\172\1\144\1\141\1\172\1\165\1"
+        u"\143\1\162\2\uffff\2\172\2\145\1\164\1\146\1\141\1\uffff\1\172"
+        u"\1\uffff\2\172\1\145\1\172\1\55\1\157\1\141\1\156\1\143\1\172\1"
+        u"\151\1\uffff\1\145\1\171\1\172\1\uffff\2\172\1\145\3\uffff\1\157"
+        u"\1\172\1\uffff\1\164\1\172\1\uffff\1\145\1\164\1\uffff\2\164\1"
+        u"\145\2\uffff\1\162\1\144\1\172\1\141\1\155\3\uffff\1\172\2\uffff"
+        u"\1\160\1\156\2\164\1\uffff\1\164\1\144\1\172\3\uffff\1\162\1\160"
+        u"\1\uffff\1\151\1\uffff\1\172\1\151\1\145\1\172\1\141\1\163\1\40"
+        u"\1\uffff\1\143\1\145\1\uffff\1\145\1\143\1\163\1\157\1\171\1\172"
+        u"\1\uffff\1\172\1\145\1\157\1\uffff\1\157\1\172\1\uffff\1\164\1"
+        u"\172\1\uffff\1\145\1\172\1\162\1\145\1\172\1\162\1\172\2\uffff"
+        u"\1\162\2\156\1\uffff\1\145\1\uffff\1\172\1\uffff\1\164\1\172\1"
+        u"\uffff\1\172\1\uffff\1\164\3\172\1\uffff\1\151\2\uffff\1\171\3"
+        u"\uffff\1\145\1\172\1\163\1\uffff\1\172\1\uffff"
         )
 
     DFA11_accept = DFA.unpack(
         u"\2\uffff\1\2\1\3\1\4\7\uffff\1\20\5\uffff\1\37\1\40\4\uffff\1\52"
         u"\1\53\1\54\2\uffff\1\111\1\112\1\113\5\uffff\1\51\1\7\u0087\uffff"
-        u"\1\47\1\uffff\1\41\1\42\25\uffff\1\5\44\uffff\1\44\1\uffff\1\46"
-        u"\1\50\1\55\1\102\16\uffff\1\21\1\6\14\uffff\1\66\1\uffff\1\104"
-        u"\1\15\1\24\14\uffff\1\33\1\35\7\uffff\1\61\1\uffff\1\64\13\uffff"
-        u"\1\10\3\uffff\1\67\3\uffff\1\14\1\26\1\100\2\uffff\1\25\2\uffff"
-        u"\1\30\2\uffff\1\32\3\uffff\1\101\1\72\5\uffff\1\63\1\65\1\1\1\uffff"
+        u"\1\47\1\uffff\1\41\1\42\25\uffff\1\5\45\uffff\1\45\1\50\1\46\1"
+        u"\55\1\102\16\uffff\1\21\1\6\14\uffff\1\66\1\uffff\1\104\1\15\1"
+        u"\24\14\uffff\1\33\1\35\7\uffff\1\61\1\uffff\1\64\13\uffff\1\10"
+        u"\3\uffff\1\67\3\uffff\1\14\1\26\1\100\2\uffff\1\25\2\uffff\1\30"
+        u"\2\uffff\1\32\3\uffff\1\101\1\72\5\uffff\1\63\1\65\1\1\1\uffff"
         u"\1\23\1\34\4\uffff\1\16\3\uffff\1\12\1\27\1\56\2\uffff\1\22\1\uffff"
         u"\1\43\7\uffff\1\57\2\uffff\1\13\6\uffff\1\76\3\uffff\1\73\2\uffff"
-        u"\1\107\2\uffff\1\45\7\uffff\1\11\1\74\3\uffff\1\75\1\uffff\1\103"
+        u"\1\107\2\uffff\1\44\7\uffff\1\11\1\74\3\uffff\1\75\1\uffff\1\103"
         u"\1\uffff\1\62\2\uffff\1\70\1\uffff\1\105\4\uffff\1\60\1\uffff\1"
         u"\106\1\71\1\uffff\1\36\1\31\1\110\3\uffff\1\17\1\uffff\1\77"
         )
@@ -3027,7 +3026,7 @@ class GOCLexer(Lexer):
         DFA.unpack(u"\2\32\2\uffff\1\32\22\uffff\1\32\1\uffff\1\36\5\uffff"
         u"\1\22\1\23\3\uffff\1\30\1\14\1\31\1\uffff\11\37\1\7\1\2\5\uffff"
         u"\32\35\4\uffff\1\35\1\uffff\1\20\1\13\1\5\1\15\1\17\1\12\1\34\1"
-        u"\35\1\1\2\35\1\27\1\24\1\25\1\16\1\10\1\35\1\21\1\11\1\33\1\26"
+        u"\35\1\1\2\35\1\26\1\24\1\27\1\16\1\10\1\35\1\21\1\11\1\33\1\25"
         u"\1\6\4\35\1\3\1\uffff\1\4"),
         DFA.unpack(u"\1\41\1\40"),
         DFA.unpack(u""),
@@ -3050,8 +3049,8 @@ class GOCLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u"\1\77\3\uffff\1\100\3\uffff\1\76\5\uffff\1\101"),
         DFA.unpack(u"\1\102"),
-        DFA.unpack(u"\1\103"),
-        DFA.unpack(u"\1\105\5\uffff\1\104"),
+        DFA.unpack(u"\1\104\5\uffff\1\103"),
+        DFA.unpack(u"\1\105"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
@@ -3209,8 +3208,8 @@ class GOCLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u"\1\u00ea"),
         DFA.unpack(u"\1\u00eb"),
+        DFA.unpack(u"\1\u00ec"),
         DFA.unpack(u"\12\35\7\uffff\32\35\4\uffff\1\35\1\uffff\32\35"),
-        DFA.unpack(u"\1\u00ed"),
         DFA.unpack(u"\12\35\7\uffff\32\35\4\uffff\1\35\1\uffff\32\35"),
         DFA.unpack(u"\12\35\7\uffff\32\35\4\uffff\1\35\1\uffff\32\35"),
         DFA.unpack(u"\12\35\7\uffff\32\35\4\uffff\1\35\1\uffff\32\35"),
@@ -3266,8 +3265,8 @@ class GOCLexer(Lexer):
         DFA.unpack(u"\1\u0121"),
         DFA.unpack(u"\1\u0122"),
         DFA.unpack(u"\1\u0123"),
-        DFA.unpack(u""),
         DFA.unpack(u"\1\u0124"),
+        DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),

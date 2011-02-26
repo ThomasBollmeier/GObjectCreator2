@@ -186,20 +186,8 @@ propertyElement
     ;
 
 signalElement
-    :   RESULT '{' 'type' ':' signalType ';' '}' -> ^(RESULT signalType)
-    |   PARAMETER ID '{' 'type' ':' signalType ';' '}' -> ^(PARAMETER ID signalType)
-    ;
-
-signalType
-    :   'null'
-    |   'integer'
-    |   'boolean'
-    |   'float'
-    |   'double'
-    |   'string'
-    |   'pointer'
-    |   'object'
-    |   'enumeration'
+    :   RESULT '{' 'type' ':' typeArg ';' '}' -> ^(RESULT typeArg)
+    |   PARAMETER ID '{' 'type' ':' typeArg ';' '}' -> ^(PARAMETER ID typeArg)
     ;
 
 attributeElement
@@ -211,7 +199,8 @@ typeName
 	:   typePath -> ^(TYPE_NAME typePath)
 	|   'unsigned '? 'integer' -> ^(TYPE_NAME 'unsigned '? 'integer')
 	|   'unsigned '? 'long' -> ^(TYPE_NAME 'unsigned '? 'long')
-	|	(val='boolean'
+	|	(val='null'
+	|   val='boolean'
 	|	val='string'
 	|	val='float'
 	|	val='double'

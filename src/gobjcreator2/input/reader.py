@@ -296,16 +296,16 @@ class Reader(object):
             if name:
                 name += "-"
             name += signal_part.getText()
-        result_type = "null"
+        result_type = None
         args = []
 
         for child in children[1:]:
             type = child.getType()
             if type == RESULT:
-                result_type = child.getChildren()[0].getText()
+                result_type = self._get_type_info(child.getChildren()[0])
             elif type == PARAMETER:
                 arg_name = child.getChildren()[0].getText()
-                arg_type = child.getChildren()[1].getText()
+                arg_type = self._get_type_info(child.getChildren()[1])
                 args.append((arg_name, arg_type))
 
         visitor.signal(name, result_type, args)

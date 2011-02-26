@@ -3,6 +3,7 @@ from gobjcreator2.metadef.types import Type
 from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method_info import MethodInfo
 from gobjcreator2.metadef.constants import MethodInheritance
+from gobjcreator2.metadef.constructor import Constructor
 
 class GObject(PackageElement, Type):
 
@@ -20,7 +21,7 @@ class GObject(PackageElement, Type):
 
         self._interfaces = {}
         self._attributes = {}
-        self.constructor = None
+        self.constructor = Constructor(self)
         self._methods = {}
         self._overridden = {} # method info for overridden methods
         self._properties = {}
@@ -29,7 +30,7 @@ class GObject(PackageElement, Type):
     def get_name(self):
 
         return self.name
-
+    
     def set_super_class(self, super_class):
 
         self._super_class = super_class

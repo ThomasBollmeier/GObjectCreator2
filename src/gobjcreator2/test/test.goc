@@ -1,9 +1,5 @@
-package glib {
-
-    gtype GList;
-    gtype GHashTable;
-
-}
+gtype GList;
+gtype GHashTable;
 
 package demo {
 
@@ -20,10 +16,17 @@ package demo {
 
     }
 
+}
+
     gobject Bird {
 
         super Animal;
-        implements FlyingAnimal;
+        implements demo::FlyingAnimal;
+
+        property weight {
+            type: double;
+            access: initial-write;
+        }
 
         constructor {
 
@@ -31,12 +34,37 @@ package demo {
                 category: AnimalCatg.BIRD;
             }
 
+            parameter weight {
+                type: double;
+                bind_property: weight;
+            }
+
+        }
+        
+        method talk {
+            visibility: public;
+            inheritance: abstract;
+            parameter message { type: string; modifiers: const; }
+            parameter language_code { type: unsigned integer; }
         }
 
+        signal started {
+            parameter dest { type: string; }
+            parameter user_data { type: pointer; }
+        }
+
+        signal direction-changed {
+            parameter old { type: double; }
+            parameter new { type: double; }
+            parameter user_data { type: pointer; }
+            parameter arg1 { type: ref(GList); }
+        }
+        
         override eat;
 
         method breed { visibility: public; }
 
+        attribute num_instances { type: integer; scope: static; }
         attribute name { type: string; visibility: public; }
         attribute weight { type: double; }
 
@@ -56,4 +84,3 @@ package demo {
 
     }
 
-}

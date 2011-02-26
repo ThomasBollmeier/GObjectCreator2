@@ -9,7 +9,7 @@ from gobjcreator2.metadef.genum import GEnum
 from gobjcreator2.metadef.gflags import GFlags
 from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method import Method
-from gobjcreator2.metadef.signal import Signal, SignalType
+from gobjcreator2.metadef.signal import Signal
 from gobjcreator2.metadef.constructor import Constructor
 from gobjcreator2.metadef.constants import Scope, Visibility, \
     MethodInheritance, TypeModifier
@@ -127,18 +127,6 @@ class VisitorStep2(GOCVisitor):
             "read-only": PropAccess.READ_ONLY,
             "initial-write": PropAccess.INITIAL_WRITE,
             "read-write": PropAccess.READ_WRITE
-        }
-
-        self._signal_types = {
-            "null": SignalType.NULL,
-            "integer": SignalType.INTEGER,
-            "boolean": SignalType.BOOLEAN,
-            "float": SignalType.FLOAT,
-            "double": SignalType.DOUBLE,
-            "string": SignalType.STRING,
-            "pointer": SignalType.POINTER,
-            "object": SignalType.OBJECT,
-            "enumeration": SignalType.ENUMERATION     
         }
 
     def _get_parent(self, cls):
@@ -336,11 +324,14 @@ class VisitorStep2(GOCVisitor):
 
     def signal(self, name, result_type, args):
 
-        result = self._signal_types[result_type]
+        if result_type:
+            result = self._get_param_type(result_type)
+        else:
+            result = NULL
         sig = Signal(name, result)
 
         for arg in args:
-            sig.add_parameter(arg[0], self._signal_types[arg[1]])
+            sig.add_parameter(arg[0], self._get_param_type(arg[1]))
 
         cls = self._get_parent(GObject)
         if cls:
@@ -422,7 +413,7 @@ class VisitorStep2(GOCVisitor):
             elif attr == "auto_create":
                 auto_create = attrs[attr]
 
-        prop = Property(name, type, description, access, gtype,
+        prop = Property(name, type, access, description, gtype,
                         min_value, max_value, default_value, auto_create)
 
         cls = self._get_parent(GObject)

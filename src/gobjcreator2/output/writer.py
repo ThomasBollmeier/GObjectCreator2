@@ -25,6 +25,7 @@ class Writer(object):
         self._indent = 0
         self._tab_size = 4
         self._output = StdOut()
+        self._begin_of_line = True
 
     def set_output(self, output):
 
@@ -36,13 +37,22 @@ class Writer(object):
 
     def write(self, text):
 
-        tmp = " " * self._indent + text
+        if self._begin_of_line:
+            tmp = " " * self._indent + text
+            self._begin_of_line = False
+        else:
+            tmp = text
         self._output.wrt(tmp, line_break=False)
 
     def writeln(self, text=""):
 
-        tmp = " " * self._indent + text
+        if self._begin_of_line:
+            tmp = " " * self._indent + text
+            self._begin_of_line = False
+        else:
+            tmp = text
         self._output.wrt(tmp, line_break=True)
+        self._begin_of_line = True
 
     def user_section(self, name, default_code=""):
 
