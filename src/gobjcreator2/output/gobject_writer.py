@@ -43,18 +43,18 @@ class GObjectWriter(Writer):
 
         if self._gobj.super_class:
             self.writeln('#include "%s.h"' % \
-                         self._clifname(self._gobj.super_class).lower())
+                         self._filename_base(self._gobj.super_class))
 
         for intf in self._gobj.interfaces:
-            self.writeln('#include "%s.h"' % self._clifname(intf).lower())
+            self.writeln('#include "%s.h"' % self._filename_base(intf))
         self.writeln()
 
         self.user_section("header_top", "/* add includes here... */")
         self.writeln()
 
-        if self._gobj.has_attributes(Visibility.PRIVATE):
+        if self._gobj.has_attributes(Visibility.PRIVATE, Scope.INSTANCE):
             self.writeln("typedef struct _%(Class)sPriv %(Class)sPriv;" % self._vars)
-        if self._gobj.has_attributes(Visibility.PROTECTED):
+        if self._gobj.has_attributes(Visibility.PROTECTED, Scope.INSTANCE):
             self.writeln("typedef struct _%(Class)sProt %(Class)sProt;" % self._vars)
         self.writeln()
 
@@ -67,16 +67,101 @@ class GObjectWriter(Writer):
 
         self._write_init_methods()
 
-        self._write_public_method_decls()
+        self._write_method_decls(Visibility.PUBLIC)
         
         self._write_properties()
 
         self._write_macros()
 
+        self.user_section("header_bottom")
+        self.writeln()
+
         self.writeln("G_END_DECLS")
         self.writeln()
         self.writeln("#endif")
 
+    def write_header_protected(self):
+
+        self._write_comment()
+        self.writeln()
+
+        self.writeln("#ifndef %(CLASS)s_PROT_H" % self._vars)
+        self.writeln("#define %(CLASS)s_PROT_H" % self._vars)
+        self.writeln()
+        self.writeln('#include "glib-object.h"')
+        self.writeln()
+        self.writeln("G_BEGIN_DECLS")
+        self.writeln()
+        self.writeln('#include "%s.h"' % self._filename_base(self._gobj))
+        self.writeln()
+        self.user_section("header_top")
+        self.writeln()
+
+        if self._gobj.has_attributes(Visibility.PROTECTED, Scope.INSTANCE):
+            self.writeln("struct _%(Class)sProt {" % self._vars)
+            self.indent()
+            for attr in self._gobj.attributes:
+                if attr.visibility != Visibility.PROTECTED or \
+                   attr.scope != Scope.INSTANCE:
+                    continue
+                self.writeln("%s %s;" % \
+                             (self.typename(attr.type), attr.name))
+            self.unindent()
+            self.writeln("};")
+            self.writeln()
+
+        self._write_init_methods_prot()
+
+        self.writeln("void")
+        self.writeln("%(prefix)s_dispose(GObject* obj);" % self._vars)
+        self.writeln()
+        self.writeln("void")
+        self.writeln("%(prefix)s_finalize(GObject* obj);" % self._vars)
+        self.writeln()
+        
+        self._write_method_decls(Visibility.PROTECTED)
+
+        self.user_section("header_bottom")
+        self.writeln()
+        self.writeln("G_END_DECLS")
+        self.writeln()
+        self.writeln("#endif")
+        self.writeln()
+
+    def write_source(self):
+
+        self._write_comment()
+        self.writeln()
+
+        self.writeln("#include \"%s_prot.h\"" % self._filename_base(self._gobj))
+        self.writeln()
+        
+        default_lines = []
+        if self._gobj.signals:
+            default_lines.append('#include "%s_marshalller.h"' % \
+                                 self._filename_base(self._gobj))
+        default_lines.append("/* add further includes ...*/")
+        
+        self.user_section("header_top", default_lines, indent_level=-1)
+        self.writeln()
+        
+        if self._gobj.has_attributes(Visibility.PRIVATE, Scope.INSTANCE):
+            self.writeln("struct _%(Class)sPriv {" % self._vars)
+            self.indent()
+            for attr in self._gobj.attributes:
+                if attr.visibility != Visibility.PRIVATE or \
+                   attr.scope != Scope.INSTANCE:
+                    continue
+                self.writeln("%s %s;" % \
+                             (self.typename(attr.type), attr.name))
+            self.unindent()
+            self.writeln("};")
+            self.writeln()
+            
+        self._write_method_decls(Visibility.PRIVATE)
+        
+        self._write_interface_impls()
+            
     def _write_comment(self):
 
         self.writeln("/* This file has been generated automatically by GObjectCreator")
@@ -195,18 +280,50 @@ class GObjectWriter(Writer):
         self.writeln("} %(Class)sClass;" % self._vars)
         self.writeln()
 
-    def _write_method_decl(self, method, as_pointer=False):
+    def _write_method_decl(self, method, as_pointer=False, method_name=""):
+        
+        self._write_method_lines(method, 
+                                 method_name, 
+                                 as_pointer, 
+                                 implementation = False, 
+                                 define_as_static = False
+                                 )
+
+    def _write_method_impl(self, method, method_name=""):
+
+        self._write_method_lines(method, 
+                                 method_name, 
+                                 as_pointer = False, 
+                                 implementation = True, 
+                                 define_as_static = True
+                                 )
+
+    def _write_method_lines(self, 
+                            method,
+                            method_name, 
+                            as_pointer = False,
+                            implementation = False,
+                            define_as_static = False
+                            ):
 
         MAXLEN_ARG = 50
-
+        
+        if not method_name:
+            name = method.name
+        else:
+            name = method_name
+        
         tmp = self.typename(method.result)
         if TypeModifier.CONST in method.result_modifiers:
             tmp = "const " + tmp
+        if define_as_static:
+            tmp = "static " + tmp
         self.writeln(tmp)
+        
         if not as_pointer:
-            tmp = "%(prefix)s" % self._vars + "_" + method.name
+            tmp = "%(prefix)s" % self._vars + "_" + name
         else:
-            tmp = "(*%s)" % method.name
+            tmp = "(*%s)" % name
         self.write(tmp + "(")
 
         args = ""
@@ -234,8 +351,12 @@ class GObjectWriter(Writer):
 
         if args:
             self.write(args)
-        self.writeln(");")
-
+            
+        if not implementation:
+            self.writeln(");")
+        else:
+            self.writeln(") {")
+            
         if not first_line_break:
             self.unindent()
 
@@ -276,25 +397,75 @@ class GObjectWriter(Writer):
     def _write_init_methods(self):
 
         if not self._gobj.abstract:
-            self.writeln("/* ===== instance creation & destruction ===== */")
+            self.writeln("/* ===== instance creation ===== */")
             self.writeln()
             self._write_method_decl(self._gobj.constructor)
             self.writeln()
 
-    def _write_public_method_decls(self):
+    def _write_init_methods_prot(self):
+
+        init_method = Method("init")
+        init_method.parameters = self._gobj.constructor.parameters[:]
+
+        self._write_method_decl(init_method)
+        self.writeln()
+
+    def _write_method_decls(self, visibility):
 
         first = True
         for m in self._gobj.methods:
-            if m.visibility != Visibility.PUBLIC:
+            if m.visibility != visibility:
                 continue
             if first:
                 first = False
-                self.writeln("/* ===== public methods ===== */")
+                if visibility == Visibility.PUBLIC:
+                    self.writeln("/* ===== public methods ===== */")
+                elif visibility == Visibility.PROTECTED:
+                    self.writeln("/* ===== protected methods ===== */")
+                elif visibility == Visibility.PRIVATE:
+                    self.writeln("/* ===== private methods ===== */")
             self.writeln()
             self._write_method_decl(m)
         if not first:
             self.writeln()
 
+    def _write_method_impls(self, visibility):
+
+        first = True
+        for m in self._gobj.methods:
+            if m.visibility != visibility:
+                continue
+            if first:
+                first = False
+                if visibility == Visibility.PUBLIC:
+                    self.writeln("/* ===== public methods ===== */")
+                elif visibility == Visibility.PROTECTED:
+                    self.writeln("/* ===== protected methods ===== */")
+                elif visibility == Visibility.PRIVATE:
+                    self.writeln("/* ===== private methods ===== */")
+            self.writeln()
+            self._write_method_impl(m, m.name + "_im")
+        if not first:
+            self.writeln()
+            
+    def _write_interface_impls(self):
+        
+        first = True
+        for intf in self._gobj.interfaces:
+            for m in intf.methods:
+                if first:
+                    first = False
+                    self.writeln("/* ===== interface_implementations ===== */")
+                    self.writeln()
+                self._write_method_impl(m, 
+                                        method_name = m.name + "_im"
+                                        )
+                self.user_section(m.name)
+                self.writeln("}")
+
+        if not first:
+            self.writeln()
+                
     def _write_macros(self):
 
         self.writeln("/* ===== macros ===== */")
@@ -362,3 +533,6 @@ class GObjectWriter(Writer):
             
         return res
 
+    def _filename_base(self, clif):
+
+        return self._clifname(clif).lower()

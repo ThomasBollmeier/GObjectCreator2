@@ -91,11 +91,14 @@ class GObject(PackageElement, Type):
         else:
             return None
 
-    def has_attributes(self, visibility):
+    def has_attributes(self, visibility, scope=None):
 
         for value in self._attributes.values():
             if value.visibility == visibility:
-                return True
+                if scope is None:
+                    return True
+                elif value.scope == scope:
+                    return True
             
         return False
 

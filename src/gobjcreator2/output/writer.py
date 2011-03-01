@@ -54,19 +54,44 @@ class Writer(object):
         self._output.wrt(tmp, line_break=True)
         self._begin_of_line = True
 
-    def user_section(self, name, default_code=""):
+    def user_section(self, name, default_code=None, indent_level=1):
 
         self.writeln("/* UserCode %s { */" % name)
-        if default_code:
+        
+        if default_code is not None:
+         
             self.writeln()
-            self.indent()
-            lines = default_code.split("\n")
+            
+            if indent_level > 0:
+                for dum in range(indent_level):
+                    self.indent()
+            elif indent_level < 0:
+                for dum in range(abs(indent_level)):
+                    self.unindent()
+                
+            if isinstance(default_code, str):
+                lines = default_code.split("\n")
+            elif isinstance(default_code, list):
+                lines = default_code
+            else:
+                lines = []
+            
             for line in lines:
                 self.writeln(line)
-            self.unindent()
+        
+            if indent_level > 0:
+                for dum in range(indent_level):
+                    self.unindent()
+            elif indent_level < 0:
+                for dum in range(abs(indent_level)):
+                    self.indent()
+
             self.writeln()
+        
         else:
+        
             self.writeln()
+        
         self.writeln("/* } UserCode */")
 
     def indent(self):

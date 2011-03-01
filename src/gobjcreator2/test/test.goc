@@ -64,9 +64,12 @@ package demo {
 
         method breed { visibility: public; }
 
+        method do_something_protected { visibility: protected; }
+
         attribute num_instances { type: integer; scope: static; }
         attribute name { type: string; visibility: public; }
         attribute weight { type: double; }
+        attribute color { type: unsigned integer; visibility: protected; }
 
     }
 

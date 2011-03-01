@@ -17,4 +17,9 @@ top = GOCRecognizer().process_file("test.goc")
 bird = top["demo::Bird"]
 
 writer = GObjectWriter(bird)
+
 writer.write_header()
+print 80 * "-"
+writer.write_header_protected()
+print 80 * "-"
+writer.write_source()
