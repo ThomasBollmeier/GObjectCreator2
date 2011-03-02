@@ -13,15 +13,25 @@ package demo {
     ginterface FlyingAnimal {
 
         method fly {}
+        method do_something {}
 
     }
-
-}
+    
+    ginterface Actor {
+    
+    	method do_something { 
+    		parameter duration { type: integer; }
+    	}
+    	
+	}
+	
+}	
 
     gobject Bird {
 
         super Animal;
         implements demo::FlyingAnimal;
+        implements demo::Actor;
 
         property weight {
             type: double;
@@ -43,7 +53,7 @@ package demo {
         
         method talk {
             visibility: public;
-            inheritance: abstract;
+            inheritance: virtual;
             parameter message { type: string; modifiers: const; }
             parameter language_code { type: unsigned integer; }
         }

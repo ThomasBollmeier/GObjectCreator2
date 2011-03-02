@@ -1,4 +1,5 @@
 from gobjcreator2.output.writer import Writer
+from gobjcreator2.output.func_name_creator import FuncNameCreator
 from gobjcreator2.metadef.constants import Visibility, Scope, TypeModifier
 from gobjcreator2.metadef.property import PropAccess
 from gobjcreator2.metadef.method import Method, MethodInheritance
@@ -27,6 +28,8 @@ class GObjectWriter(Writer):
             "NAMESPACE": namespace.upper(),
             "BASENAME": self._basename()
         }
+        
+        self._func_name_creator = FuncNameCreator()
 
     def write_header(self):
 
@@ -113,10 +116,10 @@ class GObjectWriter(Writer):
         self._write_init_methods_prot()
 
         self.writeln("void")
-        self.writeln("%(prefix)s_dispose(GObject* obj);" % self._vars)
+        self.writeln("%(prefix)s_dispose( GObject* obj );" % self._vars)
         self.writeln()
         self.writeln("void")
-        self.writeln("%(prefix)s_finalize(GObject* obj);" % self._vars)
+        self.writeln("%(prefix)s_finalize( GObject* obj );" % self._vars)
         self.writeln()
         
         self._write_method_decls(Visibility.PROTECTED)
@@ -142,7 +145,7 @@ class GObjectWriter(Writer):
                                  self._filename_base(self._gobj))
         default_lines.append("/* add further includes ...*/")
         
-        self.user_section("header_top", default_lines, indent_level=-1)
+        self.user_section("source_top", default_lines, indent_level=-1)
         self.writeln()
         
         if self._gobj.has_attributes(Visibility.PRIVATE, Scope.INSTANCE):
@@ -157,11 +160,16 @@ class GObjectWriter(Writer):
             self.unindent()
             self.writeln("};")
             self.writeln()
-            
+        
+        self._write_interface_defs()
+        self._write_virtual_defs()    
         self._write_method_decls(Visibility.PRIVATE)
         
+        
         self._write_interface_impls()
-            
+        
+        self.user_section("source_bottom")
+                    
     def _write_comment(self):
 
         self.writeln("/* This file has been generated automatically by GObjectCreator")
@@ -280,14 +288,18 @@ class GObjectWriter(Writer):
         self.writeln("} %(Class)sClass;" % self._vars)
         self.writeln()
 
-    def _write_method_decl(self, method, as_pointer=False, method_name=""):
+    def _write_method_decl(self, 
+                           method, 
+                           as_pointer = False, 
+                           method_name = "",
+                           define_as_static = False
+                           ):
         
         self._write_method_lines(method, 
                                  method_name, 
                                  as_pointer, 
                                  implementation = False, 
-                                 define_as_static = False
-                                 )
+                                 define_as_static = define_as_static                                 )
 
     def _write_method_impl(self, method, method_name=""):
 
@@ -448,23 +460,65 @@ class GObjectWriter(Writer):
         if not first:
             self.writeln()
             
+    def _write_interface_defs(self):
+        
+        self._write_interface_methods(implementation = False)
+            
     def _write_interface_impls(self):
+ 
+        self._write_interface_methods(implementation = True)
+        
+    def _write_interface_methods(self, implementation):
         
         first = True
         for intf in self._gobj.interfaces:
             for m in intf.methods:
                 if first:
                     first = False
-                    self.writeln("/* ===== interface_implementations ===== */")
-                    self.writeln()
-                self._write_method_impl(m, 
-                                        method_name = m.name + "_im"
-                                        )
-                self.user_section(m.name)
-                self.writeln("}")
+                    if implementation:
+                        self.writeln("/* ===== interface methods (implementation) ===== */")
+                    else:
+                        self.writeln("/* ===== interface methods (definition) ===== */")
+                self.writeln()
+                
+                method_name = self._func_name_creator.create_impl_func_name(m.name, intf.name)
+                                    
+                if implementation:
+                    self._write_method_impl(m, 
+                                            method_name
+                                            )
+                    section_name = intf.name + "->" + m.name
+                    self.user_section(section_name)
+                    self.writeln("}")
+                else:
+                    self.writeln("/* %s->%s */" % (intf.name, m.name))
+                    self._write_method_decl(m, 
+                                            as_pointer = False, 
+                                            method_name = method_name,
+                                            define_as_static = True
+                                            )
 
         if not first:
             self.writeln()
+            
+    def _write_virtual_defs(self):
+        
+        first = True
+        for m in self._gobj.methods:
+            if m.inheritance_mode != MethodInheritance.VIRTUAL:
+                continue
+            if first:
+                first = False
+                self.writeln("/* ====== virtual methods (definition) ===== */")
+            self.writeln()
+            method_name = self._func_name_creator.create_impl_func_name(m.name)
+            self._write_method_decl(m, 
+                                    as_pointer = False, 
+                                    method_name = method_name, 
+                                    define_as_static = True
+                                    )
+        if not first:
+            self.writeln()    
                 
     def _write_macros(self):
 
