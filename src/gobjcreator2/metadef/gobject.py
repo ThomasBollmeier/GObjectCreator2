@@ -72,23 +72,32 @@ class GObject(PackageElement, Type):
 
         self._signals[signal.name] = signal
 
-    def lookup_method(self, method_name):
+    def lookup_method(self, method_name, interface_name=""):
         """
         -> method_name : Name of method to lookup
         <- method info
         """
-        if method_name in self._methods:
-            method = self._methods[method_name]
-            return MethodInfo(method, self)
-
-        for interface in self._interfaces.values():
-            for interface_method in interface.methods:
-                if method_name == interface_method.name:
-                    return MethodInfo(interface_method, interface)
-
-        if self._super_class:
-            return self._super_class.lookup_method(method_name)
+        if not interface_name:
+            
+            if method_name in self._methods:
+                method = self._methods[method_name]
+                return MethodInfo(method, self)
+    
+            for interface in self._interfaces.values():
+                for interface_method in interface.methods:
+                    if method_name == interface_method.name:
+                        return MethodInfo(interface_method, interface)
+    
+            if self._super_class:
+                return self._super_class.lookup_method(method_name)
+            else:
+                return None
+            
         else:
+            
+            for method in self._interfaces[interface_name].methods:
+                if method.name == method_name:
+                    return MethodInfo(method, self._interfaces[interface_name])
             return None
 
     def has_attributes(self, visibility, scope=None):

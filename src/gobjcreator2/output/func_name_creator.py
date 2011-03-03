@@ -21,4 +21,13 @@ class FuncNameCreator(object):
                     res = method_name + "_%d_im" % len(func_names)
                     func_names[interface_name] = res
                     return res 
+                
+    def get_info(self, impl_func_name):
+        
+        for method_name in self._intf_funcs:
+            for interface_name, func_name in self._intf_funcs[method_name].items():
+                if func_name == impl_func_name:
+                    return (method_name, interface_name)
+        
+        return (impl_func_name[:-3], "")
         

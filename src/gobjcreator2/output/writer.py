@@ -5,27 +5,26 @@ from gobjcreator2.metadef.package import PackageElement
 
 class Output(object):
 
-    def wrt(self, text, line_break):
+    def wrt(self, text):
 
         pass
 
 class StdOut(Output):
 
-    def wrt(self, text, line_break):
+    def wrt(self, text):
 
-        if line_break:
-            print text
-        else:
-            print text,
-
+        print text
+        
 class Writer(object):
 
     def __init__(self):
 
         self._indent = 0
         self._tab_size = 4
-        self._output = StdOut()
         self._begin_of_line = True
+        self._line = ""
+        
+        self._output = StdOut()
 
     def set_output(self, output):
 
@@ -42,7 +41,7 @@ class Writer(object):
             self._begin_of_line = False
         else:
             tmp = text
-        self._output.wrt(tmp, line_break=False)
+        self._line += tmp
 
     def writeln(self, text=""):
 
@@ -51,8 +50,10 @@ class Writer(object):
             self._begin_of_line = False
         else:
             tmp = text
-        self._output.wrt(tmp, line_break=True)
+        self._line += tmp
+        self._output.wrt(self._line)
         self._begin_of_line = True
+        self._line = ""
 
     def user_section(self, name, default_code=None, indent_level=1):
 

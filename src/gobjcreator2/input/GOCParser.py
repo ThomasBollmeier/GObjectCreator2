@@ -1,4 +1,4 @@
-# $ANTLR 3.1.3 Mar 18, 2009 10:09:25 GOC.g 2011-02-26 12:46:48
+# $ANTLR 3.1.3 Mar 18, 2009 10:09:25 GOC.g 2011-03-03 20:27:10
 
 import sys
 from antlr3 import *
@@ -622,7 +622,7 @@ class GOCParser(Parser):
                 stream_59.add(char_literal16)
 
                 # AST Rewrite
-                # elements: PACKAGE, ID, packageElement
+                # elements: PACKAGE, packageElement, ID
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -936,7 +936,7 @@ class GOCParser(Parser):
 
 
                 # AST Rewrite
-                # elements: className, classMember, GOBJECT
+                # elements: className, GOBJECT, classMember
                 # token labels: className
                 # rule labels: retval
                 # token list labels: 
@@ -1091,7 +1091,7 @@ class GOCParser(Parser):
 
 
                 # AST Rewrite
-                # elements: intfMember, GINTERFACE, intfName
+                # elements: GINTERFACE, intfName, intfMember
                 # token labels: intfName
                 # rule labels: retval
                 # token list labels: 
@@ -1224,7 +1224,7 @@ class GOCParser(Parser):
                 stream_59.add(char_literal38)
 
                 # AST Rewrite
-                # elements: ERROR_DOMAIN, errorDomainElement, ID
+                # elements: ERROR_DOMAIN, ID, errorDomainElement
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -1448,7 +1448,7 @@ class GOCParser(Parser):
                 stream_59.add(char_literal46)
 
                 # AST Rewrite
-                # elements: ENUMERATION, ID, enumElement
+                # elements: ID, ENUMERATION, enumElement
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -1601,7 +1601,7 @@ class GOCParser(Parser):
 
 
                 # AST Rewrite
-                # elements: ID, 60, INT
+                # elements: 60, ID, INT
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -2202,7 +2202,7 @@ class GOCParser(Parser):
                     stream_57.add(char_literal74)
 
                     # AST Rewrite
-                    # elements: ID, PREFIX
+                    # elements: PREFIX, ID
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2246,7 +2246,7 @@ class GOCParser(Parser):
                     stream_57.add(char_literal77)
 
                     # AST Rewrite
-                    # elements: IMPLEMENTS, typeName
+                    # elements: typeName, IMPLEMENTS
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2389,7 +2389,7 @@ class GOCParser(Parser):
                     stream_59.add(char_literal86)
 
                     # AST Rewrite
-                    # elements: methodElement, ID, METHOD
+                    # elements: methodElement, METHOD, ID
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2511,7 +2511,7 @@ class GOCParser(Parser):
                     stream_59.add(char_literal98)
 
                     # AST Rewrite
-                    # elements: attributeElement, ID, typeArg, ATTRIBUTE
+                    # elements: attributeElement, ATTRIBUTE, ID, typeArg
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2589,7 +2589,7 @@ class GOCParser(Parser):
                     stream_59.add(char_literal103)
 
                     # AST Rewrite
-                    # elements: ID, propertyElement, PROPERTY
+                    # elements: propertyElement, PROPERTY, ID
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2665,7 +2665,7 @@ class GOCParser(Parser):
                     stream_59.add(char_literal108)
 
                     # AST Rewrite
-                    # elements: signalID, signalElement, SIGNAL
+                    # elements: signalElement, signalID, SIGNAL
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2802,7 +2802,7 @@ class GOCParser(Parser):
                     stream_57.add(char_literal111)
 
                     # AST Rewrite
-                    # elements: PREFIX, ID
+                    # elements: ID, PREFIX
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2870,7 +2870,7 @@ class GOCParser(Parser):
                     stream_59.add(char_literal116)
 
                     # AST Rewrite
-                    # elements: methodElement, ID, METHOD
+                    # elements: ID, methodElement, METHOD
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2943,7 +2943,7 @@ class GOCParser(Parser):
                     stream_59.add(char_literal121)
 
                     # AST Rewrite
-                    # elements: signalElement, SIGNAL, signalID
+                    # elements: signalID, SIGNAL, signalElement
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -3081,7 +3081,7 @@ class GOCParser(Parser):
                 stream_59.add(char_literal129)
 
                 # AST Rewrite
-                # elements: modifiers, RESULT, typeArg
+                # elements: RESULT, typeArg, modifiers
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -3287,7 +3287,7 @@ class GOCParser(Parser):
                     stream_57.add(char_literal134)
 
                     # AST Rewrite
-                    # elements: val, VISIBILITY
+                    # elements: VISIBILITY, val
                     # token labels: val
                     # rule labels: retval
                     # token list labels: 
@@ -3357,7 +3357,7 @@ class GOCParser(Parser):
                     stream_57.add(char_literal137)
 
                     # AST Rewrite
-                    # elements: SCOPE, val
+                    # elements: val, SCOPE
                     # token labels: val
                     # rule labels: retval
                     # token list labels: 
@@ -3598,7 +3598,7 @@ class GOCParser(Parser):
                     stream_59.add(char_literal149)
 
                     # AST Rewrite
-                    # elements: ID, parameterElement, typeArg, PARAMETER
+                    # elements: ID, parameterElement, PARAMETER, typeArg
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -3945,7 +3945,7 @@ class GOCParser(Parser):
                     stream_57.add(char_literal160)
 
                     # AST Rewrite
-                    # elements: value, name
+                    # elements: name, value
                     # token labels: name, value
                     # rule labels: retval
                     # token list labels: 
@@ -3998,7 +3998,7 @@ class GOCParser(Parser):
                     stream_57.add(char_literal163)
 
                     # AST Rewrite
-                    # elements: name, code, enum
+                    # elements: code, enum, name
                     # token labels: name, code
                     # rule labels: retval, enum
                     # token list labels: 
@@ -4103,7 +4103,7 @@ class GOCParser(Parser):
                 stream_57.add(char_literal167)
 
                 # AST Rewrite
-                # elements: 72, MODIFIERS
+                # elements: MODIFIERS, 72
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -5156,7 +5156,7 @@ class GOCParser(Parser):
                     stream_57.add(char_literal223)
 
                     # AST Rewrite
-                    # elements: val, VISIBILITY
+                    # elements: VISIBILITY, val
                     # token labels: val
                     # rule labels: retval
                     # token list labels: 
@@ -5337,7 +5337,7 @@ class GOCParser(Parser):
                     stream_74.add(string_literal226)
 
                     # AST Rewrite
-                    # elements: 91, 74
+                    # elements: 74, 91
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -5394,7 +5394,7 @@ class GOCParser(Parser):
                     stream_92.add(string_literal228)
 
                     # AST Rewrite
-                    # elements: 91, 92
+                    # elements: 92, 91
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -5912,7 +5912,7 @@ class GOCParser(Parser):
                         break #loop46
 
                 # AST Rewrite
-                # elements: part2, part1
+                # elements: part1, part2
                 # token labels: part1
                 # rule labels: retval
                 # token list labels: part2

@@ -116,10 +116,10 @@ class GObjectWriter(Writer):
         self._write_init_methods_prot()
 
         self.writeln("void")
-        self.writeln("%(prefix)s_dispose( GObject* obj );" % self._vars)
+        self.writeln("%(prefix)s_dispose(GObject* obj);" % self._vars)
         self.writeln()
         self.writeln("void")
-        self.writeln("%(prefix)s_finalize( GObject* obj );" % self._vars)
+        self.writeln("%(prefix)s_finalize(GObject* obj);" % self._vars)
         self.writeln()
         
         self._write_method_decls(Visibility.PROTECTED)
@@ -163,9 +163,9 @@ class GObjectWriter(Writer):
         
         self._write_interface_defs()
         self._write_virtual_defs()    
+        self._write_overriden_defs()
         self._write_method_decls(Visibility.PRIVATE)
-        
-        
+                
         self._write_interface_impls()
         
         self.user_section("source_bottom")
@@ -257,11 +257,11 @@ class GObjectWriter(Writer):
                 first = False
             self.write("%s %s;" % (self.typename(attr.type), attr.name))
             if attr.visibility == Visibility.PUBLIC:
-                self.writeln("/* public */")
+                self.writeln(" /* public */")
             elif attr.visibility == Visibility.PROTECTED:
-                self.writeln("/* protected */")
+                self.writeln(" /* protected */")
             elif attr.visibility == Visibility.PRIVATE:
-                self.writeln("/* private */")
+                self.writeln(" /* private */")
 
         first = True
         for m in self._gobj.methods:
@@ -340,7 +340,22 @@ class GObjectWriter(Writer):
 
         args = ""
         if method.scope == Scope.INSTANCE:
-            args += "%(Class)s* self" % self._vars
+            if not method_name:
+                lookup_method = method_name
+                lookup_interface = ""
+            else:
+                lookup_method, lookup_interface = self._func_name_creator.get_info(method_name)
+            method_info = self._gobj.lookup_method(lookup_method, lookup_interface)
+            if method_info:
+                selftype = self.typename(method_info.defined_in)
+                if selftype == self.typename(self._gobj):
+                    selfname = "self"
+                else:
+                    selfname = "obj"
+            else:
+                selftype = self.typename(self._gobj)
+                selfname = "self"
+            args += "%s %s" % (selftype, selfname) 
             if method.parameters:
                 args += ", "
 
@@ -519,46 +534,60 @@ class GObjectWriter(Writer):
                                     )
         if not first:
             self.writeln()    
+            
+    def _write_overriden_defs(self):
+        
+        first = True
+        
+        for method_info in self._gobj.overridden_methods:
+            
+            if first:
+                first = False
+                self.writeln("/* ===== overridden methods (definition) ===== */")
+                self.writeln()
+            
+            method_name = method_info.method.name + "_im"
+            
+            self._write_method_decl(method_info.method, 
+                                    as_pointer = False, 
+                                    method_name = method_name, 
+                                    define_as_static = True
+                                    )
+            self.writeln()
                 
     def _write_macros(self):
 
         self.writeln("/* ===== macros ===== */")
         self.writeln()
 
-        self.writeln("#define %(NAMESPACE)sTYPE_%(BASENAME)s \\" % \
-            self._vars)
+        self.writeln("#define %(NAMESPACE)sTYPE_%(BASENAME)s \\" % self._vars)
         self.indent()
-    	self.writeln("(%(prefix)s_get_type())" % self._vars)
+        self.writeln("(%(prefix)s_get_type())" % self._vars)
         self.unindent()
 
-        self.writeln("#define %(NAMESPACE)s%(BASENAME)s(obj) \\" % \
-            self._vars)
+        self.writeln("#define %(NAMESPACE)s%(BASENAME)s(obj) \\" % self._vars)
         self.indent()
-    	self.writeln("(G_TYPE_CHECK_INSTANCE_CAST((obj), %(NAMESPACE)sTYPE_%(BASENAME)s, %(Class)s))" % self._vars)
+        self.writeln("(G_TYPE_CHECK_INSTANCE_CAST((obj), %(NAMESPACE)sTYPE_%(BASENAME)s, %(Class)s))" % self._vars)
         self.unindent()
 
-        self.writeln("#define %(NAMESPACE)s%(BASENAME)s_CLASS(cls) \\" % \
-            self._vars)
+        self.writeln("#define %(NAMESPACE)s%(BASENAME)s_CLASS(cls) \\" % self._vars)
         self.indent()
-    	self.writeln("(G_TYPE_CHECK_CLASS_CAST((cls), %(NAMESPACE)sTYPE_%(BASENAME)s, %(Class)sClass))" % self._vars)
+        self.writeln("(G_TYPE_CHECK_CLASS_CAST((cls), %(NAMESPACE)sTYPE_%(BASENAME)s, %(Class)sClass))" % self._vars)
         self.unindent()
 
-        self.writeln("#define %(NAMESPACE)sIS_%(BASENAME)s(obj) \\" % \
-            self._vars)
+        self.writeln("#define %(NAMESPACE)sIS_%(BASENAME)s(obj) \\" % self._vars)
         self.indent()
-    	self.writeln("(G_TYPE_CHECK_INSTANCE_TYPE((obj), %(NAMESPACE)sTYPE_%(BASENAME)s))" % self._vars)
+        self.writeln("(G_TYPE_CHECK_INSTANCE_TYPE((obj), %(NAMESPACE)sTYPE_%(BASENAME)s))" % self._vars)
         self.unindent()
 
-        self.writeln("#define %(NAMESPACE)sIS_%(BASENAME)s_CLASS(cls) \\" % \
-            self._vars)
+        self.writeln("#define %(NAMESPACE)sIS_%(BASENAME)s_CLASS(cls) \\" % self._vars)
         self.indent()
-    	self.writeln("(G_TYPE_CHECK_CLASS_TYPE((cls), %(NAMESPACE)sTYPE_%(BASENAME)s))" % self._vars)
+        self.writeln("(G_TYPE_CHECK_CLASS_TYPE((cls), %(NAMESPACE)sTYPE_%(BASENAME)s))" % self._vars)
         self.unindent()
 
-        self.writeln("#define %(NAMESPACE)s%(BASENAME)s_GET_CLASS(obj) \\" % \
-            self._vars)
+        self.writeln("#define %(NAMESPACE)s%(BASENAME)s_GET_CLASS(obj) \\" % self._vars)
         self.indent()
-    	self.writeln("(G_TYPE_INSTANCE_GET_CLASS((obj), %(NAMESPACE)sTYPE_%(BASENAME)s, %(Class)sClass))" % self._vars)
+        self.writeln("(G_TYPE_INSTANCE_GET_CLASS((obj), %(NAMESPACE)sTYPE_%(BASENAME)s, %(Class)sClass))" % self._vars)
         self.unindent()
 
         self.writeln()
