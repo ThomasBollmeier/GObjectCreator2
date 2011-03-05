@@ -165,6 +165,10 @@ class GObjectWriter(Writer):
         self._write_virtual_defs()    
         self._write_overriden_defs()
         self._write_method_decls(Visibility.PRIVATE)
+        self._write_property_enum()
+        self._write_signals_enum()
+        
+        self._write_class_init()
                 
         self._write_interface_impls()
         
@@ -231,7 +235,68 @@ class GObjectWriter(Writer):
                 self.writeln("(read/write)")
         self.writeln("*/")
         self.writeln()
-
+        
+    def _write_property_enum(self):
+        
+        if not self._gobj.properties:
+            return
+        
+        self.writeln("/* ===== properties ===== */")
+        self.writeln()
+        self.writeln("enum {")
+        self.indent()
+        first = True
+        for prop in self._gobj.properties:
+            if first:
+                first = False
+            else:
+                self.writeln(",")
+            self.write("PROP_%s" % prop.name.upper())
+            if prop is self._gobj.properties[0]:
+                self.write(" = 1")
+        self.writeln()
+        self.unindent()
+        self.writeln("};")
+        self.writeln()
+        self.writeln("static void")
+        self.writeln("%(prefix)s_set_property(" % self._vars)
+        self.indent()
+        self.writeln("GObject* object,")
+        self.writeln("guint property_id,")
+        self.writeln("const GValue* value,")
+        self.writeln("GParamSpec* param_spec")
+        self.writeln(");")
+        self.unindent()
+        self.writeln()
+        self.writeln("static void")
+        self.writeln("%(prefix)s_get_property(" % self._vars)
+        self.indent()
+        self.writeln("GObject* object,")
+        self.writeln("guint property_id,")
+        self.writeln("GValue* value,")
+        self.writeln("GParamSpec* param_spec")
+        self.writeln(");")
+        self.unindent()
+        self.writeln()
+     
+    def _write_signals_enum(self):
+        
+        if not self._gobj.signals:
+            return
+        
+        self.writeln("/* ===== signals ===== */")
+        self.writeln()
+        self.writeln("enum {")
+        self.indent()
+        for signal in self._gobj.signals:
+            self.writeln(signal.internal_name.upper() + ",")
+        self.writeln("LAST_SIGNAL")
+        self.unindent()
+        self.writeln("};")
+        self.writeln()
+        self.writeln("static guint %(prefix)s_signals[LAST_SIGNAL] = {0};" % self._vars)
+        self.writeln()
+        
     def _write_class_struct(self):
 
         self.writeln("/* ===== Class ===== */")
@@ -286,6 +351,34 @@ class GObjectWriter(Writer):
         self.unindent()
         self.writeln()
         self.writeln("} %(Class)sClass;" % self._vars)
+        self.writeln()
+        
+    def _write_class_init(self):
+        
+        self.writeln("/* ===== class initialization ===== */")
+        self.writeln()
+        self.writeln("static void")
+        self.writeln("%(prefix)s_class_init(%(Class)sClass* cls) {" % self._vars)
+        self.indent()
+        self.writeln()
+        
+        self.writeln("GObjectClass* gobj_class = G_OBJECT_CLASS(cls);")
+        for prop in self._gobj.properties:
+            self.writeln("GParamSpec* pspec_%s;" % prop.name.lower())
+        self.writeln()
+        
+        if self._gobj.has_attributes(Visibility.PRIVATE):
+            self.writeln("/* Register structure holding private attributes: */")
+            self.writeln("g_type_class_add_private (cls, sizeof(%(Class)sPriv));" % self._vars)
+            self.writeln()
+            
+        self.user_section("class_init", "/* init class members ... */")
+        self.writeln()
+                
+        self.writeln()
+        self.unindent()
+        self.writeln("}")
+        
         self.writeln()
 
     def _write_method_decl(self, 

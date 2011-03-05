@@ -37,7 +37,9 @@ package demo {
             type: double;
             access: initial-write;
         }
-
+        
+        property dummy { access: read-only; }
+        	
         constructor {
 
             init_properties {
