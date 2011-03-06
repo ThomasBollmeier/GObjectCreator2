@@ -17,7 +17,7 @@ from gobjcreator2.metadef.types import *
 from gobjcreator2.metadef.parameter import Parameter, ConstructorParameter
 from gobjcreator2.metadef.attribute import Attribute
 from gobjcreator2.metadef.property import Property, PropType, \
-    PropAccess, PropGTypeValue
+    PropAccess, PropGTypeValue, PropValue
 
 class VisitorStep1(GOCVisitor):
 
@@ -404,12 +404,14 @@ class VisitorStep2(GOCVisitor):
             elif attr == "gtype":
                 value = attrs[attr]
                 gtype = PropGTypeValue(value.name, value.is_typename)
-            elif attr == "min":
-                min_value = attrs[attr]
-            elif attr == "max":
-                max_value = attrs[attr]
-            elif attr == "default":
-                default_value = attrs[attr]
+            elif attr in ["min", "max", "default"]:
+                value = attrs[attr]
+                if attr == "min":
+                    min_value = PropValue(value.name, value.is_codename)
+                elif attr == "max":
+                    max_value = PropValue(value.name, value.is_codename)
+                elif attr == "default":
+                    default_value = PropValue(value.name, value.is_codename)
             elif attr == "auto_create":
                 auto_create = attrs[attr]
 

@@ -45,3 +45,10 @@ class PropGTypeValue(object):
 
         self.name = name
         self.is_typename = is_typename
+        
+class PropValue(object):
+    
+    def __init__(self, name, is_codename):
+        
+        self.name = name
+        self.is_codename = is_codename

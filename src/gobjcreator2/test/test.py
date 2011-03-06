@@ -23,3 +23,6 @@ print 80 * "-"
 writer.write_header_protected()
 print 80 * "-"
 writer.write_source()
+print 80 * "-"
+writer.write_marshaller_header()
+print 80 * "-"

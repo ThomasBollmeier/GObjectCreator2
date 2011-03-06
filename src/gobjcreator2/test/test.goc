@@ -24,21 +24,47 @@ package demo {
     	}
     	
 	}
+
+	genum BirdCategory {
 	
-}	
+		code ONE { value: 100; }
+		code TWO;
+	
+	}
 
     gobject Bird {
 
         super Animal;
         implements demo::FlyingAnimal;
         implements demo::Actor;
+        
+        property bird_category {
+        
+        	description: "bird's category";
+        	type: enumeration;
+        	gtype: gtypename(BirdCategory);
+        	access: read-only;
+        	default: BirdCategory.ONE;
+        
+        }
 
         property weight {
+        	description: "weight in kg";
             type: double;
             access: initial-write;
+            default: "90.0";
         }
         
-        property dummy { access: read-only; }
+        property dummy { 
+        	access: read-only; 
+        	default: "I am a \"string\"";
+        	}
+        	
+        property mother {
+        	description: "bird's mother";
+        	type: object;
+        	gtype: gtypename(Bird);
+        }
         	
         constructor {
 
@@ -59,6 +85,8 @@ package demo {
             parameter message { type: string; modifiers: const; }
             parameter language_code { type: unsigned integer; }
         }
+        
+        signal say-hello {}
 
         signal started {
             parameter dest { type: string; }
@@ -69,7 +97,6 @@ package demo {
             parameter old { type: double; }
             parameter new { type: double; }
             parameter user_data { type: pointer; }
-            parameter arg1 { type: ref(GList); }
         }
         
         override eat;
@@ -99,3 +126,4 @@ package demo {
 
     }
 
+}

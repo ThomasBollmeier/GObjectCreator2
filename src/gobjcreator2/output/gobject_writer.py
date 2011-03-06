@@ -1,7 +1,8 @@
-from gobjcreator2.output.writer import Writer
+from gobjcreator2.output.writer import Writer, ListOut
 from gobjcreator2.output.func_name_creator import FuncNameCreator
+from gobjcreator2.output.marshaller_generator import MarshallerGenerator
 from gobjcreator2.metadef.constants import Visibility, Scope, TypeModifier
-from gobjcreator2.metadef.property import PropAccess
+from gobjcreator2.metadef.property import PropAccess, PropType
 from gobjcreator2.metadef.method import Method, MethodInheritance
 
 class GObjectWriter(Writer):
@@ -173,6 +174,22 @@ class GObjectWriter(Writer):
         self._write_interface_impls()
         
         self.user_section("source_bottom")
+        
+    def write_marshaller_header(self):
+        
+        self._write_marshaller(header = True)
+
+    def write_marshaller_source(self):
+        
+        self._write_marshaller(header = False)
+        
+    def _write_marshaller(self, header = True):
+        
+        marshaller_gen = MarshallerGenerator(self._gobj)
+        
+        lines = marshaller_gen.get_code(for_header = header)
+        for line in lines:
+            self.writeln(line)
                     
     def _write_comment(self):
 
@@ -226,7 +243,9 @@ class GObjectWriter(Writer):
 
         self.writeln("/* ===== Properties ======")
         for prop in self._gobj.properties:
-            self.write("* %s: \"%s\"" % (prop.name, prop.description))
+            descr = prop.description.strip("\"")
+            descr = descr.replace('\\"', '"')
+            self.write("* %s <-- %s " % (prop.name, descr))
             if prop.access == PropAccess.READ_ONLY:
                 self.writeln("(read)")
             elif prop.access == PropAccess.INITIAL_WRITE:
@@ -278,7 +297,223 @@ class GObjectWriter(Writer):
         self.writeln(");")
         self.unindent()
         self.writeln()
-     
+        
+    def _write_property_specs(self):
+        
+        if not self._gobj.properties:
+            return
+        
+        propspec_write = {
+                          PropType.BOOLEAN: self._write_propspec_boolean,
+                          PropType.INTEGER: self._write_propspec_integer,
+                          PropType.FLOAT: self._write_propspec_float,
+                          PropType.DOUBLE: self._write_propspec_double,
+                          PropType.STRING: self._write_propspec_string,
+                          PropType.POINTER: self._write_propspec_string,
+                          PropType.OBJECT: self._write_propspec_object,
+                          PropType.ENUMERATION: self._write_propspec_enum
+                          }
+        
+        self.writeln("/* install properties */")
+        self.writeln()
+        
+        for prop in self._gobj.properties:
+            
+            saved_output = self.output
+            list_output = ListOut()
+            self.output = list_output
+            
+            propspec_write[prop.type](prop)
+            self.writeln("g_object_class_install_property(")
+            self.indent()
+            self.writeln("gobj_class,")
+            self.writeln("PROP_%s," % prop.name.upper())
+            self.writeln("pspec_%s" % prop.name.lower())
+            self.writeln(");")
+            self.unindent()
+            
+            self.output = saved_output
+            
+            self.user_section("property_reg_%s" % prop.name.lower(), 
+                              default_code = list_output.get_lines(),
+                              indent_level = -1
+                              )
+            self.writeln()
+            
+    def _write_propspec_boolean(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_boolean(" % prop.name.lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        if prop.default is None:
+            default = "FALSE"
+        else:
+            default = self._prop_value_to_string(prop, "default")
+        self.writeln(default + ",")
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+            
+    def _write_propspec_integer(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_int(" % prop.name.lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        if prop.min is None:
+            min = "0"
+        else:
+            min = self._prop_value_to_string(prop, "min")
+        self.writeln(min + ",")
+        if prop.max is None:
+            max = "0"
+        else:
+            max = self._prop_value_to_string(prop, "max")
+        self.writeln(max + ",")
+        if prop.default is None:
+            default = "0"
+        else:
+            default = self._prop_value_to_string(prop, "default")
+        self.writeln(default + ",")
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+        
+    def _write_propspec_float(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_float(" % prop.name.lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        if prop.min is None:
+            min = "0.0"
+        else:
+            min = self._prop_value_to_string(prop, "min")
+        self.writeln(min + ",")
+        if prop.max is None:
+            max = "0.0"
+        else:
+            max = self._prop_value_to_string(prop, "max")
+        self.writeln(max + ",")
+        if prop.default is None:
+            default = "0.0"
+        else:
+            default = self._prop_value_to_string(prop, "default")
+        self.writeln(default + ",")
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+
+    def _write_propspec_double(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_double(" % prop.name.lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        if prop.min is None:
+            min = "0.0"
+        else:
+            min = self._prop_value_to_string(prop, "min")
+        self.writeln(min + ",")
+        if prop.max is None:
+            max = "0.0"
+        else:
+            max = self._prop_value_to_string(prop, "max")
+        self.writeln(max + ",")
+        if prop.default is None:
+            default = "0.0"
+        else:
+            default = self._prop_value_to_string(prop, "default")
+        self.writeln(default + ",")
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+    
+    def _write_propspec_string(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_string(" % prop.name.lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        if prop.default is None:
+            default = '""'
+        else:
+            default = '"%s"' % self._prop_value_to_string(prop, "default")
+        self.writeln(default + ",")
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+    
+    def _write_propspec_pointer(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_pointer(" % prop.name.lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+    
+    def _write_propspec_object(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_object(" % prop.name.lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        if prop.gtype.is_typename:
+            gtypename = self.gtypename(prop.gtype.name, self._gobj.package)
+        else:
+            gtypename = prop.gtype.name
+        self.writeln("%s," % gtypename)
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+    
+    def _write_propspec_enum(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_enum(" % prop.name.lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        if prop.gtype.is_typename:
+            gtypename = self.gtypename(prop.gtype.name, self._gobj.package)
+        else:
+            gtypename = prop.gtype.name
+        self.writeln("%s," % gtypename)
+        if prop.default is None:
+            default = "0"
+        else:
+            default = self._prop_value_to_string(prop, "default")
+        self.writeln(default + ",")
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+        
+    def _write_propspec_name_descr(self, prop):
+        
+        self.writeln("\"" + prop.name + "\",")
+        descr = prop.description.strip("\"")
+        self.writeln("\"" + descr + "\",")
+        self.writeln("\"" + descr + "\",")
+        
+    def _write_propspec_flags(self, prop):
+        
+        if prop.access == PropAccess.READ_ONLY:
+            self.writeln("G_PARAM_READABLE|G_PARAM_STATIC_STRINGS")
+        elif prop.access == PropAccess.INITIAL_WRITE:
+            self.writeln("G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY|G_PARAM_STATIC_STRINGS")
+        elif prop.access == PropAccess.READ_WRITE:
+            self.writeln("G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS")
+            
+    def _prop_value_to_string(self, prop, value_name):
+        
+        value = getattr(prop, value_name)
+        if not value.is_codename:
+            return value.name
+        else:
+            enum_name, code_name = value.name.split(".")
+            enum_type = self._gobj.package[enum_name]
+            code_name = self.to_underscore(enum_type.name) + "_" + code_name.upper()
+            package = enum_type.package
+            while package:
+                if package.name:
+                    code_name = package.name.upper() + "_" + code_name
+                package = package.package
+            return code_name
+
     def _write_signals_enum(self):
         
         if not self._gobj.signals:
@@ -374,7 +609,42 @@ class GObjectWriter(Writer):
             
         self.user_section("class_init", "/* init class members ... */")
         self.writeln()
+        
+        self.writeln("gobj_class->dispose = %(prefix)s_dispose;" % self._vars)
+        self.writeln("gobj_class->finalize = %(prefix)s_finalize;" % self._vars)
+        self.writeln("gobj_class->set_property = %(prefix)s_set_property;" % self._vars)
+        self.writeln("gobj_class->get_property = %(prefix)s_get_property;" % self._vars)
+        self.writeln() 
+        
+        first = True
+        for m in self._gobj.methods:
+            if m.inheritance_mode != MethodInheritance.VIRTUAL:
+                continue
+            if first:
+                first = False
+                self.writeln("/* set default implementations of virtual methods */")
+                self.writeln()
+            method_name = self._vars["prefix"] + "_" + self._func_name_creator.create_impl_func_name(m.name)
+            self.writeln("cls->%s = %s;" % (m.name, method_name))
+        if not first:
+            self.writeln()
                 
+        first = True
+        for info in self._gobj.overridden_methods:
+            if first:
+                first = False
+                self.writeln("/* set implementations of overridden methods */")
+                self.writeln()
+            method_name = self._vars["prefix"] + "_" + info.method.name + "_im"
+            cast_name = self._clifname(info.defined_in) + "Class"
+            self.writeln("(%s* cls)->%s = %s;" % (cast_name, info.method.name, method_name))
+        if not first:
+            self.writeln()    
+            
+        self._write_property_specs()
+                
+        self._write_add_signals()
+                      
         self.writeln()
         self.unindent()
         self.writeln("}")
@@ -513,7 +783,55 @@ class GObjectWriter(Writer):
 
         if not first_line_break:
             self.unindent()
-
+            
+    def _write_add_signals(self):
+        
+        if not self._gobj.signals:
+            return
+        
+        self.writeln("/* add signals */")
+        self.writeln()
+        
+        marshaller_gen = MarshallerGenerator(self._gobj)
+        
+        for signal in self._gobj.signals:
+            
+            saved_out = self.output
+            list_out = ListOut()
+            self.output = list_out
+            
+            self.write("%(prefix)s_signals[" % self._vars)
+            self.writeln("%s] = g_signal_new(\"%s\"," % (signal.internal_name.upper(), signal.name))
+            self.indent()
+            self.writeln(self.gtypename(self._gobj) + ",")
+            self.writeln("G_SIGNAL_RUN_LAST|G_SIGNAL_DETAILED,")
+            self.write("G_STRUCT_OFFSET(%(Class)sClass, " % self._vars)
+            self.writeln(signal.internal_name + "),")
+            self.writeln("NULL, /* accumulator */")
+            self.writeln("NULL,")
+            self.writeln("%s," % marshaller_gen.get_marshaller_name(signal))
+            self.writeln("%s," % self.gtypename(signal.result))
+            if signal.parameters:
+                self.writeln("%d," % len(signal.parameters))
+                for param in signal.parameters:
+                    self.write(self.gtypename(param[1]))
+                    if not param is signal.parameters[-1]:
+                        self.writeln(",")
+                    else:
+                        self.writeln()
+            else:
+                self.writeln("0")
+            self.writeln(");")
+            self.unindent()
+                        
+            self.output = saved_out
+            
+            self.user_section("signal_%s" % signal.internal_name,
+                              default_code = list_out.get_lines(), 
+                              indent_level = -1
+                              )
+            self.writeln()
+        
     def _write_init_methods(self):
 
         if not self._gobj.abstract:
@@ -697,17 +1015,8 @@ class GObjectWriter(Writer):
         return res
 
     def _basename(self):
-
-        res = ""
-        lastChar = ""
-        for ch in self._gobj.name:
-            if lastChar:
-                if lastChar == lastChar.lower() and ch == ch.upper():
-                    res += "_"
-            res += ch.upper()
-            lastChar = ch
-            
-        return res
+        
+        return self.to_underscore(self._gobj.name)
 
     def _filename_base(self, clif):
 

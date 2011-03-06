@@ -1,19 +1,53 @@
 import gobjcreator2.metadef.types as types
 from gobjcreator2.metadef.gobject import GObject
 from gobjcreator2.metadef.ginterface import GInterface
-from gobjcreator2.metadef.package import PackageElement
+from gobjcreator2.metadef.package import PackageElement, Package
+import gobjcreator2.output.util as util
 
 class Output(object):
+    
+    def __init__(self):
+        pass
 
     def wrt(self, text):
 
-        pass
+        raise NotImplementedError
 
 class StdOut(Output):
-
+    
+    def __init__(self):
+        
+        Output.__init__(self)
+        
     def wrt(self, text):
 
         print text
+        
+class ListOut(Output):
+
+    def __init__(self):
+        
+        Output.__init__(self)
+        
+        self._lines = []
+    
+    def wrt(self, text):
+        
+        self._lines.append(text)
+        
+    def get_lines(self):
+        
+        return self._lines
+    
+class NullOut(Output):
+    
+    def __init__(self):
+        
+        Output.__init__(self)
+        
+    def wrt(self, text):
+        
+        pass
         
 class Writer(object):
 
@@ -29,6 +63,12 @@ class Writer(object):
     def set_output(self, output):
 
         self._output = output
+        
+    def get_output(self):
+        
+        return self._output
+    
+    output = property(get_output, set_output)
 
     def set_tab_size(self, size):
 
@@ -140,3 +180,18 @@ class Writer(object):
                 res += "*"
 
         return res
+
+    def gtypename(self, typename_or_type, current_package=None):
+        
+        if isinstance(typename_or_type, types.Type):
+            type = typename_or_type
+        else:
+            if not current_package:
+                current_package = Package.get_top()
+            type = current_package[typename_or_type]
+            
+        return util.gtypename(type)
+
+    def to_underscore(self, name):
+        
+        return util.camelcase_to_underscore(name)

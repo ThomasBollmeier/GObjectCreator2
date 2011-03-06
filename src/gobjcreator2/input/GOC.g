@@ -180,8 +180,11 @@ propertyElement
     |   'gtype' ':' GTYPENAME '(' typeName ')' ';'
     ->  ^(PROP_GTYPE ^(GTYPENAME typeName))
     |   'min' ':' STRING ';' -> ^(PROP_MIN STRING)
+    |	'min' ':' enum=typeName '.' code=ID ';' -> ^(PROP_MIN $enum $code)
     |   'max' ':' STRING ';' -> ^(PROP_MAX STRING)
+    |	'max' ':' enum=typeName '.' code=ID ';' -> ^(PROP_MAX $enum $code)
     |   'default' ':' STRING ';' -> ^(PROP_DEFAULT STRING)
+    |	'default' ':' enum=typeName '.' code=ID ';' -> ^(PROP_DEFAULT $enum $code)
     |   AUTO_CREATE^ ';'
     ;
 

@@ -356,11 +356,11 @@ class Reader(object):
             elif token_type == PROP_DESC:
                 attrs["description"] = child.getChildren()[0].getText()
             elif token_type == PROP_MIN:
-                attrs["min"] = child.getChildren()[0].getText()
+                attrs["min"] = self._get_prop_value(child)
             elif token_type == PROP_MAX:
-                attrs["max"] = child.getChildren()[0].getText()
+                attrs["max"] = self._get_prop_value(child)
             elif token_type == PROP_DEFAULT:
-                attrs["default"] = child.getChildren()[0].getText()
+                attrs["default"] = self._get_prop_value(child)
             elif token_type == AUTO_CREATE:
                 attrs["auto_create"] = True
 
@@ -387,7 +387,24 @@ class Reader(object):
             res += child.getText()
 
         return res
-
+    
+    def _get_prop_value(self, prop_value_node):
+        
+        children = prop_value_node.getChildren()
+        
+        if len(children) == 1: # string literal
+            value = children[0].getText()
+            if value[0] == '"':
+                value = value[1:]
+            if value[-1] == '"':
+                value = value[:-1]
+            is_codename = False
+        else:
+            value = self._get_type_name(children[0]) + "." + children[1].getText()
+            is_codename = True
+            
+        return CodeValue(value, is_codename)
+            
     def _get_modifiers(self, modifiers_node):
 
         res = []
@@ -464,6 +481,8 @@ class PropInitValue(object):
 
         self.name = name
         self.is_codename = is_codename
+        
+CodeValue = PropInitValue
 
 class GOCVisitor(object):
 
