@@ -1,6 +1,7 @@
 from gobjcreator2.output.writer import Writer, ListOut
 from gobjcreator2.output.func_name_creator import FuncNameCreator
 from gobjcreator2.output.marshaller_generator import MarshallerGenerator
+import gobjcreator2.output.util as util
 from gobjcreator2.metadef.constants import Visibility, Scope, TypeModifier
 from gobjcreator2.metadef.property import PropAccess, PropType
 from gobjcreator2.metadef.method import Method, MethodInheritance
@@ -170,6 +171,9 @@ class GObjectWriter(Writer):
         self._write_signals_enum()
         
         self._write_class_init()
+        self._write_interfaces_init()
+        
+        self._write_type_init()
                 
         self._write_interface_impls()
         
@@ -650,7 +654,120 @@ class GObjectWriter(Writer):
         self.writeln("}")
         
         self.writeln()
+        
+    def _write_interfaces_init(self):
+        
+        self.writeln("/* ===== interfaces ===== */")
+        self.writeln()
+        
+        for interface in self._gobj.interfaces:
+            
+            self.writeln("static void")
+            
+            method_name = "%(prefix)s_" % self._vars
+            iface_name = util.camelcase_to_underscore(self._clifname(interface))
+            method_name += iface_name.lower() + "_init("
+            method_name += self.typename(interface) + " iface) {"
+            self.writeln(method_name)
+            self.indent()
+            self.writeln()
+            for method in interface.methods:
+                line = "iface->%s = " % method.name
+                line += "%s;" % \
+                    self._func_name_creator.create_impl_func_name(method.name, interface.name)
+                self.writeln(line)
+            self.writeln()
+            self.unindent()
+            self.writeln("}")
+            self.writeln()
+        
+        self.user_section("external_interfaces_init",
+                          "/* Initialize implementation of unmodeled interfaces... */"
+                          )
+        self.writeln()
+        
+    def _write_type_init(self):
+        
+        self.writeln("/* ===== type initialization ==== */")
+        self.writeln()
+        
+        self.writeln("static void")
+        self.writeln("%(prefix)s_instance_init(" % self._vars)
+        self.indent()
+        self.writeln("GTypeInstance* obj,")
+        self.writeln("gpointer cls")
+        self.writeln(") {")
+        self.writeln()
+        
+        if self._gobj.has_attributes(Visibility.PRIVATE) or \
+           self._gobj.has_attributes(Visibility.PROTECTED):
+            
+            line = "%(Class)s* self = %(NAMESPACE)s%(BASENAME)s(obj);" % self._vars
+            self.writeln(line)
+            self.writeln()
+            
+        if self._gobj.has_attributes(Visibility.PRIVATE):
+            self.writeln("self->priv = G_TYPE_INSTANCE_GET_PRIVATE(")
+            self.indent()
+            self.writeln("self,")
+            self.writeln("%(NAMESPACE)sTYPE_%(BASENAME)s," % self._vars)
+            self.writeln("%(Class)sPriv" % self._vars)
+            self.writeln(");")
+            self.unindent()
+            self.writeln()
+            
+        if self._gobj.has_attributes(Visibility.PROTECTED):
+            self.writeln("self->prot = (%(Class)sProt*) g_new(%(Class)sProt, 1);" % self._vars)
+            self.writeln()
+            
+        lines = []
+        lines.append("/* init members, allocate memory, etc ... */")
+        lines.append("")
+        
+        for prop in self._gobj.properties:
+            if not prop.auto_create:
+                continue
+            line = ""
+            if prop.type == PropType.BOOLEAN:
+                line = "self->priv->%s = FALSE;" % prop.name
+            elif prop.type == PropType.INTEGER:
+                line = "self->priv->%s = 0;" % prop.name 
+            elif prop.type == PropType.FLOAT or prop.type == PropType.DOUBLE:
+                line = "self->priv->%s = 0.0;" % prop.name 
+            elif prop.type == PropType.STRING:
+                line = "self->priv->%s = NULL;" % prop.name
+            lines.append(line)
+            
+        self.user_section("instance_init", 
+                          default_code = lines,
+                          indent_level = 0
+                          )
+        self.writeln()
+            
+        self.unindent()
+        self.writeln("}")
+        self.writeln()
 
+
+##! user_code instance_init
+#    /* allocate memory if needed... */
+#    #! for prop in class.props where prop.attr_name
+#        #! if equal prop.type_ '0'
+#    self->priv->$prop.attr_name$ = FALSE;
+#        #! elif equal prop.type_ '1'
+#    self->priv->$prop.attr_name$ = 0;        
+#        #! elif equal prop.type_ '2'
+#    self->priv->$prop.attr_name$ = 0.0;
+#        #! elif equal prop.type_ '3'
+#    self->priv->$prop.attr_name$ = NULL;
+#        #! elif equal prop.type_ '4'
+#    self->priv->$prop.attr_name$ = NULL;
+#        #! end
+#    #! end
+##! end
+#    
+#}        
+        
     def _write_method_decl(self, 
                            method, 
                            as_pointer = False, 
@@ -1020,4 +1137,4 @@ class GObjectWriter(Writer):
 
     def _filename_base(self, clif):
 
-        return self._clifname(clif).lower()
+        return util.camelcase_to_underscore(self._clifname(clif)).lower()

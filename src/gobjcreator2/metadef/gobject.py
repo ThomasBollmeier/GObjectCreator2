@@ -1,9 +1,11 @@
 from gobjcreator2.metadef.package import PackageElement
-from gobjcreator2.metadef.types import Type
+from gobjcreator2.metadef.types import Type, BOOL, INT, FLOAT, DOUBLE, STRING
 from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method_info import MethodInfo
 from gobjcreator2.metadef.constants import MethodInheritance
 from gobjcreator2.metadef.constructor import Constructor
+from gobjcreator2.metadef.attribute import Attribute
+from gobjcreator2.metadef.property import PropType
 
 class GObject(PackageElement, Type):
 
@@ -67,7 +69,27 @@ class GObject(PackageElement, Type):
     def add_property(self, property):
 
         self._properties[property.name] = property
-
+        
+        if property.auto_create:
+            # Create attribute that holds property value:
+            attr_name = property.name
+            
+            if not hasattr(self, "_prop_type_map"):
+                self._prop_type_map = {
+                                       PropType.BOOLEAN: BOOL,
+                                       PropType.INTEGER: INT,
+                                       PropType.FLOAT: FLOAT,
+                                       PropType.DOUBLE: DOUBLE,
+                                       PropType.STRING: STRING,
+                                       }
+            try:
+                attr_type = self._prop_type_map[property.type]
+            except KeyError:
+                raise DefinitionError("Auto-creation of attribute not supported for property %s" % \
+                                 property.name)
+            
+            self.add_attribute(Attribute(attr_name, attr_type))
+            
     def add_signal(self, signal):
 
         self._signals[signal.name] = signal
