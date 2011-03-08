@@ -747,26 +747,77 @@ class GObjectWriter(Writer):
         self.unindent()
         self.writeln("}")
         self.writeln()
+        
+        self._write_get_type_method()
+        
+    def _write_get_type_method(self):
+        
+        self.writeln("GType %(prefix)s_get_type() {" % self._vars)
+        self.writeln()
+        self.indent()
+        
+        self.writeln("static type_id = 0;")
+        self.writeln()
+        
+        self.writeln("if (type_id == 0) {")
+        self.indent()
+        self.writeln()
+        self.writeln("const GTypeInfo class_info = {")
+        self.indent()
+        self.writeln("sizeof(%(Class)sClass)," % self._vars)
+        self.writeln("NULL, /* base initializer */")
+        self.writeln("NULL, /* base finalizer */")
+        self.writeln("(GClassInitFunc) %(prefix)s_class_init," % self._vars)
+        self.writeln("NULL, /* class finalizer */")
+        self.writeln("NULL, /* class data */")
+        self.writeln("sizeof(%(Class)s)," % self._vars)
+        self.writeln("0,") 
+        self.writeln("%(prefix)s_instance_init" % self._vars)
+        self.writeln("};")
+        self.unindent()
+        self.writeln()
 
-
-##! user_code instance_init
-#    /* allocate memory if needed... */
-#    #! for prop in class.props where prop.attr_name
-#        #! if equal prop.type_ '0'
-#    self->priv->$prop.attr_name$ = FALSE;
-#        #! elif equal prop.type_ '1'
-#    self->priv->$prop.attr_name$ = 0;        
-#        #! elif equal prop.type_ '2'
-#    self->priv->$prop.attr_name$ = 0.0;
-#        #! elif equal prop.type_ '3'
-#    self->priv->$prop.attr_name$ = NULL;
-#        #! elif equal prop.type_ '4'
-#    self->priv->$prop.attr_name$ = NULL;
-#        #! end
-#    #! end
-##! end
-#    
-#}        
+        for interface in self._gobj.interfaces:
+            ifname = util.camelcase_to_underscore(interface.name).lower()
+            ifprefix = util.camelcase_to_underscore(self._clifname(interface)).lower()
+            initfunc = "%(prefix)s" % self._vars + "_" + ifprefix + "_init"
+            self.writeln("const GInterfaceInfo %s_info = {" % ifname)
+            self.indent()
+            self.writeln("(GInterfaceInitFunc) %s," % initfunc)
+            self.writeln("NULL,")
+            self.writeln("NULL")
+            self.writeln("};")
+            self.unindent()
+            self.writeln()
+            
+        self.writeln("type_id = g_type_register_static(")
+        self.indent()
+        if self._gobj.super_class is None:
+            self.writeln("G_TYPE_OBJECT,"),
+        else:
+            self.writeln("%sTYPE_%s," % \
+                         (util.namespace_prefix(self._gobj.super_class).upper(),
+                          self._gobj.super_class.name.upper()))
+        self.writeln('"%(Class)s",' % self._vars)
+        self.writeln("&class_info,")
+        if not self._gobj.abstract:
+            self.writeln("0")
+        else:
+            self.writeln("G_TYPE_FLAG_ABSTRACT")
+        self.writeln(");")
+        self.unindent()
+        self.writeln()
+        
+        self.unindent()
+        self.writeln("}")
+        
+        self.writeln()
+        self.writeln("return type_id;")
+        
+        self.unindent()
+        self.writeln()
+        self.writeln("}")
+        self.writeln()
         
     def _write_method_decl(self, 
                            method, 

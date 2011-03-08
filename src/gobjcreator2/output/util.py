@@ -47,3 +47,20 @@ def camelcase_to_underscore(name):
         lastChar = ch
         
     return res
+
+def namespace_prefix(element):
+    
+    res = ""
+    package = element.package
+    while package:
+        if package.name:
+            if not res:
+                res = package.name
+            else:
+                res = package.name + "_" + res
+        package = package.package
+        
+    if res:
+        res += "_"
+        
+    return res
