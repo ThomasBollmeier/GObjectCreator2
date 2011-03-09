@@ -778,10 +778,9 @@ class GObjectWriter(Writer):
         self.writeln()
 
         for interface in self._gobj.interfaces:
-            ifname = util.camelcase_to_underscore(interface.name).lower()
             ifprefix = util.camelcase_to_underscore(self._clifname(interface)).lower()
             initfunc = "%(prefix)s" % self._vars + "_" + ifprefix + "_init"
-            self.writeln("const GInterfaceInfo %s_info = {" % ifname)
+            self.writeln("const GInterfaceInfo %s_info = {" % ifprefix)
             self.indent()
             self.writeln("(GInterfaceInitFunc) %s," % initfunc)
             self.writeln("NULL,")
@@ -795,9 +794,10 @@ class GObjectWriter(Writer):
         if self._gobj.super_class is None:
             self.writeln("G_TYPE_OBJECT,"),
         else:
+            super_basename = util.camelcase_to_underscore(self._gobj.super_class.name).upper()
             self.writeln("%sTYPE_%s," % \
                          (util.namespace_prefix(self._gobj.super_class).upper(),
-                          self._gobj.super_class.name.upper()))
+                          super_basename))
         self.writeln('"%(Class)s",' % self._vars)
         self.writeln("&class_info,")
         if not self._gobj.abstract:
@@ -807,8 +807,32 @@ class GObjectWriter(Writer):
         self.writeln(");")
         self.unindent()
         self.writeln()
+
+        for interface in self._gobj.interfaces:
+            
+            iftype = util.namespace_prefix(interface).upper()
+            iftype += "TYPE_" 
+            iftype += util.camelcase_to_underscore(interface.name).upper()
+            
+            ifprefix = self._clifname(interface)
+            ifprefix = util.camelcase_to_underscore(ifprefix)
+            ifprefix = ifprefix.lower()
+            
+            self.writeln("g_type_add_interface_static(")
+            self.indent()
+            self.writeln("type_id,")
+            self.writeln(iftype + ",")
+            self.writeln("&%s_info" % ifprefix)
+            self.writeln(");")
+            self.unindent()
+            self.writeln()
         
         self.unindent()
+
+        self.user_section("external_interfaces_register", 
+                          "/* Register implementation of unmodeled interfaces... */"
+                          )
+        self.writeln()
         self.writeln("}")
         
         self.writeln()
