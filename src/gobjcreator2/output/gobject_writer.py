@@ -174,6 +174,11 @@ class GObjectWriter(Writer):
         self._write_interfaces_init()
         
         self._write_type_init()
+        
+        self.writeln("/* ===== implementation ===== */")
+        self.writeln()
+        
+        self._write_instantiation_impl()
                 
         self._write_interface_impls()
         
@@ -508,15 +513,20 @@ class GObjectWriter(Writer):
         if not value.is_codename:
             return value.name
         else:
-            enum_name, code_name = value.name.split(".")
-            enum_type = self._gobj.package[enum_name]
-            code_name = self.to_underscore(enum_type.name) + "_" + code_name.upper()
-            package = enum_type.package
-            while package:
-                if package.name:
-                    code_name = package.name.upper() + "_" + code_name
-                package = package.package
-            return code_name
+            return self._code_to_string(value.name)
+        
+    def _code_to_string(self, code):
+        
+        enum_name, code_name = code.split(".")
+        enum_type = self._gobj.package[enum_name]
+        code_name = self.to_underscore(enum_type.name) + "_" + code_name.upper()
+        package = enum_type.package
+        while package:
+            if package.name:
+                code_name = package.name.upper() + "_" + code_name
+            package = package.package
+            
+        return code_name
 
     def _write_signals_enum(self):
         
@@ -856,13 +866,13 @@ class GObjectWriter(Writer):
                                  implementation = False, 
                                  define_as_static = define_as_static                                 )
 
-    def _write_method_impl(self, method, method_name=""):
+    def _write_method_impl(self, method, method_name="", define_as_static=True):
 
         self._write_method_lines(method, 
                                  method_name, 
                                  as_pointer = False, 
                                  implementation = True, 
-                                 define_as_static = True
+                                 define_as_static = define_as_static
                                  )
 
     def _write_method_lines(self, 
@@ -1039,7 +1049,81 @@ class GObjectWriter(Writer):
 
         self._write_method_decl(init_method)
         self.writeln()
+        
+    def _write_instantiation_impl(self):
 
+        if not self._gobj.abstract:
+            self._write_constructor_impl()
+        
+        init_method = Method("init")
+        init_method.parameters = self._gobj.constructor.parameters[:]
+
+        self._write_method_impl(init_method, define_as_static=False)
+        self.user_section("constructor", "/* == init your members == */")
+        self.writeln("}")
+        self.writeln()    
+    
+    def _write_constructor_impl(self):
+        
+        constructor = self._gobj.constructor
+        self._write_method_impl(constructor, define_as_static=False)
+        self.writeln()
+        self.indent()
+        
+        self.write("%s obj = " % self.typename(self._gobj))
+        self.write("g_object_new(")
+        self.write("%(NAMESPACE)sTYPE%(BASENAME)s" % self._vars)
+        prop_inits = self._get_property_inits(constructor)
+        if prop_inits:
+            self.writeln(",")
+            self.indent()
+            for prop_name, prop_value in prop_inits:
+                self.writeln('"%s", %s,' % (prop_name, prop_value))
+            self.writeln("NULL")
+            self.writeln(");")
+            self.unindent()
+        else:
+            self.writeln(");")
+        self.writeln()
+        self.write("%(prefix)s_init(obj" % self._vars)
+        if constructor.parameters:
+            args=""
+            for param in constructor.parameters:
+                if args:
+                    args += ", "
+                args += param.name
+            self.writeln(", " + args + ");")
+        else:
+            self.writeln(");")
+        self.writeln()
+        self.writeln("return obj;")
+        self.unindent()
+        self.writeln()
+        self.writeln("}")
+        self.writeln()    
+        
+    def _get_property_inits(self, constructor):
+        
+        res = []
+        
+        for param in constructor.parameters:
+            if param.bind_to:
+                res.append((param.bind_to, param.name)) 
+                
+        for prop_name in constructor.property_inits:
+            val, is_code = constructor.property_inits[prop_name]
+            if is_code:
+                value = self._code_to_string(val)
+            else:
+                if val[0] == '"':
+                    val = val[1:]
+                if val[-1] == '"':
+                    val = val[:-1]
+                value = val.replace('\\"', '"')
+            res.append((prop_name, value))
+                
+        return res
+        
     def _write_method_decls(self, visibility):
 
         first = True
