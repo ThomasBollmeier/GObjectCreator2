@@ -41,7 +41,7 @@ def camelcase_to_underscore(name):
     lastChar = ""
     for ch in name:
         if lastChar:
-            if lastChar == lastChar.lower() and ch == ch.upper():
+            if lastChar == lastChar.lower() and ch == ch.upper() and ch != "_":
                 res += "_"
         res += ch.upper()
         lastChar = ch

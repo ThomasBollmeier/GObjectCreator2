@@ -11,9 +11,16 @@ package demo {
     }
 
     ginterface FlyingAnimal {
+    
+    	prefix flya;
 
         method fly {}
         method do_something {}
+        
+        signal landed {
+        	parameter lon { type: double; }
+        	parameter lat { type: double; } 
+        }
 
     }
     
@@ -106,7 +113,9 @@ package demo {
 
         method do_something_protected { visibility: protected; }
         
-        method do_private_stuff {}
+        method do_private_stuff { 
+        	parameter name { type: string; modifiers: const; }
+        }
 
         attribute num_instances { type: integer; scope: static; }
         attribute name { type: string; visibility: public; }

@@ -1,17 +1,18 @@
-from gobjcreator2.output.writer import Writer, ListOut
+from gobjcreator2.output.writer import ListOut
+from gobjcreator2.output.class_intf_writer import ClassIntfWriter
 from gobjcreator2.output.func_name_creator import FuncNameCreator
 from gobjcreator2.output.marshaller_generator import MarshallerGenerator
 import gobjcreator2.output.util as util
-from gobjcreator2.metadef.constants import Visibility, Scope, TypeModifier
+from gobjcreator2.metadef.constants import Visibility, Scope
 from gobjcreator2.metadef.property import PropAccess, PropType
 from gobjcreator2.metadef.method import Method, MethodInheritance
 import gobjcreator2.metadef.types as types
 
-class GObjectWriter(Writer):
+class GObjectWriter(ClassIntfWriter):
 
     def __init__(self, gobject):
 
-        Writer.__init__(self)
+        ClassIntfWriter.__init__(self, gobject)
         self._gobj = gobject
 
         namespace = ""
@@ -27,7 +28,7 @@ class GObjectWriter(Writer):
         self._vars = {
             "CLASS": self._clifname(self._gobj).upper(),
             "Class": self._clifname(self._gobj),
-            "prefix": namespace.lower() + self._gobj.prefix,
+            "prefix": namespace.lower() + self._base_prefix,
             "NAMESPACE": namespace.upper(),
             "BASENAME": self._basename()
         }
@@ -218,13 +219,6 @@ class GObjectWriter(Writer):
         for line in lines:
             self.writeln(line)
                     
-    def _write_comment(self):
-
-        self.writeln("/* This file has been generated automatically by GObjectCreator")
-        self.writeln("* (see http://www.bollmeier.de/GObjectCreator for details).")
-        self.writeln("* Please modify user sections only!")
-        self.writeln("*/")
-
     def _write_struct(self):
 
         self.writeln("typedef struct _%(Class)s {" % self._vars)
@@ -1127,116 +1121,9 @@ class GObjectWriter(Writer):
                                  define_as_static = define_as_static
                                  )
 
-    def _write_method_lines(self, 
-                            method,
-                            method_name, 
-                            as_pointer = False,
-                            implementation = False,
-                            define_as_static = False
-                            ):
-
-        MAXLEN_ARG = 50
-        
-        if not method_name:
-            name = method.name
-        else:
-            name = method_name
-        
-        tmp = self.typename(method.result)
-        if TypeModifier.CONST in method.result_modifiers:
-            tmp = "const " + tmp
-        if define_as_static:
-            tmp = "static " + tmp
-        self.writeln(tmp)
-        
-        if not as_pointer:
-            tmp = "%(prefix)s" % self._vars + "_" + name
-        else:
-            tmp = "(*%s)" % name
-        self.write(tmp + "(")
-
-        args = ""
-        if method.scope == Scope.INSTANCE:
-            if not method_name:
-                lookup_method = method_name
-                lookup_interface = ""
-            else:
-                lookup_method, lookup_interface = self._func_name_creator.get_info(method_name)
-            method_info = self._gobj.lookup_method(lookup_method, lookup_interface)
-            if method_info:
-                selftype = self.typename(method_info.defined_in)
-                if selftype == self.typename(self._gobj):
-                    selfname = "self"
-                else:
-                    selfname = "obj"
-            else:
-                selftype = self.typename(self._gobj)
-                selfname = "self"
-            args += "%s %s" % (selftype, selfname) 
-            if method.parameters:
-                args += ", "
-
-        first_line_break = True
-        for p in method.parameters:
-            tmp = self.typename(p.type)
-            if TypeModifier.CONST in p.modifiers:
-                tmp = "const " + tmp
-            tmp += " " + p.name
-            args += tmp
-            is_last = p == method.parameters[-1]
-            if not is_last:
-                args += ", "
-            if ( len(args) > MAXLEN_ARG ) and ( not is_last ):
-                self.writeln(args)
-                if first_line_break:
-                    self.indent()
-                    first_line_break = False
-                args = ""
-
-        if args:
-            self.write(args)
-            
-        if not implementation:
-            self.writeln(");")
-        else:
-            self.writeln(") {")
-            
-        if not first_line_break:
-            self.unindent()
-
     def _write_signal_decl(self, signal):
-
-        MAXLEN_ARG = 50
-
-        self.writeln("%s /* %s */" % (self.typename(signal.result),
-                                      signal.name))
-        self.write("(*%s)(" % signal.internal_name)
         
-        args = "%(Class)s* sender" % self._vars
-        if signal.parameters:
-            args += ", "
-
-        first_line_break = True
-        for p in signal.parameters:
-            tmp = self.typename(p[1])
-            tmp += " " + p[0]
-            args += tmp
-            is_last = p == signal.parameters[-1]
-            if not is_last:
-                args += ", "
-            if ( len(args) > MAXLEN_ARG ) and ( not is_last ):
-                self.writeln(args)
-                if first_line_break:
-                    self.indent()
-                    first_line_break = False
-                args = ""
-
-        if args:
-            self.write(args)
-        self.writeln(");")
-
-        if not first_line_break:
-            self.unindent()
+        self._declare_signal("%(Class)s" % self._vars, signal)
             
     def _write_add_signals(self):
         
@@ -1574,21 +1461,6 @@ class GObjectWriter(Writer):
 
         self.writeln()
 
-    def _clifname(self, clif):
-
-        res = clif.name
-        package = clif.package
-        while package:
-            if package.name:
-                res = package.name.capitalize() + res
-            package = package.package
-
-        return res
-
     def _basename(self):
         
         return self.to_underscore(self._gobj.name)
-
-    def _filename_base(self, clif):
-
-        return util.camelcase_to_underscore(self._clifname(clif)).lower()

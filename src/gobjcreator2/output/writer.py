@@ -195,3 +195,25 @@ class Writer(object):
     def to_underscore(self, name):
         
         return util.camelcase_to_underscore(name)
+
+    def _write_comment(self):
+
+        self.writeln("/* This file has been generated automatically by GObjectCreator")
+        self.writeln("* (see http://www.bollmeier.de/GObjectCreator for details).")
+        self.writeln("* Please modify user sections only!")
+        self.writeln("*/")
+
+    def _filename_base(self, clif):
+
+        return util.camelcase_to_underscore(self._clifname(clif)).lower()
+
+    def _clifname(self, clif):
+
+        res = clif.name
+        package = clif.package
+        while package:
+            if package.name:
+                res = package.name.capitalize() + res
+            package = package.package
+
+        return res

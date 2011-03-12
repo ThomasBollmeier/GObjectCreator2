@@ -1,5 +1,6 @@
 from gobjcreator2.metadef.package import PackageElement
 from gobjcreator2.metadef.types import Type
+from gobjcreator2.metadef.method_info import MethodInfo
 
 class GInterface(PackageElement, Type):
 
@@ -27,6 +28,21 @@ class GInterface(PackageElement, Type):
 
         self._signals[signal.name] = signal
 
+    def lookup_method(self, method_name, interface_name=""):
+        """
+        -> method_name : Name of method to lookup
+        <- method info
+        """
+        if interface_name and interface_name != self.name:
+            return None
+            
+        if method_name not in self._methods:
+            return None
+        
+        method = self._methods[method_name]
+    
+        return MethodInfo(method, self)
+    
     # Properties
 
     def _get_methods(self):
