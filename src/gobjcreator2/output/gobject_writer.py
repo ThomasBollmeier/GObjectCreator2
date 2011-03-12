@@ -5,6 +5,7 @@ import gobjcreator2.output.util as util
 from gobjcreator2.metadef.constants import Visibility, Scope, TypeModifier
 from gobjcreator2.metadef.property import PropAccess, PropType
 from gobjcreator2.metadef.method import Method, MethodInheritance
+import gobjcreator2.metadef.types as types
 
 class GObjectWriter(Writer):
 
@@ -47,7 +48,7 @@ class GObjectWriter(Writer):
         self.writeln()
 
         if self._gobj.super_class:
-            self.writeln('#include "%s.h"' % \
+            self.writeln('#include "%s_prot.h"' % \
                          self._filename_base(self._gobj.super_class))
 
         for intf in self._gobj.interfaces:
@@ -165,8 +166,12 @@ class GObjectWriter(Writer):
         
         self._write_interface_defs()
         self._write_virtual_defs()    
-        self._write_overriden_defs()
-        self._write_method_decls(Visibility.PRIVATE)
+        self._write_overridden_defs()
+        self._write_method_decls(Visibility.PRIVATE, define_as_static=True)
+        
+        self.user_section("private_methods", "/* define further methods...*/")
+        self.writeln()
+        
         self._write_property_enum()
         self._write_signals_enum()
         
@@ -179,8 +184,21 @@ class GObjectWriter(Writer):
         self.writeln()
         
         self._write_instantiation_impl()
-                
+        self._write_prop_setter_getter()        
+        
         self._write_interface_impls()
+        
+        self._write_methods_implementation(Visibility.PUBLIC, 
+                                           "/* ===== public methods ===== */"
+                                           )
+        self._write_methods_implementation(Visibility.PROTECTED, 
+                                           "/* ===== protected methods ===== */"
+                                           )
+        self._write_methods_implementation(Visibility.PRIVATE, 
+                                           "/* ===== private methods ===== */"
+                                           )
+        
+        self._write_overridden_impls()
         
         self.user_section("source_bottom")
         
@@ -506,6 +524,184 @@ class GObjectWriter(Writer):
             self.writeln("G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY|G_PARAM_STATIC_STRINGS")
         elif prop.access == PropAccess.READ_WRITE:
             self.writeln("G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS")
+            
+    def _write_prop_setter_getter(self):
+        
+        self.writeln("void")
+        self.writeln("%(prefix)s_set_property(" % self._vars)
+        self.indent()
+        self.writeln("GObject* obj,")
+        self.writeln("guint property_id,")
+        self.writeln("const GValue* value,")
+        self.writeln("GParamSpec* param_spec")
+        self.writeln(") {")
+        self.writeln()
+        has_write_props = False
+        first = True
+        for prop in self._gobj.properties:
+            if prop.access == PropAccess.READ_ONLY:
+                continue
+            if first:
+                first = False
+                has_write_props = True
+                self.write("%s self = " % self.typename(self._gobj))
+                self.writeln("%(NAMESPACE)s%(BASENAME)s(obj);" % self._vars)
+                self.writeln()
+                self.user_section("property_set_data_decls",
+                                  "/* data declarations...*/")
+                self.writeln()
+                self.writeln("switch (property_id) {")
+                self.indent()
+                self.writeln()
+            self.writeln("case PROP_%s:" % prop.name.upper())
+            self.indent()
+            self._write_prop_set(prop)
+            self.unindent()
+            self.writeln()
+        
+        if has_write_props:
+            self.writeln("default:")
+            self.indent()
+            self.writeln("G_OBJECT_WARN_INVALID_PROPERTY_ID(")
+            self.indent()
+            self.writeln("obj,")
+            self.writeln("property_id,")
+            self.writeln("param_spec")
+            self.writeln(");")
+            self.unindent()
+            self.unindent()
+            self.writeln()
+            self.unindent()
+            self.writeln("}")
+        else:
+            self.writeln("G_OBJECT_WARN_INVALID_PROPERTY_ID(")
+            self.indent()
+            self.writeln("obj,")
+            self.writeln("property_id,")
+            self.writeln("param_spec")
+            self.writeln(");")
+            self.unindent()
+        
+        self.unindent()
+        self.writeln()
+        self.writeln("}")
+        self.writeln()
+
+        self.writeln("void")
+        self.writeln("%(prefix)s_get_property(" % self._vars)
+        self.indent()
+        self.writeln("GObject* obj,")
+        self.writeln("guint property_id,")
+        self.writeln("GValue* value,")
+        self.writeln("GParamSpec* param_spec")
+        self.writeln(") {")
+        self.writeln()
+        has_props = False
+        first = True
+        for prop in self._gobj.properties:
+            if first:
+                first = False
+                has_props = True
+                self.write("%s self = " % self.typename(self._gobj))
+                self.writeln("%(NAMESPACE)s%(BASENAME)s(obj);" % self._vars)
+                self.writeln()
+                self.user_section("property_get_data_decls",
+                                  "/* data declarations...*/")
+                self.writeln()
+                self.writeln("switch (property_id) {")
+                self.indent()
+                self.writeln()
+            self.writeln("case PROP_%s:" % prop.name.upper())
+            self.indent()
+            self._write_prop_get(prop)
+            self.unindent()
+            self.writeln()
+        
+        if has_props:
+            self.writeln("default:")
+            self.indent()
+            self.writeln("G_OBJECT_WARN_INVALID_PROPERTY_ID(")
+            self.indent()
+            self.writeln("obj,")
+            self.writeln("property_id,")
+            self.writeln("param_spec")
+            self.writeln(");")
+            self.unindent()
+            self.unindent()
+            self.writeln()
+            self.unindent()
+            self.writeln("}")
+        else:
+            self.writeln("G_OBJECT_WARN_INVALID_PROPERTY_ID(")
+            self.indent()
+            self.writeln("obj,")
+            self.writeln("property_id,")
+            self.writeln("param_spec")
+            self.writeln(");")
+            self.unindent()
+        
+        self.unindent()
+        self.writeln()
+        self.writeln("}")
+        self.writeln()
+        
+    def _write_prop_set(self, prop):
+        
+        save_out = self.get_output()
+        self.set_output(ListOut())
+        
+        if prop.auto_create:
+            if prop.type == PropType.BOOLEAN:
+                self.write("self->priv->%s = " % prop.name)
+                self.writeln("g_value_get_boolean(value);")
+            elif prop.type == PropType.INTEGER:
+                self.write("self->priv->%s = " % prop.name)
+                self.writeln("g_value_get_integer(value);")
+            elif prop.type == PropType.FLOAT:
+                self.write("self->priv->%s = " % prop.name)
+                self.writeln("g_value_get_float(value);")
+            elif prop.type == PropType.DOUBLE:
+                self.write("self->priv->%s = " % prop.name)
+                self.writeln("g_value_get_double(value);")
+            elif prop.type == PropType.STRING:
+                self.writeln("if (self->priv->%s" % prop.name + ")")
+                self.indent()
+                self.writeln("g_free(self->priv->%s);" % prop.name)
+                self.unindent()
+                self.write("self->priv->%s = " % prop.name)
+                self.writeln("g_value_dup_string(value);")
+        self.writeln('g_object_notify(obj, "%s");' % prop.name)
+        lines = self.get_output().get_lines()
+        
+        self.set_output(save_out)
+        
+        self.user_section("property_set_%s" % prop.name, lines,
+                          indent_level=-3)
+        self.writeln("break;")
+
+    def _write_prop_get(self, prop):
+        
+        save_out = self.get_output()
+        self.set_output(ListOut())
+        
+        if prop.auto_create:
+            if prop.type == PropType.BOOLEAN:
+                self.writeln("g_value_set_boolean(value, self->priv->%s);" % prop.name)
+            elif prop.type == PropType.INTEGER:
+                self.writeln("g_value_set_integer(value, self->priv->%s);" % prop.name)
+            elif prop.type == PropType.FLOAT:
+                self.writeln("g_value_set_float(value, self->priv->%s);" % prop.name)
+            elif prop.type == PropType.DOUBLE:
+                self.writeln("g_value_set_double(value, self->priv->%s);" % prop.name)
+            elif prop.type == PropType.STRING:
+                self.writeln("g_value_set_static_string(value, self->priv->%s);" % prop.name)
+        lines = self.get_output().get_lines()
+        
+        self.set_output(save_out)
+        
+        self.user_section("property_get_%s" % prop.name, lines,
+                          indent_level=-3)
+        self.writeln("break;")
             
     def _prop_value_to_string(self, prop, value_name):
         
@@ -853,6 +1049,62 @@ class GObjectWriter(Writer):
         self.writeln("}")
         self.writeln()
         
+    def _write_methods_implementation(self, visibility, comment=""):
+        
+        first = True
+        
+        for method in self._gobj.methods:
+            
+            if method.visibility != visibility:
+                continue
+
+            if first:
+                first = False
+                if comment:
+                    self.writeln(comment)
+                    self.writeln()
+            
+            define_as_static = method.visibility == Visibility.PRIVATE
+            self._write_method_lines(method,
+                                     method.name, 
+                                     implementation = True,
+                                     define_as_static = define_as_static
+                                     )
+            if method.inheritance_mode == MethodInheritance.FINAL:
+                self.user_section(method.name)
+            else:
+                self.writeln()
+                self.indent()
+                self.write("%(Class)sClass* cls = " % self._vars)
+                self.writeln("%(NAMESPACE)s%(BASENAME)s_GET_CLASS(self);" % self._vars)
+                self.writeln()
+                args = ""
+                for param in method.parameters:
+                    if args:
+                        args += ", "
+                    args += param.name
+                if args:
+                    line = "cls->%s(self, %s);" % (method.name, args)
+                else:
+                    line = "cls->%s(self);" % method.name
+                if method.result != types.NULL:
+                    line = "return " + line
+                self.writeln(line)
+                self.unindent()
+                self.writeln()
+            self.writeln("}")
+            self.writeln()
+            
+            if method.inheritance_mode == MethodInheritance.VIRTUAL:
+                self._write_method_lines(method,
+                                         method.name + "_im", 
+                                         implementation = True,
+                                         define_as_static = True
+                                         )
+                self.user_section(method.name)
+                self.writeln("}")
+                self.writeln()
+                        
     def _write_method_decl(self, 
                            method, 
                            as_pointer = False, 
@@ -1061,7 +1313,28 @@ class GObjectWriter(Writer):
         self._write_method_impl(init_method, define_as_static=False)
         self.user_section("constructor", "/* == init your members == */")
         self.writeln("}")
-        self.writeln()    
+        self.writeln()
+        self.writeln("void")
+        self.writeln("%(prefix)s_dispose(GObject* obj) {" % self._vars)
+        self.user_section("dispose", "/* unref ...*/")
+        self.writeln("}")
+        self.writeln()
+        self.writeln("void")
+        self.writeln("%(prefix)s_finalize(GObject* obj){" % self._vars)
+        self.indent()
+        self.writeln()
+        if self._gobj.has_attributes(Visibility.PROTECTED):
+            self.write(self.typename(self._gobj) + " self = ")
+            self.writeln("%(NAMESPACE)s%(BASENAME)s(obj);" % self._vars)
+            self.writeln()
+        self.user_section("finalize", "/* free allocated memory... */")
+        self.writeln()
+        if self._gobj.has_attributes(Visibility.PROTECTED):
+            self.writeln("g_free(self->prot);")
+            self.writeln()
+        self.unindent()
+        self.writeln("}")
+        self.writeln()
     
     def _write_constructor_impl(self):
         
@@ -1072,7 +1345,7 @@ class GObjectWriter(Writer):
         
         self.write("%s obj = " % self.typename(self._gobj))
         self.write("g_object_new(")
-        self.write("%(NAMESPACE)sTYPE%(BASENAME)s" % self._vars)
+        self.write("%(NAMESPACE)sTYPE_%(BASENAME)s" % self._vars)
         prop_inits = self._get_property_inits(constructor)
         if prop_inits:
             self.writeln(",")
@@ -1124,7 +1397,7 @@ class GObjectWriter(Writer):
                 
         return res
         
-    def _write_method_decls(self, visibility):
+    def _write_method_decls(self, visibility, define_as_static=False):
 
         first = True
         for m in self._gobj.methods:
@@ -1139,7 +1412,7 @@ class GObjectWriter(Writer):
                 elif visibility == Visibility.PRIVATE:
                     self.writeln("/* ===== private methods ===== */")
             self.writeln()
-            self._write_method_decl(m)
+            self._write_method_decl(m, define_as_static=define_as_static)
         if not first:
             self.writeln()
 
@@ -1222,7 +1495,7 @@ class GObjectWriter(Writer):
         if not first:
             self.writeln()    
             
-    def _write_overriden_defs(self):
+    def _write_overridden_defs(self):
         
         first = True
         
@@ -1240,6 +1513,28 @@ class GObjectWriter(Writer):
                                     method_name = method_name, 
                                     define_as_static = True
                                     )
+            self.writeln()
+            
+    def _write_overridden_impls(self):
+        
+        first = True
+        
+        for method_info in self._gobj.overridden_methods:
+            
+            if first:
+                first = False
+                self.writeln("/* ===== overridden methods ===== */")
+                self.writeln()
+            
+            method_name = method_info.method.name + "_im"
+            
+            self._write_method_impl(method_info.method, 
+                                    method_name = method_name, 
+                                    define_as_static = True
+                                    )
+            
+            self.user_section(method_info.method.name)
+            self.writeln("}")
             self.writeln()
                 
     def _write_macros(self):

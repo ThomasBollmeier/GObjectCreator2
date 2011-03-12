@@ -105,6 +105,8 @@ package demo {
         method breed { visibility: public; }
 
         method do_something_protected { visibility: protected; }
+        
+        method do_private_stuff {}
 
         attribute num_instances { type: integer; scope: static; }
         attribute name { type: string; visibility: public; }
