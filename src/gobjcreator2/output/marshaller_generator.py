@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+import gobjcreator2.output.util as util
 import gobjcreator2.metadef.types as types
 from gobjcreator2.metadef.gobject import GObject
 from gobjcreator2.metadef.genum import GEnum
@@ -11,7 +12,8 @@ class MarshallerGenerator(object):
     def __init__(self, clif):
         
         self._clif = clif
-        self._prefix = self._clif.name.lower()
+        self._prefix = self._clif.prefix
+        self._prefix = util.camelcase_to_underscore(self._prefix).lower()
         package = self._clif.package
         while package:
             if package.name:

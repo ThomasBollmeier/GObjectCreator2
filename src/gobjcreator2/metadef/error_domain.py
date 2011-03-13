@@ -6,7 +6,7 @@ class ErrorDomain(PackageElement):
                  name,
                  package = None):
 
-        PackageElement.__init__(name, package)
+        PackageElement.__init__(self, name, package)
 
         self.error_codes = []
 

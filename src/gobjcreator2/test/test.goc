@@ -5,9 +5,16 @@ package demo {
 
     genum AnimalCatg {
 
-        code BIRD;
+        code BIRD { value: 101; }
         code MAMMAL;
 
+    }
+    
+    gobject Position {
+    
+    	attribute lon { type: double; visibility: public; }
+    	attribute lat { type: double; visibility: public; }
+    
     }
 
     ginterface FlyingAnimal {
@@ -15,13 +22,25 @@ package demo {
     	prefix flya;
 
         method fly {}
-        method do_something {}
+        method do_something {
+        	result { type: boolean; }
+        	parameter command_name { type: string; modifiers: const; }
+        }
         
         signal landed {
-        	parameter lon { type: double; }
-        	parameter lat { type: double; } 
+        	parameter position { type: Position; }
         }
 
+    }
+    
+    gflags ActionFlags {
+    	code FORCE;
+    	code ASYNC;
+    }
+    
+    gerror ActionError {
+    	code NOT_FOUND;
+    	code FAILED;
     }
     
     ginterface Actor {

@@ -1,5 +1,6 @@
 from gobjcreator2.output.class_intf_writer import ClassIntfWriter
 import gobjcreator2.output.util as util
+from gobjcreator2.metadef.types import NULL
 
 class GInterfaceWriter(ClassIntfWriter):
 
@@ -49,11 +50,32 @@ class GInterfaceWriter(ClassIntfWriter):
         self.writeln("G_END_DECLS")
         self.writeln()
         self.writeln("#endif")
+        self.writeln()
     
     def write_source(self):
         
-        pass
-
+        self._write_comment()
+        self.writeln()
+        
+        self.writeln('#include "%s.h"' % self._filename_base(self._obj))
+        self.writeln()
+        
+        lines = []
+        if self._obj.signals:
+            lines.append('#include "%s_marshaller.h"' % \
+                         self._filename_base(self._obj))
+        lines.append("/* add further includes... */")
+        self.user_section("source_top", lines, indent_level = -1)
+        self.writeln()
+        
+        self._write_signal_section()
+        self._write_init_final_section()
+        self._write_get_type_method()
+        self._write_method_definitions()
+        
+        self.user_section("source_bottom")
+        self.writeln()
+        
     def _write_struct_defs(self):
         
         self.writeln("typedef struct _%(Interface)s %(Interface)s;" % self._vars)
@@ -146,3 +168,135 @@ class GInterfaceWriter(ClassIntfWriter):
         self.unindent()
         self.writeln()
         
+    def _write_signal_section(self):
+        
+        if not self._obj.signals:
+            return
+        
+        self._write_signals_enum()
+        
+    def _write_init_final_section(self):
+        
+        self.writeln("/* ===== initialization & finalization ===== */")
+        self.writeln()
+        
+        self.writeln("static void")
+        self.write("%(prefix)s_base_init(" % self._vars)
+        self.writeln("%(Interface)sIface* iface) {" % self._vars)
+        self.indent()
+        self.writeln()
+        self.writeln("static gboolean initialized = FALSE;")
+        self.writeln()
+        self.writeln("if (initialized)")
+        self.indent()
+        self.writeln("return;")
+        self.unindent()
+        self.writeln()
+        self._write_add_signal_section("%(Interface)sIface" % self._vars)
+        self.user_section("interface_init", "/* further initializations... */")
+        self.writeln()
+        self.writeln("initialized = TRUE;")
+        self.writeln()
+        self.unindent()
+        self.writeln("}")
+        self.writeln()
+        
+        self.writeln("static void")
+        self.write("%(prefix)s_base_finalize(" % self._vars)
+        self.writeln("%(Interface)sIface* iface) {" % self._vars)
+        self.indent()
+        self.writeln()
+        self.writeln("static gboolean finalized = FALSE;")
+        self.writeln()
+        self.writeln("if (finalized)")
+        self.indent()
+        self.writeln("return;")
+        self.unindent()
+        self.writeln()
+        self.user_section("interface_finalize", 
+                          "/* do some final stuff... */"
+                          )
+        self.writeln()
+        self.writeln("finalized = TRUE;")
+        self.writeln()
+        self.unindent()
+        self.writeln("}")
+        
+        self.writeln()
+    
+    def _write_get_type_method(self):
+        
+        self.writeln("GType")
+        self.writeln("%(prefix)s_get_type() {" % self._vars)
+        self.indent()
+        self.writeln()
+        self.writeln("static GType type_id = 0;")
+        self.writeln()
+        self.writeln("if (type_id == 0) {")
+        self.indent()
+        self.writeln()
+        self.writeln("const GTypeInfo %(prefix)s_info = {" % self._vars)
+        self.indent()
+        self.writeln("sizeof(%(Interface)sIface)," % self._vars)
+        self.writeln("(GBaseInitFunc) %(prefix)s_base_init," % self._vars)
+        self.writeln("(GBaseFinalizeFunc) %(prefix)s_base_finalize" % self._vars)
+        self.writeln("};")
+        self.unindent()
+        self.writeln()
+        self.writeln("type_id = g_type_register_static(")
+        self.indent()
+        self.writeln("G_TYPE_INTERFACE,")
+        self.writeln("%(Interface)s," % self._vars)
+        self.writeln("&%(prefix)s_info," % self._vars)
+        self.writeln("0")
+        self.writeln(");")
+        self.writeln()
+        self.unindent()
+        self.writeln("/* all classes are allowed to implement this interface: */")
+        self.writeln("g_type_interface_add_prerequisite(type_id, G_TYPE_OBJECT);")
+        self.writeln()
+        self.unindent()
+        self.writeln("}")
+        self.writeln()
+        self.writeln("return type_id;")
+        self.writeln()
+        self.unindent()
+        self.writeln("}")
+        self.writeln()
+
+    def _write_method_definitions(self):
+        
+        if not self._obj.methods:
+            return
+        
+        self.writeln("/* ===== methods ===== */")
+        self.writeln()
+        
+        for method in self._obj.methods:
+            self._write_method_lines(method, 
+                                     method.name, 
+                                     as_pointer = False, 
+                                     implementation = True, 
+                                     define_as_static = False
+                                     )
+            self.indent()
+            self.writeln()
+            self.write("%(Interface)sIface* iface = " % self._vars)
+            self.writeln("%(NAMESPACE)s%(BASENAME)s_GET_INTERFACE(self);" % self._vars)
+            self.writeln()
+            call = "iface->%s(self" % method.name
+            if method.parameters:
+                args = ""
+                for param in method.parameters:
+                    if args:
+                        args += ", "
+                    args += param.name
+                call += ", " + args
+            call += ");"
+            if method.result != NULL:
+                call = "return " + call
+            self.writeln(call)
+            self.writeln()
+            self.unindent()
+            self.writeln("}")
+            self.writeln()

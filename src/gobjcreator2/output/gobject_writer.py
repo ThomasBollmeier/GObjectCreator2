@@ -86,6 +86,7 @@ class GObjectWriter(ClassIntfWriter):
         self.writeln("G_END_DECLS")
         self.writeln()
         self.writeln("#endif")
+        self.writeln()
 
     def write_header_protected(self):
 
@@ -202,22 +203,7 @@ class GObjectWriter(ClassIntfWriter):
         self._write_overridden_impls()
         
         self.user_section("source_bottom")
-        
-    def write_marshaller_header(self):
-        
-        self._write_marshaller(header = True)
-
-    def write_marshaller_source(self):
-        
-        self._write_marshaller(header = False)
-        
-    def _write_marshaller(self, header = True):
-        
-        marshaller_gen = MarshallerGenerator(self._gobj)
-        
-        lines = marshaller_gen.get_code(for_header = header)
-        for line in lines:
-            self.writeln(line)
+        self.writeln()
                     
     def _write_struct(self):
 
@@ -717,24 +703,6 @@ class GObjectWriter(ClassIntfWriter):
             package = package.package
             
         return code_name
-
-    def _write_signals_enum(self):
-        
-        if not self._gobj.signals:
-            return
-        
-        self.writeln("/* ===== signals ===== */")
-        self.writeln()
-        self.writeln("enum {")
-        self.indent()
-        for signal in self._gobj.signals:
-            self.writeln(signal.internal_name.upper() + ",")
-        self.writeln("LAST_SIGNAL")
-        self.unindent()
-        self.writeln("};")
-        self.writeln()
-        self.writeln("static guint %(prefix)s_signals[LAST_SIGNAL] = {0};" % self._vars)
-        self.writeln()
         
     def _write_class_struct(self):
 
@@ -1127,51 +1095,7 @@ class GObjectWriter(ClassIntfWriter):
             
     def _write_add_signals(self):
         
-        if not self._gobj.signals:
-            return
-        
-        self.writeln("/* add signals */")
-        self.writeln()
-        
-        marshaller_gen = MarshallerGenerator(self._gobj)
-        
-        for signal in self._gobj.signals:
-            
-            saved_out = self.output
-            list_out = ListOut()
-            self.output = list_out
-            
-            self.write("%(prefix)s_signals[" % self._vars)
-            self.writeln("%s] = g_signal_new(\"%s\"," % (signal.internal_name.upper(), signal.name))
-            self.indent()
-            self.writeln(self.gtypename(self._gobj) + ",")
-            self.writeln("G_SIGNAL_RUN_LAST|G_SIGNAL_DETAILED,")
-            self.write("G_STRUCT_OFFSET(%(Class)sClass, " % self._vars)
-            self.writeln(signal.internal_name + "),")
-            self.writeln("NULL, /* accumulator */")
-            self.writeln("NULL,")
-            self.writeln("%s," % marshaller_gen.get_marshaller_name(signal))
-            self.writeln("%s," % self.gtypename(signal.result))
-            if signal.parameters:
-                self.writeln("%d," % len(signal.parameters))
-                for param in signal.parameters:
-                    self.write(self.gtypename(param[1]))
-                    if not param is signal.parameters[-1]:
-                        self.writeln(",")
-                    else:
-                        self.writeln()
-            else:
-                self.writeln("0")
-            self.writeln(");")
-            self.unindent()
-                        
-            self.output = saved_out
-            
-            self.user_section("signal_%s" % signal.internal_name,
-                              default_code = list_out.get_lines(), 
-                              indent_level = -1
-                              )
-            self.writeln()
+        self._write_add_signal_section("%(Class)sClass" % self._vars)
         
     def _write_init_methods(self):
 
