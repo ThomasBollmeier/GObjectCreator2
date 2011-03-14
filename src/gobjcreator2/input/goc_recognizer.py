@@ -15,7 +15,8 @@ class GOCRecognizer(object):
     def process_file(self, file_name):
 
         self._reader.read_file(file_name)
-
+        self._reader.set_main_goc_file(file_name)
+        
         self._reader.walk_syntax_tree(VisitorStep1())
         self._reader.walk_syntax_tree(VisitorStep2())
         self._reader.walk_syntax_tree(VisitorStep3())

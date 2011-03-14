@@ -48,6 +48,26 @@ class NullOut(Output):
     def wrt(self, text):
         
         pass
+    
+class FileOut(Output):
+    
+    def __init__(self, file_path):
+        
+        Output.__init__(self)
+        
+        self._file_path = file_path
+        
+    def open(self):
+        
+        self._file = open(self._file_path, "w")
+        
+    def close(self):
+        
+        self._file.close()
+        
+    def wrt(self, text):
+        
+        self._file.write(text + "\n")
         
 class Writer(object):
 
@@ -202,10 +222,22 @@ class Writer(object):
         self.writeln("* (see http://www.bollmeier.de/GObjectCreator for details).")
         self.writeln("* Please modify user sections only!")
         self.writeln("*/")
+        
+    def file_basename(self, element):
+        
+        res = util.camelcase_to_underscore(element.name).lower()
+        
+        package = element.package
+        while package:
+            if package.name:
+                res = package.name.lower() + "_" + res
+            package = package.package
+        
+        return res
 
     def _filename_base(self, clif):
-
-        return util.camelcase_to_underscore(self._clifname(clif)).lower()
+        
+        return self.file_basename(clif)
 
     def _clifname(self, clif):
 

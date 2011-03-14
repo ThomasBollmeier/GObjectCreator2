@@ -4,7 +4,9 @@ class PackageElement(object):
 
     def __init__(self,
                  name,
-                 package=None):
+                 package = None,
+                 is_external = False
+                 ):
 
         self._name = name
         if package is not None:
@@ -16,6 +18,8 @@ class PackageElement(object):
 
         if self._package:
             self._package._elements[name] = self
+            
+        self.is_external = is_external
 
     def _get_name(self):
 
@@ -45,7 +49,9 @@ class Package(PackageElement):
 
     def __init__(self,
                  name,
-                 package = None):
+                 package = None,
+                 is_external = False
+                 ):
 
         if package is None:
             if Package.TOP is not None:
@@ -60,7 +66,7 @@ class Package(PackageElement):
 
         self._elements = {}
         
-        PackageElement.__init__(self, name, parent)
+        PackageElement.__init__(self, name, parent, is_external)
 
     def get_element(self, path):
 

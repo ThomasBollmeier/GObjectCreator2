@@ -1,6 +1,7 @@
 import antlr3
-from GOCLexer import GOCLexer
-from GOCParser import *
+from gobjcreator2.input.GOCLexer import GOCLexer
+from gobjcreator2.input.GOCParser import *
+from gobjcreator2.input.goc_tree_adaptor import GOCTreeAdaptor
 import os
 
 class Reader(object):
@@ -23,18 +24,23 @@ class Reader(object):
             SIGNAL: self._walk_signal
         }
 
-        self._adaptor = antlr3.tree.CommonTreeAdaptor()
+        self._adaptor = GOCTreeAdaptor()
         self._root_node = None
         self._include_paths = [os.curdir]
+        self._main_goc_file = ""
 
     def add_include_path(self, path):
 
         self._include_paths.append(path)
 
-    def read_file(self, filename):
+    def read_file(self, file_path):
 
         self._syntax_tree = {}
-        self._root_node = self._create_ast_from_file(filename)
+        self._root_node = self._create_ast_from_file(file_path)
+        
+    def set_main_goc_file(self, path):
+        
+        self._main_goc_file = path
 
     def walk_syntax_tree(self, visitor):
 
@@ -43,7 +49,12 @@ class Reader(object):
 
         for child in self._root_node.getChildren():
             self._walk(child, visitor)
-
+            
+    def _is_external(self, node):
+        
+        return os.path.normpath(node.goc_file_path) != \
+            os.path.normpath(self._main_goc_file)
+            
     def _create_ast_from_file(self, filename):
         """
         read file and return abstract syntax tree (AST)
@@ -65,8 +76,14 @@ class Reader(object):
         lexer = GOCLexer(stream)
         tokens = antlr3.CommonTokenStream(lexer)
         parser = GOCParser(tokens)
+        parser.adaptor = self._adaptor
 
+        # Set path of currently processed file to separate
+        # external(=included) model parts from the parts in the main file:
+        self._adaptor.set_goc_file_path(file_path)
         res = parser.defFile().tree
+        self._adaptor.set_goc_file_path("")
+                
         self._syntax_tree[filename] = res
         self._resolve_includes(res)
 
@@ -92,7 +109,7 @@ class Reader(object):
                     tree.deleteChild(top_node.getChildIndex())
 
     def _walk(self, node, visitor):
-
+        
         type = node.getType()
 
         try:
@@ -107,7 +124,7 @@ class Reader(object):
         children = node.getChildren()
         name = children[0].getText()
 
-        visitor.package_begin(name)
+        visitor.package_begin(name, self._is_external(node))
 
         for child in children[1:]:
             self._walk(child, visitor)
@@ -135,7 +152,8 @@ class Reader(object):
             else:
                 other_children.append(child)
         
-        visitor.gobject_begin(name, super, interfaces, attrs)
+        visitor.gobject_begin(name, super, interfaces, 
+                              attrs, self._is_external(node))
 
         for child in other_children:
             self._walk(child, visitor)
@@ -156,7 +174,7 @@ class Reader(object):
             else:
                 other_children.append(child)
 
-        visitor.ginterface_begin(name, attrs)
+        visitor.ginterface_begin(name, attrs, self._is_external(node))
 
         for child in other_children:
             self._walk(child, visitor)
@@ -167,7 +185,7 @@ class Reader(object):
 
         name = node.getChildren()[0].getText()
 
-        visitor.gtype(name)
+        visitor.gtype(name, self._is_external(node))
 
     def _walk_error_domain(self, node, visitor):
 
@@ -176,7 +194,7 @@ class Reader(object):
         for child in node.getChildren()[1:]:
             codes.append(child.getText())
 
-        visitor.error_domain(name, codes)
+        visitor.error_domain(name, codes, self._is_external(node))
 
     def _walk_enumeration(self, node, visitor):
 
@@ -191,7 +209,7 @@ class Reader(object):
                 value = None
             codevals.append((code, value))
 
-        visitor.enumeration(name, codevals)
+        visitor.enumeration(name, codevals, self._is_external(node))
 
     def _walk_flags(self, node, visitor):
 
@@ -200,7 +218,7 @@ class Reader(object):
         for child in node.getChildren()[1:]:
             codes.append(child.getText())
 
-        visitor.flags(name, codes)
+        visitor.flags(name, codes, self._is_external(node))
 
     def _walk_method(self, node, visitor):
 
@@ -490,7 +508,7 @@ class GOCVisitor(object):
 
         pass
 
-    def package_begin(self, name):
+    def package_begin(self, name, is_external):
 
         pass
 
@@ -502,7 +520,9 @@ class GOCVisitor(object):
                       name,
                       super,
                       interfaces,
-                      attrs):
+                      attrs,
+                      is_external
+                      ):
 
         pass
 
@@ -510,7 +530,7 @@ class GOCVisitor(object):
 
         pass
 
-    def ginterface_begin(self, name, attrs):
+    def ginterface_begin(self, name, attrs, is_external):
 
         pass
 
@@ -518,19 +538,19 @@ class GOCVisitor(object):
 
         pass
 
-    def gtype(self, name):
+    def gtype(self, name, is_external):
 
         pass
 
-    def error_domain(self, name, codes):
+    def error_domain(self, name, codes, is_external):
 
         pass
 
-    def enumeration(self, name, codevals):
+    def enumeration(self, name, codevals, is_external):
 
         pass
 
-    def flags(self, name, codes):
+    def flags(self, name, codes, is_external):
 
         pass
 

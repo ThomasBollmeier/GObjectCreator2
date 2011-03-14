@@ -12,9 +12,11 @@ class GObject(PackageElement, Type):
     def __init__(self,
                  name,
                  package = None,
-                 super_class = None):
+                 super_class = None,
+                 is_external = False
+                 ):
 
-        PackageElement.__init__(self, name, package)
+        PackageElement.__init__(self, name, package, is_external)
         Type.__init__(self)
 
         self._super_class = super_class
@@ -28,7 +30,7 @@ class GObject(PackageElement, Type):
         self._overridden = {} # method info for overridden methods
         self._properties = {}
         self._signals = {}
-
+        
     def get_name(self):
 
         return self.name

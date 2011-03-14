@@ -33,9 +33,12 @@ class VisitorStep1(GOCVisitor):
         else:
             return None
         
-    def package_begin(self, name):
+    def package_begin(self, name, is_external):
 
-        package = Package(name, package = self._get_package())
+        package = Package(name, 
+                          package = self._get_package(), 
+                          is_external = is_external
+                          )
         self._package_stack.append(package)
 
     def package_end(self, name):
@@ -46,29 +49,37 @@ class VisitorStep1(GOCVisitor):
                       name,
                       super,
                       interfaces,
-                      attrs):
+                      attrs,
+                      is_external
+                      ):
 
-        GObject(name, package = self._get_package())
+        GObject(name, package = self._get_package(),
+                is_external = is_external)
 
-    def ginterface_begin(self, name, attrs):
+    def ginterface_begin(self, name, attrs, is_external):
 
-        GInterface(name, package = self._get_package())
+        GInterface(name, package = self._get_package(),
+                   is_external = is_external)
 
-    def gtype(self, name):
+    def gtype(self, name, is_external):
 
-        GType(name, package = self._get_package())
+        GType(name, package = self._get_package(), 
+              is_external = is_external)
 
-    def error_domain(self, name, codes):
+    def error_domain(self, name, codes, is_external):
 
-        ErrorDomain(name, package = self._get_package())
+        ErrorDomain(name, package = self._get_package(),
+                    is_external = is_external)
 
-    def enumeration(self, name, codevals):
+    def enumeration(self, name, codevals, is_external):
 
-        GEnum(name, package = self._get_package())
+        GEnum(name, package = self._get_package(),
+              is_external = is_external)
 
-    def flags(self, name, codes):
+    def flags(self, name, codes, is_external):
 
-        GFlags(name, package = self._get_package())
+        GFlags(name, package = self._get_package(),
+               is_external = is_external)
 
 class VisitorStep2(GOCVisitor):
 
@@ -167,7 +178,7 @@ class VisitorStep2(GOCVisitor):
 
         return res
 
-    def package_begin(self, name):
+    def package_begin(self, name, is_external):
 
         parent = self._get_parent(Package)
         self._stack.append(parent[name])
@@ -180,7 +191,9 @@ class VisitorStep2(GOCVisitor):
                       name,
                       super,
                       interfaces,
-                      attrs):
+                      attrs,
+                      is_external
+                      ):
 
         package = self._get_parent(Package)
         cls = package[name]
@@ -204,7 +217,7 @@ class VisitorStep2(GOCVisitor):
 
         self._stack.pop()
 
-    def ginterface_begin(self, name, attrs):
+    def ginterface_begin(self, name, attrs, is_external):
 
         package = self._get_parent(Package)
         intf = package[name]
@@ -219,11 +232,11 @@ class VisitorStep2(GOCVisitor):
 
         self._stack.pop()
 
-    def gtype(self, name):
+    def gtype(self, name, is_external):
 
         pass
 
-    def error_domain(self, name, codes):
+    def error_domain(self, name, codes, is_external):
 
         package = self._get_parent(Package)
         error_domain = package[name]
@@ -231,7 +244,7 @@ class VisitorStep2(GOCVisitor):
         for code in codes:
             error_domain.add_error_code(code)
 
-    def enumeration(self, name, codevals):
+    def enumeration(self, name, codevals, is_external):
 
         package = self._get_parent(Package)
         enum = package[name]
@@ -239,7 +252,7 @@ class VisitorStep2(GOCVisitor):
         for code, value in codevals:
             enum.add_code(code, value)
 
-    def flags(self, name, codes):
+    def flags(self, name, codes, is_external):
 
         package = self._get_parent(Package)
         flags = package[name]
@@ -444,7 +457,7 @@ class VisitorStep3(GOCVisitor):
         else:
             return Package.get_top()
 
-    def package_begin(self, name):
+    def package_begin(self, name, is_external):
 
         parent = self._get_parent(Package)
         package = parent[name]
@@ -459,7 +472,9 @@ class VisitorStep3(GOCVisitor):
                       name,
                       super,
                       interfaces,
-                      attrs):
+                      attrs,
+                      is_external
+                      ):
 
         parent = self._get_parent(Package)
         cls = parent[name]
