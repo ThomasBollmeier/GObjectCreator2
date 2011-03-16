@@ -3,6 +3,7 @@ from gobjcreator2.metadef.gobject import GObject
 from gobjcreator2.metadef.ginterface import GInterface
 from gobjcreator2.metadef.package import PackageElement, Package
 import gobjcreator2.output.util as util
+from gobjcreator2.output.user_content import UserContent
 
 class Output(object):
     
@@ -79,6 +80,7 @@ class Writer(object):
         self._line = ""
         
         self._output = StdOut()
+        self._user_content = None
 
     def set_output(self, output):
 
@@ -89,7 +91,11 @@ class Writer(object):
         return self._output
     
     output = property(get_output, set_output)
-
+    
+    def set_user_content(self, file_path):
+        
+        self._user_content = UserContent.create_from_file(file_path)
+        
     def set_tab_size(self, size):
 
         self._tab_size = size
@@ -119,39 +125,54 @@ class Writer(object):
 
         self.writeln("/* UserCode %s { */" % name)
         
-        if default_code is not None:
-         
-            self.writeln()
+        # Insert user code if it has already been modified:
+        try:
             
-            if indent_level > 0:
-                for dum in range(indent_level):
-                    self.indent()
-            elif indent_level < 0:
-                for dum in range(abs(indent_level)):
-                    self.unindent()
-                
-            if isinstance(default_code, str):
-                lines = default_code.split("\n")
-            elif isinstance(default_code, list):
-                lines = default_code
-            else:
-                lines = []
+            user_lines = self._user_content.get_section_content(name)
             
-            for line in lines:
+            saved_indent = self._indent
+            self._indent = 0
+            
+            for line in user_lines:
                 self.writeln(line)
         
-            if indent_level > 0:
-                for dum in range(indent_level):
-                    self.unindent()
-            elif indent_level < 0:
-                for dum in range(abs(indent_level)):
-                    self.indent()
-
-            self.writeln()
+            self._indent = saved_indent
         
-        else:
+        except KeyError: # -> user section has not been in use before:
         
-            self.writeln()
+            if default_code is not None:
+             
+                self.writeln()
+                
+                if indent_level > 0:
+                    for dum in range(indent_level):
+                        self.indent()
+                elif indent_level < 0:
+                    for dum in range(abs(indent_level)):
+                        self.unindent()
+                    
+                if isinstance(default_code, str):
+                    lines = default_code.split("\n")
+                elif isinstance(default_code, list):
+                    lines = default_code
+                else:
+                    lines = []
+                
+                for line in lines:
+                    self.writeln(line)
+            
+                if indent_level > 0:
+                    for dum in range(indent_level):
+                        self.unindent()
+                elif indent_level < 0:
+                    for dum in range(abs(indent_level)):
+                        self.indent()
+    
+                self.writeln()
+            
+            else:
+            
+                self.writeln()
         
         self.writeln("/* } UserCode */")
 
