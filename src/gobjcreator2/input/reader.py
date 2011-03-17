@@ -40,7 +40,7 @@ class Reader(object):
         
     def set_main_goc_file(self, path):
         
-        self._main_goc_file = path
+        self._main_goc_file = os.path.abspath(path)
 
     def walk_syntax_tree(self, visitor):
 
