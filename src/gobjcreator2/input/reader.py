@@ -59,20 +59,19 @@ class Reader(object):
         """
         read file and return abstract syntax tree (AST)
         """
-
-        if filename in self._syntax_tree:
-            return self._syntax_tree[filename]
-
-        stream = None
         for path in self._include_paths:
-            try:
-                file_path = path + os.sep + filename
-                stream = antlr3.ANTLRFileStream(file_path)
+            file_path = path + os.sep + filename
+            file_path = os.path.abspath(file_path)
+            if os.path.exists(file_path):
                 break
-            except IOError, error:
-                pass
-        if not stream:
-            raise error
+            else:
+                file_path = ""
+                continue
+            
+        if file_path in self._syntax_tree:
+            return self._syntax_tree[file_path]
+
+        stream = antlr3.ANTLRFileStream(file_path)
         lexer = GOCLexer(stream)
         tokens = antlr3.CommonTokenStream(lexer)
         parser = GOCParser(tokens)
@@ -84,7 +83,7 @@ class Reader(object):
         res = parser.defFile().tree
         self._adaptor.set_goc_file_path("")
                 
-        self._syntax_tree[filename] = res
+        self._syntax_tree[file_path] = res
         self._resolve_includes(res)
 
         return res
