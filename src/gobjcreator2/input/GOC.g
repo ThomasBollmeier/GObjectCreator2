@@ -39,7 +39,7 @@ stmt
 	;
 
 includeStmt
-    :   'include' filename=STRING ';' -> ^(INCLUDE $filename)
+    :   'include' '<' INCFILE_PATH '>' -> ^(INCLUDE INCFILE_PATH)
     ;
 
 packageDef
@@ -356,6 +356,10 @@ STRING
 
 INT :   ('1'..'9')('0'..'9')*
     ;
+
+INCFILE_PATH
+	:	('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'.'|'/')+
+	;
 
 fragment
 HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ;
