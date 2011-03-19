@@ -1,3 +1,23 @@
+#
+# Copyright 2011 Thomas Bollmeier
+#
+# This file is part of GObjectCreator2.
+#
+# GObjectCreator2 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# GObjectCreator2 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GObjectCreator2.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+
 import gobjcreator2.metadef.types as types
 from gobjcreator2.metadef.gobject import GObject
 from gobjcreator2.metadef.ginterface import GInterface
@@ -81,6 +101,7 @@ class Writer(object):
         
         self._output = StdOut()
         self._user_content = None
+        self._header_comment = []
 
     def set_output(self, output):
 
@@ -92,6 +113,10 @@ class Writer(object):
     
     output = property(get_output, set_output)
     
+    def set_header_comment(self, lines):
+        
+        self._header_comment = lines
+            
     def set_user_content(self, file_path):
         
         self._user_content = UserContent.create_from_file(file_path)
@@ -238,11 +263,15 @@ class Writer(object):
         return util.camelcase_to_underscore(name)
 
     def _write_comment(self):
-
-        self.writeln("/* This file has been generated automatically by GObjectCreator")
-        self.writeln("* (see http://www.bollmeier.de/GObjectCreator for details).")
-        self.writeln("* Please modify user sections only!")
-        self.writeln("*/")
+        
+        if not self._header_comment:
+            self.writeln("/* This file has been generated automatically by GObjectCreator")
+            self.writeln("* (see http://www.bollmeier.de/GObjectCreator for details).")
+            self.writeln("* Please modify user sections only!")
+            self.writeln("*/")
+        else:
+            for line in self._header_comment:
+                self.writeln(line)
         
     def file_basename(self, element):
         

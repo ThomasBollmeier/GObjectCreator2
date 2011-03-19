@@ -1,4 +1,23 @@
 #!/usr/bin/python
+#
+# Copyright 2011 Thomas Bollmeier
+#
+# This file is part of GObjectCreator2.
+#
+# GObjectCreator2 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# GObjectCreator2 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GObjectCreator2.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 import sys
 from optparse import OptionParser
 import os
@@ -53,12 +72,12 @@ def _create_option_parser():
                    help = "write generation info to standard output"
                    )
     
-#    res.add_option("", "--header-comment",
-#                   dest = "header_comment_file",
-#                   default = "",
-#                   metavar = "FILE",
-#                   help = "add header comment from FILE to generated code"
-#                   )
+    res.add_option("", "--header-comment",
+                   dest = "header_comment_file",
+                   default = "",
+                   metavar = "FILE",
+                   help = "add header comment from FILE to generated code"
+                   )
             
     return res
 
@@ -67,11 +86,29 @@ class CodeGenerator(object):
     def __init__(self):
         
         self._outdir = os.curdir
+        self._comment_lines = []
         self.verbose = False
         
     def set_output_dir(self, outdir):
         
         self._outdir = outdir
+        
+    def set_header_comment_from_file(self, file_path):
+        
+        f = open(file_path, "r")
+        
+        self._comment_lines = []
+        
+        for line in f.readlines():
+            line.strip("\n")
+            self._comment_lines.append(line)
+        
+        f.close()
+        
+    def _init_writer(self, writer):
+        
+        if self._comment_lines:
+            writer.set_header_comment(self._comment_lines)
 
     def create_code(self, elem):
         
@@ -107,6 +144,7 @@ class CodeGenerator(object):
     def _create_code_object(self, elem):
         
         writer = GObjectWriter(elem)
+        self._init_writer(writer)
         
         self._write_header(writer, elem)
         self._write_protected_header(writer, elem)
@@ -120,6 +158,7 @@ class CodeGenerator(object):
     def _create_code_interface(self, elem):
         
         writer = GInterfaceWriter(elem)
+        self._init_writer(writer)
         
         self._write_header(writer, elem)
         
@@ -132,6 +171,7 @@ class CodeGenerator(object):
     def _create_code_enumeration(self, elem):
         
         writer = GEnumWriter(elem)
+        self._init_writer(writer)
         
         self._write_header(writer, elem)
         
@@ -140,12 +180,14 @@ class CodeGenerator(object):
     def _create_code_flags(self, elem):
         
         writer = GFlagsWriter(elem)
+        self._init_writer(writer)
         
         self._write_header(writer, elem)
         
     def _create_code_error_domain(self, elem):
         
         writer = ErrorDomainWriter(elem)
+        self._init_writer(writer)
         
         self._write_header(writer, elem)
         
