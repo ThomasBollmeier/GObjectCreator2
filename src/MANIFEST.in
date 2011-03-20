@@ -4,3 +4,4 @@ include README
 include setup.py
 recursive-include gobjcreator2 *.py *.g *.goc
 recursive-include scripts *.py
+recursive-include examples *

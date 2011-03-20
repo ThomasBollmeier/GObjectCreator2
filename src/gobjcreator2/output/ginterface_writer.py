@@ -266,7 +266,7 @@ class GInterfaceWriter(ClassIntfWriter):
         self.writeln("type_id = g_type_register_static(")
         self.indent()
         self.writeln("G_TYPE_INTERFACE,")
-        self.writeln("%(Interface)s," % self._vars)
+        self.writeln('"%(Interface)s",' % self._vars)
         self.writeln("&%(prefix)s_info," % self._vars)
         self.writeln("0")
         self.writeln(");")

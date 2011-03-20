@@ -1,0 +1,73 @@
+/*
+* Sample meta definition.
+* To (re)generate files enter: ./generate_audio_example.sh
+*/
+
+gtype GError;
+
+package audio {
+    
+    gerror Error {
+		code INVALID_STATUS;
+		code URI_NOT_FOUND;
+		code UNKNOWN_FORMAT;
+	}
+	
+	genum Format {
+		code MP3;
+		code OGG_VORBIS;
+	}
+	
+    genum PlayerStatus {
+    	code READY;
+    	code PLAYING;
+    	code PAUSED;
+    }
+    
+    ginterface IPlayer {
+    
+        method start {
+            parameter track_uri { type: string; modifiers: const; }
+            parameter format { type: Format; }
+            parameter error { type: ref(ref(GError)); }   
+      	}
+      	 
+        method stop { result { type: boolean; } }
+        
+        method pause { result { type: boolean; } }
+        
+        signal started {
+            parameter track_uri { type: string; }
+            parameter resumed { type: boolean; }
+        }
+        
+        signal stopped {
+            parameter track_uri { type: string; }
+        }
+         
+        signal paused {
+            parameter track_uri { type: string; }
+        }
+    
+    }
+    
+    gobject OggPlayer {
+    
+    	prefix oggplay;
+    	
+    	implements IPlayer;
+    	
+    	property status {
+    		description: "player's status";
+    		type: enumeration;
+    		gtype: gtypename(PlayerStatus);
+    		access: read-only;
+    		default: audio::PlayerStatus.READY;
+    	}
+    	   
+        attribute status { type: PlayerStatus; }
+        attribute current { type: string; }
+	
+	}
+
+}

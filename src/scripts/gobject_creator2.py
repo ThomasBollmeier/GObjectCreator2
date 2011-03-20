@@ -36,11 +36,13 @@ from gobjcreator2.output.genum_writer import GEnumWriter
 from gobjcreator2.output.gflags_writer import GFlagsWriter
 from gobjcreator2.output.error_domain_writer import ErrorDomainWriter
 from gobjcreator2.output.marshaller_generator import MarshallerGenerator
+from gobjcreator2 import VERSION
 
 def _create_option_parser():
     
     res = OptionParser(usage = "usage: %prog [options] <goc_file>", 
-                       version = "%prog, Version: 1.0.0, Author: Thomas Bollmeier"
+                       version = "%%prog, Version: %s, Author: Thomas Bollmeier" % \
+                       VERSION
                        )
     
     res.add_option("-d", "--dir",
@@ -318,7 +320,9 @@ else:
 code_gen = CodeGenerator()
 code_gen.set_output_dir(options.outdir)
 code_gen.verbose = options.verbose
-
+if options.header_comment_file:
+    code_gen.set_header_comment_from_file(options.header_comment_file)
+    
 code_gen.create_code(root_elem)
     
 exit(0)

@@ -855,14 +855,17 @@ class GObjectWriter(ClassIntfWriter):
             method_name = "%(prefix)s_" % self._vars
             iface_name = util.camelcase_to_underscore(self._clifname(interface))
             method_name += iface_name.lower() + "_init("
-            method_name += self.typename(interface) + " iface) {"
+            method_name += self._clifname(interface) + "Iface* iface) {"
             self.writeln(method_name)
             self.indent()
             self.writeln()
             for method in interface.methods:
                 line = "iface->%s = " % method.name
+                line += "%(prefix)s_" % self._vars
                 line += "%s;" % \
-                    self._func_name_creator.create_impl_func_name(method.name, interface.name)
+                    self._func_name_creator.create_impl_func_name(method.name, 
+                                                                  interface.name
+                                                                  )
                 self.writeln(line)
             self.writeln()
             self.unindent()
@@ -1187,7 +1190,7 @@ class GObjectWriter(ClassIntfWriter):
             self.writeln(");")
             self.unindent()
         else:
-            self.writeln(");")
+            self.writeln(", NULL);")
         self.writeln()
         self.write("%(prefix)s_init(obj" % self._vars)
         if constructor.parameters:

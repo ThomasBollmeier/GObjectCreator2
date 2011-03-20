@@ -18,13 +18,14 @@
 #
 
 from distutils.core import setup
+from gobjcreator2 import VERSION
 
 description = "Generation of source files in various languages"
 description += " from meta definition files"
 
 setup(
     name = "GObjectCreator2",
-    version = "1.0.0",
+    version = VERSION,
     description = description,
     author = "Thomas Bollmeier",
     author_email = "TBollmeier@web.de",

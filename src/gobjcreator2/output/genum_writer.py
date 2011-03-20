@@ -53,7 +53,7 @@ class GEnumWriter(Writer):
         self.writeln("#ifndef %(ENUM_ABS_NAME)s_H" % self._vars)
         self.writeln("#define %(ENUM_ABS_NAME)s_H" % self._vars)
         self.writeln()
-        self.writeln('#include "glib-object.h')
+        self.writeln('#include "glib-object.h"')
         self.writeln()
         self.writeln("G_BEGIN_DECLS")
         self.writeln()

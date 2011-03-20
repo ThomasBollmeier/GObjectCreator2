@@ -17,4 +17,4 @@
 # along with GObjectCreator2.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-
+VERSION = "1.0.1"
