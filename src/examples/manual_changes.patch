@@ -1,6 +1,6 @@
 diff -rpuN audio_example_generated/audio_iplayer.h audio_example_edited/audio_iplayer.h
---- audio_example_generated/audio_iplayer.h	2011-03-20 20:35:15.246190478 +0100
-+++ audio_example_edited/audio_iplayer.h	2011-03-20 20:35:13.607190478 +0100
+--- audio_example_generated/audio_iplayer.h	2011-03-21 19:56:31.055896997 +0100
++++ audio_example_edited/audio_iplayer.h	2011-03-21 19:57:36.317896996 +0100
 @@ -12,7 +12,7 @@ G_BEGIN_DECLS
  
  /* UserCode header_top { */
@@ -11,8 +11,8 @@ diff -rpuN audio_example_generated/audio_iplayer.h audio_example_edited/audio_ip
  /* } UserCode */
  
 diff -rpuN audio_example_generated/audio_ogg_player.c audio_example_edited/audio_ogg_player.c
---- audio_example_generated/audio_ogg_player.c	2011-03-20 20:35:15.267190478 +0100
-+++ audio_example_edited/audio_ogg_player.c	2011-03-20 22:51:43.936231873 +0100
+--- audio_example_generated/audio_ogg_player.c	2011-03-21 19:56:31.075896997 +0100
++++ audio_example_edited/audio_ogg_player.c	2011-03-21 19:57:36.339896996 +0100
 @@ -7,7 +7,7 @@
  
  /* UserCode source_top { */
@@ -58,7 +58,7 @@ diff -rpuN audio_example_generated/audio_ogg_player.c audio_example_edited/audio
          
 @@ -296,6 +299,44 @@ audio_oggplay_start_im(AudioIPlayer* obj
      GError** error) {
- /* UserCode IPlayer->start { */
+ /* UserCode IPlayer_start { */
  
 +	AudioOggPlayer* self = AUDIO_OGG_PLAYER(obj);
 +	gboolean resumed = FALSE;
@@ -103,7 +103,7 @@ diff -rpuN audio_example_generated/audio_ogg_player.c audio_example_edited/audio
  
 @@ -303,6 +344,24 @@ static gboolean
  audio_oggplay_pause_im(AudioIPlayer* obj) {
- /* UserCode IPlayer->pause { */
+ /* UserCode IPlayer_pause { */
  
 +	AudioOggPlayer* self = AUDIO_OGG_PLAYER(obj);
 +	gboolean resumed;
@@ -128,7 +128,7 @@ diff -rpuN audio_example_generated/audio_ogg_player.c audio_example_edited/audio
  
 @@ -310,6 +369,21 @@ static gboolean
  audio_oggplay_stop_im(AudioIPlayer* obj) {
- /* UserCode IPlayer->stop { */
+ /* UserCode IPlayer_stop { */
  
 +	AudioOggPlayer* self = AUDIO_OGG_PLAYER(obj);
 +	gchar* tmp = NULL;
@@ -149,8 +149,8 @@ diff -rpuN audio_example_generated/audio_ogg_player.c audio_example_edited/audio
  }
  
 diff -rpuN audio_example_generated/audio_ogg_player.h audio_example_edited/audio_ogg_player.h
---- audio_example_generated/audio_ogg_player.h	2011-03-20 20:35:15.264190478 +0100
-+++ audio_example_edited/audio_ogg_player.h	2011-03-20 20:35:13.623190478 +0100
+--- audio_example_generated/audio_ogg_player.h	2011-03-21 19:56:31.072896997 +0100
++++ audio_example_edited/audio_ogg_player.h	2011-03-21 19:57:36.335896996 +0100
 @@ -14,7 +14,7 @@ G_BEGIN_DECLS
  
  /* UserCode header_top { */

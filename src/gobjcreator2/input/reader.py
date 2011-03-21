@@ -334,18 +334,29 @@ class Reader(object):
                 name += "-"
             name += signal_part.getText()
         result_type = None
+        result_modifiers = []
         args = []
 
         for child in children[1:]:
             type = child.getType()
             if type == RESULT:
-                result_type = self._get_type_info(child.getChildren()[0])
+                children = child.getChildren()
+                result_type = self._get_type_info(children[0])
+                if len(children) == 1:
+                    result_modifiers = []
+                else:
+                    result_modifiers = self._get_modifiers(children[1])
             elif type == PARAMETER:
-                arg_name = child.getChildren()[0].getText()
-                arg_type = self._get_type_info(child.getChildren()[1])
-                args.append((arg_name, arg_type))
+                children = child.getChildren()
+                arg_name = children[0].getText()
+                arg_type = self._get_type_info(children[1])
+                if len(children) == 2:
+                    arg_modifiers = []
+                else:
+                    arg_modifiers = self._get_modifiers(children[2])
+                args.append((arg_name, arg_type, arg_modifiers))
 
-        visitor.signal(name, result_type, args)
+        visitor.signal(name, result_type, result_modifiers, args)
 
     def _walk_override(self, node, visitor):
 
@@ -593,7 +604,7 @@ class GOCVisitor(object):
 
         pass
 
-    def signal(self, name, result_type, args):
+    def signal(self, name, result_type, result_modifiers, args):
 
         pass
 

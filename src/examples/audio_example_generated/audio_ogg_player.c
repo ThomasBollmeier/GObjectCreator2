@@ -294,21 +294,21 @@ audio_oggplay_get_property(
 static void
 audio_oggplay_start_im(AudioIPlayer* obj, const gchar* track_uri, AudioFormat format, 
     GError** error) {
-/* UserCode IPlayer->start { */
+/* UserCode IPlayer_start { */
 
 /* } UserCode */
 }
 
 static gboolean
 audio_oggplay_pause_im(AudioIPlayer* obj) {
-/* UserCode IPlayer->pause { */
+/* UserCode IPlayer_pause { */
 
 /* } UserCode */
 }
 
 static gboolean
 audio_oggplay_stop_im(AudioIPlayer* obj) {
-/* UserCode IPlayer->stop { */
+/* UserCode IPlayer_stop { */
 
 /* } UserCode */
 }

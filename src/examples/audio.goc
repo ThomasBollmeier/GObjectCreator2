@@ -37,16 +37,16 @@ package audio {
         method pause { result { type: boolean; } }
         
         signal started {
-            parameter track_uri { type: string; }
+            parameter track_uri { type: string; modifiers: const; }
             parameter resumed { type: boolean; }
         }
         
         signal stopped {
-            parameter track_uri { type: string; }
+            parameter track_uri { type: string; modifiers: const;}
         }
          
         signal paused {
-            parameter track_uri { type: string; }
+            parameter track_uri { type: string; modifiers: const;}
         }
     
     }

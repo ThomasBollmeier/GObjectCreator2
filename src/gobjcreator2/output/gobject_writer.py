@@ -1296,7 +1296,7 @@ class GObjectWriter(ClassIntfWriter):
                     self._write_method_impl(m, 
                                             method_name
                                             )
-                    section_name = intf.name + "->" + m.name
+                    section_name = intf.name + "_" + m.name
                     self.user_section(section_name)
                     self.writeln("}")
                 else:

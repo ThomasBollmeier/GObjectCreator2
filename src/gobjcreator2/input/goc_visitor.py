@@ -355,16 +355,18 @@ class VisitorStep2(GOCVisitor):
 
         self._stack.pop()
 
-    def signal(self, name, result_type, args):
+    def signal(self, name, result_type, result_modifiers, args):
 
         if result_type:
             result = self._get_param_type(result_type)
         else:
             result = NULL
-        sig = Signal(name, result)
+        res_modifiers = self._get_param_modifiers(result_modifiers) 
+        sig = Signal(name, result, res_modifiers)
 
         for arg in args:
-            sig.add_parameter(arg[0], self._get_param_type(arg[1]))
+            modifiers = self._get_param_modifiers(arg[2])
+            sig.add_parameter(arg[0], self._get_param_type(arg[1]), modifiers)
 
         cls = self._get_parent(GObject)
         if cls:

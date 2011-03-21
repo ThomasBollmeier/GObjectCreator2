@@ -22,13 +22,16 @@ class Signal(object):
 
     def __init__(self,
                  name,
-                 result):
+                 result,
+                 result_modifiers
+                 ):
 
         self.name = name
         self.internal_name = name.replace("-", "_")
         self.result = result
+        self.result_modifiers = result_modifiers
         self.parameters = []
 
-    def add_parameter(self, name, type):
+    def add_parameter(self, name, type, modifiers):
 
-        self.parameters.append((name, type))
+        self.parameters.append((name, type, modifiers))

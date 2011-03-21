@@ -113,9 +113,15 @@ class ClassIntfWriter(Writer):
     def _declare_signal(self, sender_type_name, signal):
 
         MAXLEN_ARG = 50
+        
+        if TypeModifier.CONST in signal.result_modifiers:
+            modifiers = "const "
+        else:
+            modifiers = "" 
 
-        self.writeln("%s /* %s */" % (self.typename(signal.result),
-                                      signal.name))
+        self.writeln("%s%s /* %s */" % (modifiers,
+                                        self.typename(signal.result),
+                                        signal.name))
         self.write("(*%s)(" % signal.internal_name)
         
         args = "%s* sender" % sender_type_name
@@ -124,7 +130,11 @@ class ClassIntfWriter(Writer):
 
         first_line_break = True
         for p in signal.parameters:
-            tmp = self.typename(p[1])
+            if not TypeModifier.CONST in p[2]:
+                tmp = ""
+            else:
+                tmp = "const "
+            tmp += self.typename(p[1])
             tmp += " " + p[0]
             args += tmp
             is_last = p == signal.parameters[-1]

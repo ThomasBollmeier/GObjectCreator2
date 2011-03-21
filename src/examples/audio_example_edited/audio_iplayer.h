@@ -35,11 +35,11 @@ typedef struct _AudioIPlayerIface {
     /* == signals == */
     
     void /* started */
-    (*started)(AudioIPlayer* sender, gchar* track_uri, gboolean resumed);
+    (*started)(AudioIPlayer* sender, const gchar* track_uri, gboolean resumed);
     void /* paused */
-    (*paused)(AudioIPlayer* sender, gchar* track_uri);
+    (*paused)(AudioIPlayer* sender, const gchar* track_uri);
     void /* stopped */
-    (*stopped)(AudioIPlayer* sender, gchar* track_uri);
+    (*stopped)(AudioIPlayer* sender, const gchar* track_uri);
     
 } AudioIPlayerIface;
 

@@ -189,8 +189,10 @@ propertyElement
     ;
 
 signalElement
-    :   RESULT '{' 'type' ':' typeArg ';' '}' -> ^(RESULT typeArg)
-    |   PARAMETER ID '{' 'type' ':' typeArg ';' '}' -> ^(PARAMETER ID typeArg)
+    :   RESULT '{' 'type' ':' typeArg ';' modifiers? '}' 
+    -> ^(RESULT typeArg modifiers?)
+    |   PARAMETER ID '{' 'type' ':' typeArg ';' modifiers? '}' 
+    -> ^(PARAMETER ID typeArg modifiers?)
     ;
 
 attributeElement
