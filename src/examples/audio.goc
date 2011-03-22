@@ -8,15 +8,15 @@ gtype GError;
 package audio {
     
     gerror Error {
-		code INVALID_STATUS;
-		code URI_NOT_FOUND;
-		code UNKNOWN_FORMAT;
-	}
+	code INVALID_STATUS;
+	code URI_NOT_FOUND;
+	code UNKNOWN_FORMAT;
+    }
 	
-	genum Format {
-		code MP3;
-		code OGG_VORBIS;
-	}
+    genum Format {
+    	code MP3;
+	code OGG_VORBIS;
+    }
 	
     genum PlayerStatus {
     	code READY;
@@ -62,12 +62,12 @@ package audio {
     		type: enumeration;
     		gtype: gtypename(PlayerStatus);
     		access: read-only;
-    		default: audio::PlayerStatus.READY;
+    		default: PlayerStatus.READY;
     	}
     	   
         attribute status { type: PlayerStatus; }
         attribute current { type: string; }
 	
-	}
+    }
 
 }
