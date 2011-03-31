@@ -102,8 +102,7 @@ class CodeGenerator(object):
         self._comment_lines = []
         
         for line in f.readlines():
-            line.strip("\n")
-            self._comment_lines.append(line)
+            self._comment_lines.append(line.strip("\n"))
         
         f.close()
         
