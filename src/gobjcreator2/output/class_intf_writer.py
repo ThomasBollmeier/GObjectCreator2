@@ -20,6 +20,7 @@
 
 from gobjcreator2.output.writer import Writer, ListOut
 from gobjcreator2.output.func_name_creator import FuncNameCreator
+from gobjcreator2.output.annotations import Annotations
 import gobjcreator2.output.util as util 
 from gobjcreator2.output.marshaller_generator import MarshallerGenerator
 from gobjcreator2.metadef.constants import *
@@ -29,9 +30,12 @@ class ClassIntfWriter(Writer):
     def __init__(self, object):
         
         Writer.__init__(self)
+        
         self._obj = object
         self._func_name_creator = FuncNameCreator()
         self._base_prefix = util.camelcase_to_underscore(self._obj.prefix).lower()
+        
+        self.annotations = Annotations()
         
     def _write_method_lines(self, 
                             method,

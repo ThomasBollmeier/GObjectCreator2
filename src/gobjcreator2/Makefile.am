@@ -36,6 +36,7 @@ metadef/signal.py \
 metadef/types.py
 
 output_PYTHON = \
+output/annotations.py \
 output/class_intf_writer.py \
 output/error_domain_writer.py \
 output/func_name_creator.py \
@@ -45,6 +46,7 @@ output/ginterface_writer.py \
 output/gobject_writer.py \
 output/__init__.py \
 output/marshaller_generator.py \
+output/sections.py \
 output/user_content.py \
 output/util.py \
 output/writer.py

@@ -250,6 +250,9 @@ class CodeGenerator(object):
         
         writer.set_user_content(file_path)
         
+        if isinstance(writer, GObjectWriter) or isinstance(writer, GInterfaceWriter):
+            writer.annotations.load_from_file(file_path)
+        
         file_out = FileOut(file_path)
         
         saved_out = writer.get_output()

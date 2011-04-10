@@ -1048,7 +1048,10 @@ class GObjectWriter(ClassIntfWriter):
                 if comment:
                     self.writeln(comment)
                     self.writeln()
-            
+                    
+            if method.visibility == Visibility.PUBLIC:
+                self.annotations.write_method_annotation(self._gobj, method, self)
+                            
             define_as_static = method.visibility == Visibility.PRIVATE
             self._write_method_lines(method,
                                      method.name, 
@@ -1172,6 +1175,11 @@ class GObjectWriter(ClassIntfWriter):
     
     def _write_constructor_impl(self):
         
+        self.annotations.write_method_annotation(self._gobj, 
+                                                 self._gobj.constructor, 
+                                                 self
+                                                 )
+                                                         
         constructor = self._gobj.constructor
         self._write_method_impl(constructor, define_as_static=False)
         self.writeln()

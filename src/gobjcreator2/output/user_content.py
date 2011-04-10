@@ -17,24 +17,20 @@
 # along with GObjectCreator2.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-
 # coding=UTF-8
 
 import re
+from gobjcreator2.output.sections import Sections
 
-class UserContent(object):
+class UserContent(Sections):
     
     STYLES = COMMENT_C, COMMENT_CPP = list(range(2))
     
     def __init__(self):
         
-        self._sections = {}
+        Sections.__init__(self)
         self.set_comment_style(UserContent.COMMENT_C)
-   
-    def get_section_content(self, section_name):
-        
-        return self._sections[section_name]
-        
+       
     def set_comment_style(self, style):
         
         if style == UserContent.COMMENT_C:
@@ -63,10 +59,11 @@ class UserContent(object):
     def _check_for_section_begin(self, line):
         
         match = self._re_block_begin.match(line)
+        first_line = None
         if match:
-            return True, match.group(1)
+            return True, match.group(1), first_line
         else:
-            return False, ""
+            return False, "", first_line
 
     def _is_section_end(self, line):
         
@@ -75,34 +72,3 @@ class UserContent(object):
             return True
         else:
             return False
-        
-    def _parse(self, file_path):
-        
-        self._sections = {}
-        
-        try:
-            input_file = open(file_path, "r" )
-        except IOError:
-            return
-        lines = input_file.readlines()
-        input_file.close()
-        
-        user_code = False
-        
-        for line in lines:
-            
-            line = line[:-1] # Zeilenumbruch entfernen
-            
-            if not user_code:
-                section_begin, section_name = \
-                    self._check_for_section_begin(line)
-                if section_begin:
-                    user_code = True
-                    user_lines = []
-            else:
-                if not self._is_section_end(line):
-                    user_lines.append(line)
-                else:
-                    self._sections[section_name] = user_lines
-                    user_code = False
-                    section_name = ""
