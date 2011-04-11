@@ -293,6 +293,9 @@ class GInterfaceWriter(ClassIntfWriter):
         self.writeln()
         
         for method in self._obj.methods:
+            
+            self.annotations.write_method_annotation(self._obj, method, self)
+            
             self._write_method_lines(method, 
                                      method.name, 
                                      as_pointer = False, 

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([gobjcreator2], [1.2.0], [TBollmeier@web.de])
+AC_INIT([gobjcreator2], [1.2.1], [TBollmeier@web.de])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE
 AM_PATH_PYTHON

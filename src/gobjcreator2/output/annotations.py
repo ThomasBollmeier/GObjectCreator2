@@ -22,6 +22,7 @@
 from gobjcreator2.output.sections import Sections
 import gobjcreator2.output.util as util
 from gobjcreator2.metadef.types import NULL
+from gobjcreator2.metadef.constants import Scope
 import re
 
 class Annotations(Sections):
@@ -68,6 +69,8 @@ class Annotations(Sections):
         else:
             writer.writeln("* %s: " % section_name)
             writer.writeln("*")
+            if method.scope == Scope.INSTANCE:
+                writer.writeln("* @self: instance")
             for param in method.parameters:
                 writer.writeln("* @%s: ..." % param.name)
             if method.result is not NULL:
