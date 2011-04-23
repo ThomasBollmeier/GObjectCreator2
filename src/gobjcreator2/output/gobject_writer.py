@@ -1147,6 +1147,7 @@ class GObjectWriter(ClassIntfWriter):
         init_method = Method("init")
         init_method.parameters = self._gobj.constructor.parameters[:]
 
+        self.annotations.write_method_annotation(self._gobj, init_method, self, skip = True)
         self._write_method_impl(init_method, define_as_static=False)
         self.user_section("constructor", "/* == init your members == */")
         self.writeln("}")

@@ -52,7 +52,7 @@ class Annotations(Sections):
         self._first_matched = False
         self._parse(file_path)
             
-    def write_method_annotation(self, clif, method, writer):
+    def write_method_annotation(self, clif, method, writer, skip=False):
         
         prefix = util.namespace_prefix(clif)
         prefix += util.camelcase_to_underscore(clif.prefix).lower()
@@ -67,15 +67,19 @@ class Annotations(Sections):
                 line = line.lstrip()
                 writer.writeln(line)
         else:
-            writer.writeln("* %s: " % section_name)
-            writer.writeln("*")
-            if method.scope == Scope.INSTANCE:
-                writer.writeln("* @self: instance")
-            for param in method.parameters:
-                writer.writeln("* @%s: ..." % param.name)
-            if method.result is not NULL:
+            if not skip:
+                writer.writeln("* %s: " % section_name)
                 writer.writeln("*")
-                writer.writeln("* Return value: ...")
+                if method.scope == Scope.INSTANCE:
+                    writer.writeln("* @self: instance")
+                for param in method.parameters:
+                    writer.writeln("* @%s: ..." % param.name)
+                if method.result is not NULL:
+                    writer.writeln("*")
+                    writer.writeln("* Return value: ...")
+            else:
+                writer.writeln("* %s: (skip)" % section_name)
+                writer.writeln("*")
                         
         writer.writeln("*/")
         
