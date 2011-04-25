@@ -284,11 +284,13 @@ class GObjectWriter(ClassIntfWriter):
         
     def _write_property_enum(self):
         
-        if not self._gobj.properties:
-            return
-        
         self.writeln("/* ===== properties ===== */")
         self.writeln()
+        
+        if not self._gobj.properties:
+            self._write_prop_setter_getter_decl()
+            return
+        
         self.writeln("enum {")
         self.indent()
         first = True
@@ -304,6 +306,10 @@ class GObjectWriter(ClassIntfWriter):
         self.unindent()
         self.writeln("};")
         self.writeln()
+        self._write_prop_setter_getter_decl()
+        
+    def _write_prop_setter_getter_decl(self):
+        
         self.writeln("static void")
         self.writeln("%(prefix)s_set_property(" % self._vars)
         self.indent()
