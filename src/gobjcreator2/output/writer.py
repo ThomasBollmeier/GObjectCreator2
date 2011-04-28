@@ -266,7 +266,7 @@ class Writer(object):
         
         if not self._header_comment:
             self.writeln("/* This file has been generated automatically by GObjectCreator")
-            self.writeln("* (see http://www.bollmeier.de/GObjectCreator for details).")
+            self.writeln("* (see http://www.bolles-werk.org/GObjectCreator for details).")
             self.writeln("* Please modify user sections only!")
             self.writeln("*/")
         else:
