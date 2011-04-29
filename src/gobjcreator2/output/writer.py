@@ -290,12 +290,5 @@ class Writer(object):
         return self.file_basename(clif)
 
     def _clifname(self, clif):
-
-        res = clif.name
-        package = clif.package
-        while package:
-            if package.name:
-                res = package.name.capitalize() + res
-            package = package.package
-
-        return res
+        
+        return util.clifname(clif)

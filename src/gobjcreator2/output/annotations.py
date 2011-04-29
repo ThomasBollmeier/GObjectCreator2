@@ -64,24 +64,29 @@ class Annotations(Sections):
         if section_name in self._sections:
             lines = self._sections[section_name]
             for line in lines:
-                line = line.lstrip()
                 writer.writeln(line)
         else:
             if not skip:
-                writer.writeln("* %s: " % section_name)
-                writer.writeln("*")
+                writer.writeln(" * %s: " % section_name)
+                writer.writeln(" *")
                 if method.scope == Scope.INSTANCE:
-                    writer.writeln("* @self: instance")
+                    writer.writeln(" * @self: a #%s instance" % util.clifname(clif))
                 for param in method.parameters:
-                    writer.writeln("* @%s: ..." % param.name)
+                    writer.writeln(" * @%s: ..." % param.name)
                 if method.result is not NULL:
-                    writer.writeln("*")
-                    writer.writeln("* Return value: ...")
+                    writer.writeln(" *")
+                    if hasattr(clif, "constructor"):
+                        if method is clif.constructor:
+                            writer.writeln(" * Return value: a new #%s instance" % util.clifname(clif))
+                        else:
+                            writer.writeln(" * Return value: ...")
+                    else:
+                        writer.writeln(" * Return value: ...")
             else:
-                writer.writeln("* %s: (skip)" % section_name)
-                writer.writeln("*")
+                writer.writeln(" * %s: (skip)" % section_name)
+                writer.writeln(" *")
                         
-        writer.writeln("*/")
+        writer.writeln(" */")
         
     def _check_for_section_begin(self, line):
         """

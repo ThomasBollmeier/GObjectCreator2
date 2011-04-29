@@ -84,3 +84,17 @@ def namespace_prefix(element):
         res += "_"
         
     return res
+
+def clifname(class_or_intf):
+    """
+    Returns name of a class or interface
+    """
+    
+    res = class_or_intf.name
+    package = class_or_intf.package
+    while package:
+        if package.name:
+            res = package.name.capitalize() + res
+        package = package.package
+
+    return res
