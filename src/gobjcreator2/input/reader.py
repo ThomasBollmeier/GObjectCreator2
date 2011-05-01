@@ -296,7 +296,7 @@ class Reader(object):
                         if node.getType() == MODIFIERS:
                             modifiers = self._get_modifiers(node)
                         elif node.getType() == BIND_PROPERTY:
-                            bind_to = node.getChildren()[0].getText()
+                            bind_to = self._get_prop_id(node.getChildren()[0])
                 except IndexError:
                     pass
                 parameters.append(ConstructorParamInfo(
@@ -305,7 +305,7 @@ class Reader(object):
             elif type == INIT_PROPERTIES:
                 props = child.getChildren()
                 for prop in props:
-                    name = prop.getChildren()[0].getText()
+                    name = self._get_prop_id(prop.getChildren()[0])
                     args = prop.getChildren()[1:]
                     if len(args) == 1:
                         value_name = args[0].getText()
@@ -383,7 +383,7 @@ class Reader(object):
     def _walk_property(self, node, visitor):
 
         children = node.getChildren()
-        name = children[0].getText()
+        name = self._get_prop_id(children[0])
         attrs = {}
 
         for child in children[1:]:
@@ -435,6 +435,17 @@ class Reader(object):
             res += child.getText()
 
         return res
+    
+    def _get_prop_id(self, prop_id_node):
+        
+        prop_id = ""
+        children = prop_id_node.getChildren()
+        for child in children:
+            if prop_id:
+                prop_id += "-"
+            prop_id += child.getText()
+            
+        return prop_id
     
     def _get_prop_value(self, prop_value_node):
         

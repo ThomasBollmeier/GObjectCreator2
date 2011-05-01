@@ -12,6 +12,7 @@ tokens {
     SIGNAL_ID;
     REF_TO;
     LIST_OF;
+    PROPERTY_ID;
     PROP_TYPE;
     PROP_ACCESS;
     PROP_DESC;
@@ -119,7 +120,7 @@ scope {
 	| 	OVERRIDE ID ';' -> ^(OVERRIDE ID)
 	|	ATTRIBUTE ID '{' TYPE ':' typeArg ';' attributeElement* '}'
 	-> ^(ATTRIBUTE ID typeArg attributeElement*)
-	|	PROPERTY ID '{' propertyElement+ '}' -> ^(PROPERTY ID propertyElement+)
+	|	PROPERTY propertyID '{' propertyElement+ '}' -> ^(PROPERTY propertyID propertyElement+)
 	|	SIGNAL signalID '{' signalElement* '}' -> ^(SIGNAL signalID signalElement*)
 	;
 	
@@ -154,13 +155,13 @@ constructorElement
 
 parameterElement
     :   modifiers
-    |   {$classMember::with_constructor}?=> 'bind_property' ':' ID ';' -> ^(BIND_PROPERTY ID)
+    |   {$classMember::with_constructor}?=> 'bind_property' ':' propertyID ';' -> ^(BIND_PROPERTY propertyID)
     ;
 
 init_prop
-    :   name=ID ':' value=STRING ';'
+    :   name=propertyID ':' value=STRING ';'
     ->  ^(INIT_PROPERTY $name $value)
-    |   name=ID ':' enum=typeName '.' code=ID ';'
+    |   name=propertyID ':' enum=typeName '.' code=ID ';'
     ->  ^(INIT_PROPERTY $name $enum $code)
     ;
 
@@ -350,6 +351,10 @@ ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
 
 signalID
     :   part1=ID ('-' part2+=ID)* -> ^(SIGNAL_ID $part1 $part2*)
+    ;
+    
+propertyID
+    :   part1=ID ('-' part2+=ID)* -> ^(PROPERTY_ID $part1 $part2*)
     ;
 
 STRING

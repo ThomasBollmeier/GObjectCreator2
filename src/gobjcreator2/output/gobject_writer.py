@@ -299,7 +299,7 @@ class GObjectWriter(ClassIntfWriter):
                 first = False
             else:
                 self.writeln(",")
-            self.write("PROP_%s" % prop.name.upper())
+            self.write("PROP_%s" % prop.name.replace("-", "_").upper())
             if prop is self._gobj.properties[0]:
                 self.write(" = 1")
         self.writeln()
@@ -360,14 +360,14 @@ class GObjectWriter(ClassIntfWriter):
             self.writeln("g_object_class_install_property(")
             self.indent()
             self.writeln("gobj_class,")
-            self.writeln("PROP_%s," % prop.name.upper())
-            self.writeln("pspec_%s" % prop.name.lower())
+            self.writeln("PROP_%s," % prop.name.replace("-", "_").upper())
+            self.writeln("pspec_%s" % prop.name.replace("-", "_").lower())
             self.writeln(");")
             self.unindent()
             
             self.output = saved_output
             
-            self.user_section("property_reg_%s" % prop.name.lower(), 
+            self.user_section("property_reg_%s" % prop.name.replace("-", "_").lower(), 
                               default_code = list_output.get_lines(),
                               indent_level = -1
                               )
@@ -375,7 +375,7 @@ class GObjectWriter(ClassIntfWriter):
             
     def _write_propspec_boolean(self, prop):
         
-        self.writeln("pspec_%s = g_param_spec_boolean(" % prop.name.lower())
+        self.writeln("pspec_%s = g_param_spec_boolean(" % prop.name.replace("-", "_").lower())
         self.indent()
         self._write_propspec_name_descr(prop)
         if prop.default is None:
@@ -389,7 +389,7 @@ class GObjectWriter(ClassIntfWriter):
             
     def _write_propspec_integer(self, prop):
         
-        self.writeln("pspec_%s = g_param_spec_int(" % prop.name.lower())
+        self.writeln("pspec_%s = g_param_spec_int(" % prop.name.replace("-", "_").lower())
         self.indent()
         self._write_propspec_name_descr(prop)
         if prop.min is None:
@@ -413,7 +413,7 @@ class GObjectWriter(ClassIntfWriter):
         
     def _write_propspec_float(self, prop):
         
-        self.writeln("pspec_%s = g_param_spec_float(" % prop.name.lower())
+        self.writeln("pspec_%s = g_param_spec_float(" % prop.name.replace("-", "_").lower())
         self.indent()
         self._write_propspec_name_descr(prop)
         if prop.min is None:
@@ -437,7 +437,7 @@ class GObjectWriter(ClassIntfWriter):
 
     def _write_propspec_double(self, prop):
         
-        self.writeln("pspec_%s = g_param_spec_double(" % prop.name.lower())
+        self.writeln("pspec_%s = g_param_spec_double(" % prop.name.replace("-", "_").lower())
         self.indent()
         self._write_propspec_name_descr(prop)
         if prop.min is None:
@@ -461,7 +461,7 @@ class GObjectWriter(ClassIntfWriter):
     
     def _write_propspec_string(self, prop):
         
-        self.writeln("pspec_%s = g_param_spec_string(" % prop.name.lower())
+        self.writeln("pspec_%s = g_param_spec_string(" % prop.name.replace("-", "_").lower())
         self.indent()
         self._write_propspec_name_descr(prop)
         if prop.default is None:
@@ -475,7 +475,7 @@ class GObjectWriter(ClassIntfWriter):
     
     def _write_propspec_pointer(self, prop):
         
-        self.writeln("pspec_%s = g_param_spec_pointer(" % prop.name.lower())
+        self.writeln("pspec_%s = g_param_spec_pointer(" % prop.name.replace("-", "_").lower())
         self.indent()
         self._write_propspec_name_descr(prop)
         self._write_propspec_flags(prop)
@@ -484,7 +484,7 @@ class GObjectWriter(ClassIntfWriter):
     
     def _write_propspec_object(self, prop):
         
-        self.writeln("pspec_%s = g_param_spec_object(" % prop.name.lower())
+        self.writeln("pspec_%s = g_param_spec_object(" % prop.name.replace("-", "_").lower())
         self.indent()
         self._write_propspec_name_descr(prop)
         if prop.gtype.is_typename:
@@ -498,7 +498,7 @@ class GObjectWriter(ClassIntfWriter):
     
     def _write_propspec_enum(self, prop):
         
-        self.writeln("pspec_%s = g_param_spec_enum(" % prop.name.lower())
+        self.writeln("pspec_%s = g_param_spec_enum(" % prop.name.replace("-", "_").lower())
         self.indent()
         self._write_propspec_name_descr(prop)
         if prop.gtype.is_typename:
@@ -559,7 +559,7 @@ class GObjectWriter(ClassIntfWriter):
                 self.writeln("switch (property_id) {")
                 self.indent()
                 self.writeln()
-            self.writeln("case PROP_%s:" % prop.name.upper())
+            self.writeln("case PROP_%s:" % prop.name.replace("-", "_").upper())
             self.indent()
             self._write_prop_set(prop)
             self.unindent()
@@ -617,7 +617,7 @@ class GObjectWriter(ClassIntfWriter):
                 self.writeln("switch (property_id) {")
                 self.indent()
                 self.writeln()
-            self.writeln("case PROP_%s:" % prop.name.upper())
+            self.writeln("case PROP_%s:" % prop.name.replace("-", "_").upper())
             self.indent()
             self._write_prop_get(prop)
             self.unindent()
@@ -656,32 +656,34 @@ class GObjectWriter(ClassIntfWriter):
         save_out = self.get_output()
         self.set_output(ListOut())
         
+        prop_name = prop.name.replace("-", "_")
+        
         if prop.auto_create:
             if prop.type == PropType.BOOLEAN:
-                self.write("self->priv->%s = " % prop.name)
+                self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_get_boolean(value);")
             elif prop.type == PropType.INTEGER:
-                self.write("self->priv->%s = " % prop.name)
+                self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_get_integer(value);")
             elif prop.type == PropType.FLOAT:
-                self.write("self->priv->%s = " % prop.name)
+                self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_get_float(value);")
             elif prop.type == PropType.DOUBLE:
-                self.write("self->priv->%s = " % prop.name)
+                self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_get_double(value);")
             elif prop.type == PropType.STRING:
-                self.writeln("if (self->priv->%s" % prop.name + ")")
+                self.writeln("if (self->priv->%s" % prop_name + ")")
                 self.indent()
-                self.writeln("g_free(self->priv->%s);" % prop.name)
+                self.writeln("g_free(self->priv->%s);" % prop_name)
                 self.unindent()
-                self.write("self->priv->%s = " % prop.name)
+                self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_dup_string(value);")
-        self.writeln('g_object_notify(obj, "%s");' % prop.name)
+        self.writeln('g_object_notify(obj, "%s");' % prop_name)
         lines = self.get_output().get_lines()
         
         self.set_output(save_out)
         
-        self.user_section("property_set_%s" % prop.name, lines,
+        self.user_section("property_set_%s" % prop_name, lines,
                           indent_level=-3)
         self.writeln("break;")
 
@@ -690,22 +692,24 @@ class GObjectWriter(ClassIntfWriter):
         save_out = self.get_output()
         self.set_output(ListOut())
         
+        prop_name = prop.name.replace("-", "_")
+        
         if prop.auto_create:
             if prop.type == PropType.BOOLEAN:
-                self.writeln("g_value_set_boolean(value, self->priv->%s);" % prop.name)
+                self.writeln("g_value_set_boolean(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.INTEGER:
-                self.writeln("g_value_set_integer(value, self->priv->%s);" % prop.name)
+                self.writeln("g_value_set_integer(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.FLOAT:
-                self.writeln("g_value_set_float(value, self->priv->%s);" % prop.name)
+                self.writeln("g_value_set_float(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.DOUBLE:
-                self.writeln("g_value_set_double(value, self->priv->%s);" % prop.name)
+                self.writeln("g_value_set_double(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.STRING:
-                self.writeln("g_value_set_static_string(value, self->priv->%s);" % prop.name)
+                self.writeln("g_value_set_static_string(value, self->priv->%s);" % prop_name)
         lines = self.get_output().get_lines()
         
         self.set_output(save_out)
         
-        self.user_section("property_get_%s" % prop.name, lines,
+        self.user_section("property_get_%s" % prop_name, lines,
                           indent_level=-3)
         self.writeln("break;")
             
@@ -797,7 +801,7 @@ class GObjectWriter(ClassIntfWriter):
         
         self.writeln("GObjectClass* gobj_class = G_OBJECT_CLASS(cls);")
         for prop in self._gobj.properties:
-            self.writeln("GParamSpec* pspec_%s;" % prop.name.lower())
+            self.writeln("GParamSpec* pspec_%s;" % prop.name.replace("-","_").lower())
         self.writeln()
         
         if self._gobj.has_attributes(Visibility.PRIVATE):

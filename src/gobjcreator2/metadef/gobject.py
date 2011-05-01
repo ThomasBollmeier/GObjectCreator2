@@ -94,7 +94,7 @@ class GObject(PackageElement, Type):
         
         if property.auto_create:
             # Create attribute that holds property value:
-            attr_name = property.name
+            attr_name = property.name.replace("-", "_")
             
             if not hasattr(self, "_prop_type_map"):
                 self._prop_type_map = {

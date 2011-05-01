@@ -1,4 +1,4 @@
-# $ANTLR 3.1.3 Mar 18, 2009 10:09:25 GOC.g 2011-03-21 19:18:59
+# $ANTLR 3.1.3 Mar 18, 2009 10:09:25 GOC.g 2011-05-01 10:12:43
 
 import sys
 from antlr3 import *
@@ -9,55 +9,57 @@ from antlr3.compat import set, frozenset
 HIDDEN = BaseRecognizer.HIDDEN
 
 # token types
-PACKAGE=51
-PREFIX=30
-GTYPENAME=46
-PROP_ACCESS=11
-PROP_DEFAULT=16
-GTYPE=27
-OCTAL_ESC=55
+PACKAGE=52
+PREFIX=31
+GTYPENAME=47
+PROP_ACCESS=12
+PROP_DEFAULT=17
+GTYPE=28
+OCTAL_ESC=56
 EOF=-1
-INHERITANCE=42
-TYPE=36
+INHERITANCE=43
+TYPE=37
 T__93=93
 T__94=94
 T__91=91
 T__92=92
 T__90=90
-ENUMERATION=24
+ENUMERATION=25
 INCLUDE=5
-PARAMETER=43
-SUPER=28
-COMMENT=48
-GOBJECT=21
+PARAMETER=44
+SUPER=29
+COMMENT=49
+GOBJECT=22
+T__98=98
 T__97=97
 T__96=96
 T__95=95
 T__80=80
-VISIBILITY=40
+VISIBILITY=41
 REF_TO=8
 T__81=81
 T__82=82
 T__83=83
-BOOLVALUE=50
-GINTERFACE=22
-INT=25
+BOOLVALUE=51
+GINTERFACE=23
+INT=26
 T__85=85
 T__84=84
 T__87=87
 T__86=86
 T__89=89
 T__88=88
-WS=49
+WS=50
 T__71=71
 T__72=72
 T__70=70
-PROPERTY=37
+PROPERTY=38
+PROPERTY_ID=10
 T__76=76
 T__75=75
 T__74=74
 T__73=73
-CONSTRUCTOR=32
+CONSTRUCTOR=33
 T__79=79
 T__78=78
 T__77=77
@@ -70,40 +72,39 @@ T__65=65
 T__62=62
 T__63=63
 LIST_OF=9
-FLAGS=26
+FLAGS=27
 SIGNAL_ID=7
-PROP_DESC=12
-ATTRIBUTE=35
-ABSTRACT=29
-INIT_PROPERTIES=44
+PROP_DESC=13
+ATTRIBUTE=36
+ABSTRACT=30
+INIT_PROPERTIES=45
 T__61=61
-ID=20
+ID=21
 T__60=60
-MODIFIERS=45
-T__56=56
+MODIFIERS=46
 T__57=57
 T__58=58
-ESC_SEQ=52
-IMPLEMENTS=31
-SCOPE=41
+ESC_SEQ=53
+IMPLEMENTS=32
+SCOPE=42
 T__59=59
-SIGNAL=38
+SIGNAL=39
 TYPE_NAME=6
-PROP_TYPE=10
-AUTO_CREATE=47
-ERROR_DOMAIN=23
-PROP_MIN=14
-INIT_PROPERTY=18
-UNICODE_ESC=54
-HEX_DIGIT=53
-RESULT=39
+PROP_TYPE=11
+AUTO_CREATE=48
+ERROR_DOMAIN=24
+PROP_MIN=15
+INIT_PROPERTY=19
+UNICODE_ESC=55
+HEX_DIGIT=54
+RESULT=40
 ROOT=4
-BIND_PROPERTY=17
-PROP_MAX=15
-OVERRIDE=34
-PROP_GTYPE=13
-METHOD=33
-STRING=19
+BIND_PROPERTY=18
+PROP_MAX=16
+OVERRIDE=35
+PROP_GTYPE=14
+METHOD=34
+STRING=20
 
 
 class GOCLexer(Lexer):
@@ -134,31 +135,6 @@ class GOCLexer(Lexer):
 
 
 
-    # $ANTLR start "T__56"
-    def mT__56(self, ):
-
-        try:
-            _type = T__56
-            _channel = DEFAULT_CHANNEL
-
-            # GOC.g:7:7: ( 'include' )
-            # GOC.g:7:9: 'include'
-            pass 
-            self.match("include")
-
-
-
-            self._state.type = _type
-            self._state.channel = _channel
-
-        finally:
-
-            pass
-
-    # $ANTLR end "T__56"
-
-
-
     # $ANTLR start "T__57"
     def mT__57(self, ):
 
@@ -166,10 +142,10 @@ class GOCLexer(Lexer):
             _type = T__57
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:8:7: ( '{' )
-            # GOC.g:8:9: '{'
+            # GOC.g:7:7: ( 'include' )
+            # GOC.g:7:9: 'include'
             pass 
-            self.match(123)
+            self.match("include")
 
 
 
@@ -191,10 +167,10 @@ class GOCLexer(Lexer):
             _type = T__58
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:9:7: ( '}' )
-            # GOC.g:9:9: '}'
+            # GOC.g:8:7: ( '{' )
+            # GOC.g:8:9: '{'
             pass 
-            self.match(125)
+            self.match(123)
 
 
 
@@ -216,10 +192,10 @@ class GOCLexer(Lexer):
             _type = T__59
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:10:7: ( ';' )
-            # GOC.g:10:9: ';'
+            # GOC.g:9:7: ( '}' )
+            # GOC.g:9:9: '}'
             pass 
-            self.match(59)
+            self.match(125)
 
 
 
@@ -241,10 +217,10 @@ class GOCLexer(Lexer):
             _type = T__60
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:11:7: ( 'code' )
-            # GOC.g:11:9: 'code'
+            # GOC.g:10:7: ( ';' )
+            # GOC.g:10:9: ';'
             pass 
-            self.match("code")
+            self.match(59)
 
 
 
@@ -266,10 +242,10 @@ class GOCLexer(Lexer):
             _type = T__61
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:12:7: ( 'value' )
-            # GOC.g:12:9: 'value'
+            # GOC.g:11:7: ( 'code' )
+            # GOC.g:11:9: 'code'
             pass 
-            self.match("value")
+            self.match("code")
 
 
 
@@ -291,10 +267,10 @@ class GOCLexer(Lexer):
             _type = T__62
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:13:7: ( ':' )
-            # GOC.g:13:9: ':'
+            # GOC.g:12:7: ( 'value' )
+            # GOC.g:12:9: 'value'
             pass 
-            self.match(58)
+            self.match("value")
 
 
 
@@ -316,10 +292,10 @@ class GOCLexer(Lexer):
             _type = T__63
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:14:7: ( 'public' )
-            # GOC.g:14:9: 'public'
+            # GOC.g:13:7: ( ':' )
+            # GOC.g:13:9: ':'
             pass 
-            self.match("public")
+            self.match(58)
 
 
 
@@ -341,10 +317,10 @@ class GOCLexer(Lexer):
             _type = T__64
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:15:7: ( 'protected' )
-            # GOC.g:15:9: 'protected'
+            # GOC.g:14:7: ( 'public' )
+            # GOC.g:14:9: 'public'
             pass 
-            self.match("protected")
+            self.match("public")
 
 
 
@@ -366,10 +342,10 @@ class GOCLexer(Lexer):
             _type = T__65
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:16:7: ( 'private' )
-            # GOC.g:16:9: 'private'
+            # GOC.g:15:7: ( 'protected' )
+            # GOC.g:15:9: 'protected'
             pass 
-            self.match("private")
+            self.match("protected")
 
 
 
@@ -391,10 +367,10 @@ class GOCLexer(Lexer):
             _type = T__66
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:17:7: ( 'instance' )
-            # GOC.g:17:9: 'instance'
+            # GOC.g:16:7: ( 'private' )
+            # GOC.g:16:9: 'private'
             pass 
-            self.match("instance")
+            self.match("private")
 
 
 
@@ -416,10 +392,10 @@ class GOCLexer(Lexer):
             _type = T__67
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:18:7: ( 'static' )
-            # GOC.g:18:9: 'static'
+            # GOC.g:17:7: ( 'instance' )
+            # GOC.g:17:9: 'instance'
             pass 
-            self.match("static")
+            self.match("instance")
 
 
 
@@ -441,10 +417,10 @@ class GOCLexer(Lexer):
             _type = T__68
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:19:7: ( 'final' )
-            # GOC.g:19:9: 'final'
+            # GOC.g:18:7: ( 'static' )
+            # GOC.g:18:9: 'static'
             pass 
-            self.match("final")
+            self.match("static")
 
 
 
@@ -466,10 +442,10 @@ class GOCLexer(Lexer):
             _type = T__69
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:20:7: ( 'virtual' )
-            # GOC.g:20:9: 'virtual'
+            # GOC.g:19:7: ( 'final' )
+            # GOC.g:19:9: 'final'
             pass 
-            self.match("virtual")
+            self.match("final")
 
 
 
@@ -491,10 +467,10 @@ class GOCLexer(Lexer):
             _type = T__70
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:21:7: ( 'bind_property' )
-            # GOC.g:21:9: 'bind_property'
+            # GOC.g:20:7: ( 'virtual' )
+            # GOC.g:20:9: 'virtual'
             pass 
-            self.match("bind_property")
+            self.match("virtual")
 
 
 
@@ -516,10 +492,10 @@ class GOCLexer(Lexer):
             _type = T__71
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:22:7: ( '.' )
-            # GOC.g:22:9: '.'
+            # GOC.g:21:7: ( 'bind_property' )
+            # GOC.g:21:9: 'bind_property'
             pass 
-            self.match(46)
+            self.match("bind_property")
 
 
 
@@ -541,10 +517,10 @@ class GOCLexer(Lexer):
             _type = T__72
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:23:7: ( 'const' )
-            # GOC.g:23:9: 'const'
+            # GOC.g:22:7: ( '.' )
+            # GOC.g:22:9: '.'
             pass 
-            self.match("const")
+            self.match(46)
 
 
 
@@ -566,10 +542,10 @@ class GOCLexer(Lexer):
             _type = T__73
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:24:7: ( 'boolean' )
-            # GOC.g:24:9: 'boolean'
+            # GOC.g:23:7: ( 'const' )
+            # GOC.g:23:9: 'const'
             pass 
-            self.match("boolean")
+            self.match("const")
 
 
 
@@ -591,10 +567,10 @@ class GOCLexer(Lexer):
             _type = T__74
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:25:7: ( 'integer' )
-            # GOC.g:25:9: 'integer'
+            # GOC.g:24:7: ( 'boolean' )
+            # GOC.g:24:9: 'boolean'
             pass 
-            self.match("integer")
+            self.match("boolean")
 
 
 
@@ -616,10 +592,10 @@ class GOCLexer(Lexer):
             _type = T__75
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:26:7: ( 'float' )
-            # GOC.g:26:9: 'float'
+            # GOC.g:25:7: ( 'integer' )
+            # GOC.g:25:9: 'integer'
             pass 
-            self.match("float")
+            self.match("integer")
 
 
 
@@ -641,10 +617,10 @@ class GOCLexer(Lexer):
             _type = T__76
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:27:7: ( 'double' )
-            # GOC.g:27:9: 'double'
+            # GOC.g:26:7: ( 'float' )
+            # GOC.g:26:9: 'float'
             pass 
-            self.match("double")
+            self.match("float")
 
 
 
@@ -666,10 +642,10 @@ class GOCLexer(Lexer):
             _type = T__77
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:28:7: ( 'string' )
-            # GOC.g:28:9: 'string'
+            # GOC.g:27:7: ( 'double' )
+            # GOC.g:27:9: 'double'
             pass 
-            self.match("string")
+            self.match("double")
 
 
 
@@ -691,10 +667,10 @@ class GOCLexer(Lexer):
             _type = T__78
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:29:7: ( 'pointer' )
-            # GOC.g:29:9: 'pointer'
+            # GOC.g:28:7: ( 'string' )
+            # GOC.g:28:9: 'string'
             pass 
-            self.match("pointer")
+            self.match("string")
 
 
 
@@ -716,10 +692,10 @@ class GOCLexer(Lexer):
             _type = T__79
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:30:7: ( 'object' )
-            # GOC.g:30:9: 'object'
+            # GOC.g:29:7: ( 'pointer' )
+            # GOC.g:29:9: 'pointer'
             pass 
-            self.match("object")
+            self.match("pointer")
 
 
 
@@ -741,10 +717,10 @@ class GOCLexer(Lexer):
             _type = T__80
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:31:7: ( 'enumeration' )
-            # GOC.g:31:9: 'enumeration'
+            # GOC.g:30:7: ( 'object' )
+            # GOC.g:30:9: 'object'
             pass 
-            self.match("enumeration")
+            self.match("object")
 
 
 
@@ -766,10 +742,10 @@ class GOCLexer(Lexer):
             _type = T__81
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:32:7: ( 'access' )
-            # GOC.g:32:9: 'access'
+            # GOC.g:31:7: ( 'enumeration' )
+            # GOC.g:31:9: 'enumeration'
             pass 
-            self.match("access")
+            self.match("enumeration")
 
 
 
@@ -791,10 +767,10 @@ class GOCLexer(Lexer):
             _type = T__82
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:33:7: ( 'read-only' )
-            # GOC.g:33:9: 'read-only'
+            # GOC.g:32:7: ( 'access' )
+            # GOC.g:32:9: 'access'
             pass 
-            self.match("read-only")
+            self.match("access")
 
 
 
@@ -816,10 +792,10 @@ class GOCLexer(Lexer):
             _type = T__83
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:34:7: ( 'initial-write' )
-            # GOC.g:34:9: 'initial-write'
+            # GOC.g:33:7: ( 'read-only' )
+            # GOC.g:33:9: 'read-only'
             pass 
-            self.match("initial-write")
+            self.match("read-only")
 
 
 
@@ -841,10 +817,10 @@ class GOCLexer(Lexer):
             _type = T__84
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:35:7: ( 'read-write' )
-            # GOC.g:35:9: 'read-write'
+            # GOC.g:34:7: ( 'initial-write' )
+            # GOC.g:34:9: 'initial-write'
             pass 
-            self.match("read-write")
+            self.match("initial-write")
 
 
 
@@ -866,10 +842,10 @@ class GOCLexer(Lexer):
             _type = T__85
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:36:7: ( 'description' )
-            # GOC.g:36:9: 'description'
+            # GOC.g:35:7: ( 'read-write' )
+            # GOC.g:35:9: 'read-write'
             pass 
-            self.match("description")
+            self.match("read-write")
 
 
 
@@ -891,10 +867,10 @@ class GOCLexer(Lexer):
             _type = T__86
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:37:7: ( '(' )
-            # GOC.g:37:9: '('
+            # GOC.g:36:7: ( 'description' )
+            # GOC.g:36:9: 'description'
             pass 
-            self.match(40)
+            self.match("description")
 
 
 
@@ -916,10 +892,10 @@ class GOCLexer(Lexer):
             _type = T__87
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:38:7: ( ')' )
-            # GOC.g:38:9: ')'
+            # GOC.g:37:7: ( '(' )
+            # GOC.g:37:9: '('
             pass 
-            self.match(41)
+            self.match(40)
 
 
 
@@ -941,10 +917,10 @@ class GOCLexer(Lexer):
             _type = T__88
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:39:7: ( 'min' )
-            # GOC.g:39:9: 'min'
+            # GOC.g:38:7: ( ')' )
+            # GOC.g:38:9: ')'
             pass 
-            self.match("min")
+            self.match(41)
 
 
 
@@ -966,10 +942,10 @@ class GOCLexer(Lexer):
             _type = T__89
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:40:7: ( 'max' )
-            # GOC.g:40:9: 'max'
+            # GOC.g:39:7: ( 'min' )
+            # GOC.g:39:9: 'min'
             pass 
-            self.match("max")
+            self.match("min")
 
 
 
@@ -991,10 +967,10 @@ class GOCLexer(Lexer):
             _type = T__90
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:41:7: ( 'default' )
-            # GOC.g:41:9: 'default'
+            # GOC.g:40:7: ( 'max' )
+            # GOC.g:40:9: 'max'
             pass 
-            self.match("default")
+            self.match("max")
 
 
 
@@ -1016,10 +992,10 @@ class GOCLexer(Lexer):
             _type = T__91
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:42:7: ( 'unsigned ' )
-            # GOC.g:42:9: 'unsigned '
+            # GOC.g:41:7: ( 'default' )
+            # GOC.g:41:9: 'default'
             pass 
-            self.match("unsigned ")
+            self.match("default")
 
 
 
@@ -1041,10 +1017,10 @@ class GOCLexer(Lexer):
             _type = T__92
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:43:7: ( 'long' )
-            # GOC.g:43:9: 'long'
+            # GOC.g:42:7: ( 'unsigned ' )
+            # GOC.g:42:9: 'unsigned '
             pass 
-            self.match("long")
+            self.match("unsigned ")
 
 
 
@@ -1066,10 +1042,10 @@ class GOCLexer(Lexer):
             _type = T__93
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:44:7: ( 'null' )
-            # GOC.g:44:9: 'null'
+            # GOC.g:43:7: ( 'long' )
+            # GOC.g:43:9: 'long'
             pass 
-            self.match("null")
+            self.match("long")
 
 
 
@@ -1091,10 +1067,10 @@ class GOCLexer(Lexer):
             _type = T__94
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:45:7: ( 'ref' )
-            # GOC.g:45:9: 'ref'
+            # GOC.g:44:7: ( 'null' )
+            # GOC.g:44:9: 'null'
             pass 
-            self.match("ref")
+            self.match("null")
 
 
 
@@ -1116,10 +1092,10 @@ class GOCLexer(Lexer):
             _type = T__95
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:46:7: ( 'list' )
-            # GOC.g:46:9: 'list'
+            # GOC.g:45:7: ( 'ref' )
+            # GOC.g:45:9: 'ref'
             pass 
-            self.match("list")
+            self.match("ref")
 
 
 
@@ -1141,10 +1117,10 @@ class GOCLexer(Lexer):
             _type = T__96
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:47:7: ( '::' )
-            # GOC.g:47:9: '::'
+            # GOC.g:46:7: ( 'list' )
+            # GOC.g:46:9: 'list'
             pass 
-            self.match("::")
+            self.match("list")
 
 
 
@@ -1166,10 +1142,10 @@ class GOCLexer(Lexer):
             _type = T__97
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:48:7: ( '-' )
-            # GOC.g:48:9: '-'
+            # GOC.g:47:7: ( '::' )
+            # GOC.g:47:9: '::'
             pass 
-            self.match(45)
+            self.match("::")
 
 
 
@@ -1184,6 +1160,31 @@ class GOCLexer(Lexer):
 
 
 
+    # $ANTLR start "T__98"
+    def mT__98(self, ):
+
+        try:
+            _type = T__98
+            _channel = DEFAULT_CHANNEL
+
+            # GOC.g:48:7: ( '-' )
+            # GOC.g:48:9: '-'
+            pass 
+            self.match(45)
+
+
+
+            self._state.type = _type
+            self._state.channel = _channel
+
+        finally:
+
+            pass
+
+    # $ANTLR end "T__98"
+
+
+
     # $ANTLR start "COMMENT"
     def mCOMMENT(self, ):
 
@@ -1191,7 +1192,7 @@ class GOCLexer(Lexer):
             _type = COMMENT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:226:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
+            # GOC.g:227:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
             alt4 = 2
             LA4_0 = self.input.LA(1)
 
@@ -1213,10 +1214,10 @@ class GOCLexer(Lexer):
                 raise nvae
 
             if alt4 == 1:
-                # GOC.g:226:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                # GOC.g:227:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                 pass 
                 self.match("//")
-                # GOC.g:226:14: (~ ( '\\n' | '\\r' ) )*
+                # GOC.g:227:14: (~ ( '\\n' | '\\r' ) )*
                 while True: #loop1
                     alt1 = 2
                     LA1_0 = self.input.LA(1)
@@ -1226,7 +1227,7 @@ class GOCLexer(Lexer):
 
 
                     if alt1 == 1:
-                        # GOC.g:226:14: ~ ( '\\n' | '\\r' )
+                        # GOC.g:227:14: ~ ( '\\n' | '\\r' )
                         pass 
                         if (0 <= self.input.LA(1) <= 9) or (11 <= self.input.LA(1) <= 12) or (14 <= self.input.LA(1) <= 65535):
                             self.input.consume()
@@ -1239,14 +1240,14 @@ class GOCLexer(Lexer):
 
                     else:
                         break #loop1
-                # GOC.g:226:28: ( '\\r' )?
+                # GOC.g:227:28: ( '\\r' )?
                 alt2 = 2
                 LA2_0 = self.input.LA(1)
 
                 if (LA2_0 == 13) :
                     alt2 = 1
                 if alt2 == 1:
-                    # GOC.g:226:28: '\\r'
+                    # GOC.g:227:28: '\\r'
                     pass 
                     self.match(13)
 
@@ -1259,10 +1260,10 @@ class GOCLexer(Lexer):
 
 
             elif alt4 == 2:
-                # GOC.g:227:9: '/*' ( options {greedy=false; } : . )* '*/'
+                # GOC.g:228:9: '/*' ( options {greedy=false; } : . )* '*/'
                 pass 
                 self.match("/*")
-                # GOC.g:227:14: ( options {greedy=false; } : . )*
+                # GOC.g:228:14: ( options {greedy=false; } : . )*
                 while True: #loop3
                     alt3 = 2
                     LA3_0 = self.input.LA(1)
@@ -1281,7 +1282,7 @@ class GOCLexer(Lexer):
 
 
                     if alt3 == 1:
-                        # GOC.g:227:42: .
+                        # GOC.g:228:42: .
                         pass 
                         self.matchAny()
 
@@ -1312,8 +1313,8 @@ class GOCLexer(Lexer):
             _type = WS
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:230:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            # GOC.g:230:9: ( ' ' | '\\t' | '\\r' | '\\n' )
+            # GOC.g:231:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            # GOC.g:231:9: ( ' ' | '\\t' | '\\r' | '\\n' )
             pass 
             if (9 <= self.input.LA(1) <= 10) or self.input.LA(1) == 13 or self.input.LA(1) == 32:
                 self.input.consume()
@@ -1346,7 +1347,7 @@ class GOCLexer(Lexer):
             _type = BOOLVALUE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:238:5: ( 'true' | 'false' )
+            # GOC.g:239:5: ( 'true' | 'false' )
             alt5 = 2
             LA5_0 = self.input.LA(1)
 
@@ -1360,13 +1361,13 @@ class GOCLexer(Lexer):
                 raise nvae
 
             if alt5 == 1:
-                # GOC.g:238:9: 'true'
+                # GOC.g:239:9: 'true'
                 pass 
                 self.match("true")
 
 
             elif alt5 == 2:
-                # GOC.g:239:9: 'false'
+                # GOC.g:240:9: 'false'
                 pass 
                 self.match("false")
 
@@ -1389,8 +1390,8 @@ class GOCLexer(Lexer):
             _type = PACKAGE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:243:5: ( 'package' )
-            # GOC.g:243:9: 'package'
+            # GOC.g:244:5: ( 'package' )
+            # GOC.g:244:9: 'package'
             pass 
             self.match("package")
 
@@ -1414,8 +1415,8 @@ class GOCLexer(Lexer):
             _type = GOBJECT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:247:2: ( 'gobject' )
-            # GOC.g:247:4: 'gobject'
+            # GOC.g:248:2: ( 'gobject' )
+            # GOC.g:248:4: 'gobject'
             pass 
             self.match("gobject")
 
@@ -1439,8 +1440,8 @@ class GOCLexer(Lexer):
             _type = GINTERFACE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:251:2: ( 'ginterface' )
-            # GOC.g:251:4: 'ginterface'
+            # GOC.g:252:2: ( 'ginterface' )
+            # GOC.g:252:4: 'ginterface'
             pass 
             self.match("ginterface")
 
@@ -1464,8 +1465,8 @@ class GOCLexer(Lexer):
             _type = GTYPE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:255:5: ( 'gtype' )
-            # GOC.g:255:9: 'gtype'
+            # GOC.g:256:5: ( 'gtype' )
+            # GOC.g:256:9: 'gtype'
             pass 
             self.match("gtype")
 
@@ -1489,8 +1490,8 @@ class GOCLexer(Lexer):
             _type = GTYPENAME
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:259:5: ( 'gtypename' )
-            # GOC.g:259:9: 'gtypename'
+            # GOC.g:260:5: ( 'gtypename' )
+            # GOC.g:260:9: 'gtypename'
             pass 
             self.match("gtypename")
 
@@ -1514,8 +1515,8 @@ class GOCLexer(Lexer):
             _type = ERROR_DOMAIN
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:263:5: ( 'gerror' )
-            # GOC.g:263:9: 'gerror'
+            # GOC.g:264:5: ( 'gerror' )
+            # GOC.g:264:9: 'gerror'
             pass 
             self.match("gerror")
 
@@ -1539,8 +1540,8 @@ class GOCLexer(Lexer):
             _type = ENUMERATION
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:267:5: ( 'genum' )
-            # GOC.g:267:9: 'genum'
+            # GOC.g:268:5: ( 'genum' )
+            # GOC.g:268:9: 'genum'
             pass 
             self.match("genum")
 
@@ -1564,8 +1565,8 @@ class GOCLexer(Lexer):
             _type = FLAGS
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:271:5: ( 'gflags' )
-            # GOC.g:271:9: 'gflags'
+            # GOC.g:272:5: ( 'gflags' )
+            # GOC.g:272:9: 'gflags'
             pass 
             self.match("gflags")
 
@@ -1589,8 +1590,8 @@ class GOCLexer(Lexer):
             _type = SUPER
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:275:2: ( 'super' )
-            # GOC.g:275:4: 'super'
+            # GOC.g:276:2: ( 'super' )
+            # GOC.g:276:4: 'super'
             pass 
             self.match("super")
 
@@ -1614,8 +1615,8 @@ class GOCLexer(Lexer):
             _type = PREFIX
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:279:5: ( 'prefix' )
-            # GOC.g:279:9: 'prefix'
+            # GOC.g:280:5: ( 'prefix' )
+            # GOC.g:280:9: 'prefix'
             pass 
             self.match("prefix")
 
@@ -1639,8 +1640,8 @@ class GOCLexer(Lexer):
             _type = IMPLEMENTS
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:283:2: ( 'implements' )
-            # GOC.g:283:4: 'implements'
+            # GOC.g:284:2: ( 'implements' )
+            # GOC.g:284:4: 'implements'
             pass 
             self.match("implements")
 
@@ -1664,8 +1665,8 @@ class GOCLexer(Lexer):
             _type = CONSTRUCTOR
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:287:2: ( 'constructor' )
-            # GOC.g:287:4: 'constructor'
+            # GOC.g:288:2: ( 'constructor' )
+            # GOC.g:288:4: 'constructor'
             pass 
             self.match("constructor")
 
@@ -1689,8 +1690,8 @@ class GOCLexer(Lexer):
             _type = METHOD
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:291:2: ( 'method' )
-            # GOC.g:291:4: 'method'
+            # GOC.g:292:2: ( 'method' )
+            # GOC.g:292:4: 'method'
             pass 
             self.match("method")
 
@@ -1714,8 +1715,8 @@ class GOCLexer(Lexer):
             _type = OVERRIDE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:295:2: ( 'override' )
-            # GOC.g:295:4: 'override'
+            # GOC.g:296:2: ( 'override' )
+            # GOC.g:296:4: 'override'
             pass 
             self.match("override")
 
@@ -1739,8 +1740,8 @@ class GOCLexer(Lexer):
             _type = PARAMETER
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:299:2: ( 'parameter' )
-            # GOC.g:299:4: 'parameter'
+            # GOC.g:300:2: ( 'parameter' )
+            # GOC.g:300:4: 'parameter'
             pass 
             self.match("parameter")
 
@@ -1764,8 +1765,8 @@ class GOCLexer(Lexer):
             _type = ATTRIBUTE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:303:2: ( 'attribute' )
-            # GOC.g:303:4: 'attribute'
+            # GOC.g:304:2: ( 'attribute' )
+            # GOC.g:304:4: 'attribute'
             pass 
             self.match("attribute")
 
@@ -1789,8 +1790,8 @@ class GOCLexer(Lexer):
             _type = PROPERTY
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:307:2: ( 'property' )
-            # GOC.g:307:4: 'property'
+            # GOC.g:308:2: ( 'property' )
+            # GOC.g:308:4: 'property'
             pass 
             self.match("property")
 
@@ -1814,8 +1815,8 @@ class GOCLexer(Lexer):
             _type = INIT_PROPERTIES
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:311:5: ( 'init_properties' )
-            # GOC.g:311:9: 'init_properties'
+            # GOC.g:312:5: ( 'init_properties' )
+            # GOC.g:312:9: 'init_properties'
             pass 
             self.match("init_properties")
 
@@ -1839,8 +1840,8 @@ class GOCLexer(Lexer):
             _type = SIGNAL
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:315:2: ( 'signal' )
-            # GOC.g:315:4: 'signal'
+            # GOC.g:316:2: ( 'signal' )
+            # GOC.g:316:4: 'signal'
             pass 
             self.match("signal")
 
@@ -1864,8 +1865,8 @@ class GOCLexer(Lexer):
             _type = RESULT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:319:2: ( 'result' )
-            # GOC.g:319:4: 'result'
+            # GOC.g:320:2: ( 'result' )
+            # GOC.g:320:4: 'result'
             pass 
             self.match("result")
 
@@ -1889,8 +1890,8 @@ class GOCLexer(Lexer):
             _type = TYPE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:322:5: ( 'type' )
-            # GOC.g:322:7: 'type'
+            # GOC.g:323:5: ( 'type' )
+            # GOC.g:323:7: 'type'
             pass 
             self.match("type")
 
@@ -1914,8 +1915,8 @@ class GOCLexer(Lexer):
             _type = MODIFIERS
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:325:2: ( 'modifiers' )
-            # GOC.g:325:4: 'modifiers'
+            # GOC.g:326:2: ( 'modifiers' )
+            # GOC.g:326:4: 'modifiers'
             pass 
             self.match("modifiers")
 
@@ -1939,8 +1940,8 @@ class GOCLexer(Lexer):
             _type = SCOPE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:329:2: ( 'scope' )
-            # GOC.g:329:4: 'scope'
+            # GOC.g:330:2: ( 'scope' )
+            # GOC.g:330:4: 'scope'
             pass 
             self.match("scope")
 
@@ -1964,8 +1965,8 @@ class GOCLexer(Lexer):
             _type = VISIBILITY
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:333:2: ( 'visibility' )
-            # GOC.g:333:4: 'visibility'
+            # GOC.g:334:2: ( 'visibility' )
+            # GOC.g:334:4: 'visibility'
             pass 
             self.match("visibility")
 
@@ -1989,8 +1990,8 @@ class GOCLexer(Lexer):
             _type = INHERITANCE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:337:2: ( 'inheritance' )
-            # GOC.g:337:4: 'inheritance'
+            # GOC.g:338:2: ( 'inheritance' )
+            # GOC.g:338:4: 'inheritance'
             pass 
             self.match("inheritance")
 
@@ -2014,8 +2015,8 @@ class GOCLexer(Lexer):
             _type = ABSTRACT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:341:5: ( 'abstract' )
-            # GOC.g:341:9: 'abstract'
+            # GOC.g:342:5: ( 'abstract' )
+            # GOC.g:342:9: 'abstract'
             pass 
             self.match("abstract")
 
@@ -2039,8 +2040,8 @@ class GOCLexer(Lexer):
             _type = AUTO_CREATE
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:345:5: ( 'auto_create' )
-            # GOC.g:345:9: 'auto_create'
+            # GOC.g:346:5: ( 'auto_create' )
+            # GOC.g:346:9: 'auto_create'
             pass 
             self.match("auto_create")
 
@@ -2064,8 +2065,8 @@ class GOCLexer(Lexer):
             _type = ID
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:348:5: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            # GOC.g:348:7: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            # GOC.g:349:5: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            # GOC.g:349:7: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             pass 
             if (65 <= self.input.LA(1) <= 90) or self.input.LA(1) == 95 or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
@@ -2074,7 +2075,7 @@ class GOCLexer(Lexer):
                 self.recover(mse)
                 raise mse
 
-            # GOC.g:348:31: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            # GOC.g:349:31: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             while True: #loop6
                 alt6 = 2
                 LA6_0 = self.input.LA(1)
@@ -2118,11 +2119,11 @@ class GOCLexer(Lexer):
             _type = STRING
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:356:5: ( '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"' )
-            # GOC.g:356:8: '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"'
+            # GOC.g:361:5: ( '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"' )
+            # GOC.g:361:8: '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"'
             pass 
             self.match(34)
-            # GOC.g:356:12: ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )*
+            # GOC.g:361:12: ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )*
             while True: #loop7
                 alt7 = 3
                 LA7_0 = self.input.LA(1)
@@ -2134,13 +2135,13 @@ class GOCLexer(Lexer):
 
 
                 if alt7 == 1:
-                    # GOC.g:356:14: ESC_SEQ
+                    # GOC.g:361:14: ESC_SEQ
                     pass 
                     self.mESC_SEQ()
 
 
                 elif alt7 == 2:
-                    # GOC.g:356:24: ~ ( '\\\\' | '\"' )
+                    # GOC.g:361:24: ~ ( '\\\\' | '\"' )
                     pass 
                     if (0 <= self.input.LA(1) <= 33) or (35 <= self.input.LA(1) <= 91) or (93 <= self.input.LA(1) <= 65535):
                         self.input.consume()
@@ -2175,17 +2176,17 @@ class GOCLexer(Lexer):
             _type = INT
             _channel = DEFAULT_CHANNEL
 
-            # GOC.g:359:5: ( ( '1' .. '9' ) ( '0' .. '9' )* )
-            # GOC.g:359:9: ( '1' .. '9' ) ( '0' .. '9' )*
+            # GOC.g:364:5: ( ( '1' .. '9' ) ( '0' .. '9' )* )
+            # GOC.g:364:9: ( '1' .. '9' ) ( '0' .. '9' )*
             pass 
-            # GOC.g:359:9: ( '1' .. '9' )
-            # GOC.g:359:10: '1' .. '9'
+            # GOC.g:364:9: ( '1' .. '9' )
+            # GOC.g:364:10: '1' .. '9'
             pass 
             self.matchRange(49, 57)
 
 
 
-            # GOC.g:359:19: ( '0' .. '9' )*
+            # GOC.g:364:19: ( '0' .. '9' )*
             while True: #loop8
                 alt8 = 2
                 LA8_0 = self.input.LA(1)
@@ -2195,7 +2196,7 @@ class GOCLexer(Lexer):
 
 
                 if alt8 == 1:
-                    # GOC.g:359:20: '0' .. '9'
+                    # GOC.g:364:20: '0' .. '9'
                     pass 
                     self.matchRange(48, 57)
 
@@ -2220,8 +2221,8 @@ class GOCLexer(Lexer):
     def mHEX_DIGIT(self, ):
 
         try:
-            # GOC.g:363:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
-            # GOC.g:363:13: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
+            # GOC.g:368:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            # GOC.g:368:13: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
             pass 
             if (48 <= self.input.LA(1) <= 57) or (65 <= self.input.LA(1) <= 70) or (97 <= self.input.LA(1) <= 102):
                 self.input.consume()
@@ -2246,7 +2247,7 @@ class GOCLexer(Lexer):
     def mESC_SEQ(self, ):
 
         try:
-            # GOC.g:367:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
+            # GOC.g:372:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
             alt9 = 3
             LA9_0 = self.input.LA(1)
 
@@ -2269,7 +2270,7 @@ class GOCLexer(Lexer):
                 raise nvae
 
             if alt9 == 1:
-                # GOC.g:367:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
+                # GOC.g:372:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
                 pass 
                 self.match(92)
                 if self.input.LA(1) == 34 or self.input.LA(1) == 39 or self.input.LA(1) == 92 or self.input.LA(1) == 98 or self.input.LA(1) == 102 or self.input.LA(1) == 110 or self.input.LA(1) == 114 or self.input.LA(1) == 116:
@@ -2282,13 +2283,13 @@ class GOCLexer(Lexer):
 
 
             elif alt9 == 2:
-                # GOC.g:368:9: UNICODE_ESC
+                # GOC.g:373:9: UNICODE_ESC
                 pass 
                 self.mUNICODE_ESC()
 
 
             elif alt9 == 3:
-                # GOC.g:369:9: OCTAL_ESC
+                # GOC.g:374:9: OCTAL_ESC
                 pass 
                 self.mOCTAL_ESC()
 
@@ -2306,7 +2307,7 @@ class GOCLexer(Lexer):
     def mOCTAL_ESC(self, ):
 
         try:
-            # GOC.g:374:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
+            # GOC.g:379:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
             alt10 = 3
             LA10_0 = self.input.LA(1)
 
@@ -2343,25 +2344,25 @@ class GOCLexer(Lexer):
                 raise nvae
 
             if alt10 == 1:
-                # GOC.g:374:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                # GOC.g:379:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                 pass 
                 self.match(92)
-                # GOC.g:374:14: ( '0' .. '3' )
-                # GOC.g:374:15: '0' .. '3'
+                # GOC.g:379:14: ( '0' .. '3' )
+                # GOC.g:379:15: '0' .. '3'
                 pass 
                 self.matchRange(48, 51)
 
 
 
-                # GOC.g:374:25: ( '0' .. '7' )
-                # GOC.g:374:26: '0' .. '7'
+                # GOC.g:379:25: ( '0' .. '7' )
+                # GOC.g:379:26: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
 
 
-                # GOC.g:374:36: ( '0' .. '7' )
-                # GOC.g:374:37: '0' .. '7'
+                # GOC.g:379:36: ( '0' .. '7' )
+                # GOC.g:379:37: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
@@ -2370,18 +2371,18 @@ class GOCLexer(Lexer):
 
 
             elif alt10 == 2:
-                # GOC.g:375:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
+                # GOC.g:380:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
                 pass 
                 self.match(92)
-                # GOC.g:375:14: ( '0' .. '7' )
-                # GOC.g:375:15: '0' .. '7'
+                # GOC.g:380:14: ( '0' .. '7' )
+                # GOC.g:380:15: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
 
 
-                # GOC.g:375:25: ( '0' .. '7' )
-                # GOC.g:375:26: '0' .. '7'
+                # GOC.g:380:25: ( '0' .. '7' )
+                # GOC.g:380:26: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
@@ -2390,11 +2391,11 @@ class GOCLexer(Lexer):
 
 
             elif alt10 == 3:
-                # GOC.g:376:9: '\\\\' ( '0' .. '7' )
+                # GOC.g:381:9: '\\\\' ( '0' .. '7' )
                 pass 
                 self.match(92)
-                # GOC.g:376:14: ( '0' .. '7' )
-                # GOC.g:376:15: '0' .. '7'
+                # GOC.g:381:14: ( '0' .. '7' )
+                # GOC.g:381:15: '0' .. '7'
                 pass 
                 self.matchRange(48, 55)
 
@@ -2415,8 +2416,8 @@ class GOCLexer(Lexer):
     def mUNICODE_ESC(self, ):
 
         try:
-            # GOC.g:381:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
-            # GOC.g:381:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+            # GOC.g:386:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            # GOC.g:386:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
             pass 
             self.match(92)
             self.match(117)
@@ -2437,259 +2438,259 @@ class GOCLexer(Lexer):
 
 
     def mTokens(self):
-        # GOC.g:1:8: ( T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | COMMENT | WS | BOOLVALUE | PACKAGE | GOBJECT | GINTERFACE | GTYPE | GTYPENAME | ERROR_DOMAIN | ENUMERATION | FLAGS | SUPER | PREFIX | IMPLEMENTS | CONSTRUCTOR | METHOD | OVERRIDE | PARAMETER | ATTRIBUTE | PROPERTY | INIT_PROPERTIES | SIGNAL | RESULT | TYPE | MODIFIERS | SCOPE | VISIBILITY | INHERITANCE | ABSTRACT | AUTO_CREATE | ID | STRING | INT )
+        # GOC.g:1:8: ( T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | COMMENT | WS | BOOLVALUE | PACKAGE | GOBJECT | GINTERFACE | GTYPE | GTYPENAME | ERROR_DOMAIN | ENUMERATION | FLAGS | SUPER | PREFIX | IMPLEMENTS | CONSTRUCTOR | METHOD | OVERRIDE | PARAMETER | ATTRIBUTE | PROPERTY | INIT_PROPERTIES | SIGNAL | RESULT | TYPE | MODIFIERS | SCOPE | VISIBILITY | INHERITANCE | ABSTRACT | AUTO_CREATE | ID | STRING | INT )
         alt11 = 75
         alt11 = self.dfa11.predict(self.input)
         if alt11 == 1:
-            # GOC.g:1:10: T__56
-            pass 
-            self.mT__56()
-
-
-        elif alt11 == 2:
-            # GOC.g:1:16: T__57
+            # GOC.g:1:10: T__57
             pass 
             self.mT__57()
 
 
-        elif alt11 == 3:
-            # GOC.g:1:22: T__58
+        elif alt11 == 2:
+            # GOC.g:1:16: T__58
             pass 
             self.mT__58()
 
 
-        elif alt11 == 4:
-            # GOC.g:1:28: T__59
+        elif alt11 == 3:
+            # GOC.g:1:22: T__59
             pass 
             self.mT__59()
 
 
-        elif alt11 == 5:
-            # GOC.g:1:34: T__60
+        elif alt11 == 4:
+            # GOC.g:1:28: T__60
             pass 
             self.mT__60()
 
 
-        elif alt11 == 6:
-            # GOC.g:1:40: T__61
+        elif alt11 == 5:
+            # GOC.g:1:34: T__61
             pass 
             self.mT__61()
 
 
-        elif alt11 == 7:
-            # GOC.g:1:46: T__62
+        elif alt11 == 6:
+            # GOC.g:1:40: T__62
             pass 
             self.mT__62()
 
 
-        elif alt11 == 8:
-            # GOC.g:1:52: T__63
+        elif alt11 == 7:
+            # GOC.g:1:46: T__63
             pass 
             self.mT__63()
 
 
-        elif alt11 == 9:
-            # GOC.g:1:58: T__64
+        elif alt11 == 8:
+            # GOC.g:1:52: T__64
             pass 
             self.mT__64()
 
 
-        elif alt11 == 10:
-            # GOC.g:1:64: T__65
+        elif alt11 == 9:
+            # GOC.g:1:58: T__65
             pass 
             self.mT__65()
 
 
-        elif alt11 == 11:
-            # GOC.g:1:70: T__66
+        elif alt11 == 10:
+            # GOC.g:1:64: T__66
             pass 
             self.mT__66()
 
 
-        elif alt11 == 12:
-            # GOC.g:1:76: T__67
+        elif alt11 == 11:
+            # GOC.g:1:70: T__67
             pass 
             self.mT__67()
 
 
-        elif alt11 == 13:
-            # GOC.g:1:82: T__68
+        elif alt11 == 12:
+            # GOC.g:1:76: T__68
             pass 
             self.mT__68()
 
 
-        elif alt11 == 14:
-            # GOC.g:1:88: T__69
+        elif alt11 == 13:
+            # GOC.g:1:82: T__69
             pass 
             self.mT__69()
 
 
-        elif alt11 == 15:
-            # GOC.g:1:94: T__70
+        elif alt11 == 14:
+            # GOC.g:1:88: T__70
             pass 
             self.mT__70()
 
 
-        elif alt11 == 16:
-            # GOC.g:1:100: T__71
+        elif alt11 == 15:
+            # GOC.g:1:94: T__71
             pass 
             self.mT__71()
 
 
-        elif alt11 == 17:
-            # GOC.g:1:106: T__72
+        elif alt11 == 16:
+            # GOC.g:1:100: T__72
             pass 
             self.mT__72()
 
 
-        elif alt11 == 18:
-            # GOC.g:1:112: T__73
+        elif alt11 == 17:
+            # GOC.g:1:106: T__73
             pass 
             self.mT__73()
 
 
-        elif alt11 == 19:
-            # GOC.g:1:118: T__74
+        elif alt11 == 18:
+            # GOC.g:1:112: T__74
             pass 
             self.mT__74()
 
 
-        elif alt11 == 20:
-            # GOC.g:1:124: T__75
+        elif alt11 == 19:
+            # GOC.g:1:118: T__75
             pass 
             self.mT__75()
 
 
-        elif alt11 == 21:
-            # GOC.g:1:130: T__76
+        elif alt11 == 20:
+            # GOC.g:1:124: T__76
             pass 
             self.mT__76()
 
 
-        elif alt11 == 22:
-            # GOC.g:1:136: T__77
+        elif alt11 == 21:
+            # GOC.g:1:130: T__77
             pass 
             self.mT__77()
 
 
-        elif alt11 == 23:
-            # GOC.g:1:142: T__78
+        elif alt11 == 22:
+            # GOC.g:1:136: T__78
             pass 
             self.mT__78()
 
 
-        elif alt11 == 24:
-            # GOC.g:1:148: T__79
+        elif alt11 == 23:
+            # GOC.g:1:142: T__79
             pass 
             self.mT__79()
 
 
-        elif alt11 == 25:
-            # GOC.g:1:154: T__80
+        elif alt11 == 24:
+            # GOC.g:1:148: T__80
             pass 
             self.mT__80()
 
 
-        elif alt11 == 26:
-            # GOC.g:1:160: T__81
+        elif alt11 == 25:
+            # GOC.g:1:154: T__81
             pass 
             self.mT__81()
 
 
-        elif alt11 == 27:
-            # GOC.g:1:166: T__82
+        elif alt11 == 26:
+            # GOC.g:1:160: T__82
             pass 
             self.mT__82()
 
 
-        elif alt11 == 28:
-            # GOC.g:1:172: T__83
+        elif alt11 == 27:
+            # GOC.g:1:166: T__83
             pass 
             self.mT__83()
 
 
-        elif alt11 == 29:
-            # GOC.g:1:178: T__84
+        elif alt11 == 28:
+            # GOC.g:1:172: T__84
             pass 
             self.mT__84()
 
 
-        elif alt11 == 30:
-            # GOC.g:1:184: T__85
+        elif alt11 == 29:
+            # GOC.g:1:178: T__85
             pass 
             self.mT__85()
 
 
-        elif alt11 == 31:
-            # GOC.g:1:190: T__86
+        elif alt11 == 30:
+            # GOC.g:1:184: T__86
             pass 
             self.mT__86()
 
 
-        elif alt11 == 32:
-            # GOC.g:1:196: T__87
+        elif alt11 == 31:
+            # GOC.g:1:190: T__87
             pass 
             self.mT__87()
 
 
-        elif alt11 == 33:
-            # GOC.g:1:202: T__88
+        elif alt11 == 32:
+            # GOC.g:1:196: T__88
             pass 
             self.mT__88()
 
 
-        elif alt11 == 34:
-            # GOC.g:1:208: T__89
+        elif alt11 == 33:
+            # GOC.g:1:202: T__89
             pass 
             self.mT__89()
 
 
-        elif alt11 == 35:
-            # GOC.g:1:214: T__90
+        elif alt11 == 34:
+            # GOC.g:1:208: T__90
             pass 
             self.mT__90()
 
 
-        elif alt11 == 36:
-            # GOC.g:1:220: T__91
+        elif alt11 == 35:
+            # GOC.g:1:214: T__91
             pass 
             self.mT__91()
 
 
-        elif alt11 == 37:
-            # GOC.g:1:226: T__92
+        elif alt11 == 36:
+            # GOC.g:1:220: T__92
             pass 
             self.mT__92()
 
 
-        elif alt11 == 38:
-            # GOC.g:1:232: T__93
+        elif alt11 == 37:
+            # GOC.g:1:226: T__93
             pass 
             self.mT__93()
 
 
-        elif alt11 == 39:
-            # GOC.g:1:238: T__94
+        elif alt11 == 38:
+            # GOC.g:1:232: T__94
             pass 
             self.mT__94()
 
 
-        elif alt11 == 40:
-            # GOC.g:1:244: T__95
+        elif alt11 == 39:
+            # GOC.g:1:238: T__95
             pass 
             self.mT__95()
 
 
-        elif alt11 == 41:
-            # GOC.g:1:250: T__96
+        elif alt11 == 40:
+            # GOC.g:1:244: T__96
             pass 
             self.mT__96()
 
 
-        elif alt11 == 42:
-            # GOC.g:1:256: T__97
+        elif alt11 == 41:
+            # GOC.g:1:250: T__97
             pass 
             self.mT__97()
+
+
+        elif alt11 == 42:
+            # GOC.g:1:256: T__98
+            pass 
+            self.mT__98()
 
 
         elif alt11 == 43:
