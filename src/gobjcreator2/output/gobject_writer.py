@@ -664,7 +664,7 @@ class GObjectWriter(ClassIntfWriter):
                 self.writeln("g_value_get_boolean(value);")
             elif prop.type == PropType.INTEGER:
                 self.write("self->priv->%s = " % prop_name)
-                self.writeln("g_value_get_integer(value);")
+                self.writeln("g_value_get_int(value);")
             elif prop.type == PropType.FLOAT:
                 self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_get_float(value);")
@@ -698,7 +698,7 @@ class GObjectWriter(ClassIntfWriter):
             if prop.type == PropType.BOOLEAN:
                 self.writeln("g_value_set_boolean(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.INTEGER:
-                self.writeln("g_value_set_integer(value, self->priv->%s);" % prop_name)
+                self.writeln("g_value_set_int(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.FLOAT:
                 self.writeln("g_value_set_float(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.DOUBLE:
