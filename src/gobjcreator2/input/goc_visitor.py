@@ -55,10 +55,10 @@ class VisitorStep1(GOCVisitor):
         
     def package_begin(self, name, is_external):
 
-        package = Package(name, 
-                          package = self._get_package(), 
-                          is_external = is_external
-                          )
+        package = Package.get_instance(name,
+				       package = self._get_package(),
+				       is_external = is_external
+				       )
         self._package_stack.append(package)
 
     def package_end(self, name):

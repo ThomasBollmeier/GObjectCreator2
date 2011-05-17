@@ -58,6 +58,7 @@ class Package(PackageElement):
     TOP = None
 
     _SEPARATOR = "::"
+    _instances = {}
 
     @staticmethod
     def get_top():
@@ -66,6 +67,24 @@ class Package(PackageElement):
             Package("", None)
 
         return Package.TOP
+    
+    @staticmethod
+    def get_instance(name,
+                     package,
+                     is_external
+                     ):
+        
+        absname = name
+        parent = package
+        while parent:
+            if parent.name:
+                absname = parent.name + Package._SEPARATOR + absname
+            parent = parent.package
+            
+        if absname not in Package._instances:
+            Package._instances[absname] = Package(name, package, is_external)
+            
+        return Package._instances[absname]
 
     def __init__(self,
                  name,
