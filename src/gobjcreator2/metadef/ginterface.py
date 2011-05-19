@@ -18,11 +18,10 @@
 #
 
 
-from gobjcreator2.metadef.package import PackageElement
-from gobjcreator2.metadef.types import Type
+from gobjcreator2.metadef.clif import ClsIntf
 from gobjcreator2.metadef.method_info import MethodInfo
 
-class GInterface(PackageElement, Type):
+class GInterface(ClsIntf):
 
     def __init__(self,
                  name,
@@ -30,21 +29,15 @@ class GInterface(PackageElement, Type):
                  is_external = False
                  ):
 
-        PackageElement.__init__(self, name, package, is_external)
-        Type.__init__(self)
-
+        ClsIntf.__init__(self, name, package, is_external)
+        
         self.prefix = name # prefix used in function names
 
-        self._methods = {}
         self._signals = {}
         
     def get_name(self):
 
         return self.name
-
-    def add_method(self, method):
-
-        self._methods[method.name] = method
 
     def add_signal(self, signal):
 
@@ -66,12 +59,6 @@ class GInterface(PackageElement, Type):
         return MethodInfo(method, self)
     
     # Properties
-
-    def _get_methods(self):
-
-        return [m for m in self._methods.values()]
-
-    methods = property(_get_methods)
 
     def _get_signals(self):
 

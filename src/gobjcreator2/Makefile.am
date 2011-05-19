@@ -17,6 +17,7 @@ input/reader.py
 
 metadef_PYTHON = \
 metadef/attribute.py \
+metadef/clif.py \
 metadef/constants.py \
 metadef/constructor.py \
 metadef/error_domain.py \

@@ -17,8 +17,7 @@
 # along with GObjectCreator2.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-
-from gobjcreator2.metadef.package import PackageElement
+from gobjcreator2.metadef.clif import ClsIntf
 from gobjcreator2.metadef.types import Type, BOOL, INT, FLOAT, DOUBLE, STRING
 from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method_info import MethodInfo
@@ -27,7 +26,7 @@ from gobjcreator2.metadef.constructor import Constructor
 from gobjcreator2.metadef.attribute import Attribute
 from gobjcreator2.metadef.property import PropType
 
-class GObject(PackageElement, Type):
+class GObject(ClsIntf):
 
     def __init__(self,
                  name,
@@ -36,9 +35,8 @@ class GObject(PackageElement, Type):
                  is_external = False
                  ):
 
-        PackageElement.__init__(self, name, package, is_external)
-        Type.__init__(self)
-
+        ClsIntf.__init__(self, name, package, is_external)
+        
         self._super_class = super_class
         self.abstract = False
         self.prefix = name # prefix to be used in functions
@@ -46,7 +44,6 @@ class GObject(PackageElement, Type):
         self._interfaces = {}
         self._attributes = {}
         self.constructor = Constructor(self)
-        self._methods = {}
         self._overridden = {} # method info for overridden methods
         self._properties = {}
         self._signals = {}
@@ -72,10 +69,6 @@ class GObject(PackageElement, Type):
     def add_attribute(self, attribute):
 
         self._attributes[attribute.name] = attribute
-
-    def add_method(self, method):
-
-        self._methods[method.name] = method
         
     def override(self, method_name):
 
@@ -168,12 +161,6 @@ class GObject(PackageElement, Type):
         return [value for value in self._attributes.values()]
 
     attributes = property(_get_attributes)
-
-    def _get_methods(self):
-
-        return [value for value in self._methods.values()]
-
-    methods = property(_get_methods)
 
     def _get_properties(self):
 
