@@ -342,7 +342,7 @@ class GObjectWriter(ClassIntfWriter):
                           PropType.FLOAT: self._write_propspec_float,
                           PropType.DOUBLE: self._write_propspec_double,
                           PropType.STRING: self._write_propspec_string,
-                          PropType.POINTER: self._write_propspec_string,
+                          PropType.POINTER: self._write_propspec_pointer,
                           PropType.OBJECT: self._write_propspec_object,
                           PropType.ENUMERATION: self._write_propspec_enum
                           }
