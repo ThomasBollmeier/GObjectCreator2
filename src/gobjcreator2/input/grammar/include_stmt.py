@@ -2,7 +2,7 @@
 
 from tbparser.grammar import Rule, tokenNode as tnode
 from tbparser.parser import AstNode
-from gobjcreator2.input.grammar.tokens import INCLUDE, STRING
+from gobjcreator2.input.grammar.tokens import INCLUDE, LITERAL
 
 class IncludeStmt(Rule):
     
@@ -12,7 +12,7 @@ class IncludeStmt(Rule):
         
     def expand(self, start, end, context):
         
-        start.connect(tnode(INCLUDE)).connect(tnode(STRING, 'file')).connect(end)
+        start.connect(tnode(INCLUDE)).connect(tnode(LITERAL, 'file')).connect(end)
         
     def transform(self, astNode):
         

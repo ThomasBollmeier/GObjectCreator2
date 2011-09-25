@@ -1,7 +1,7 @@
 #! coding=UTF-8
 
-from tbparser.grammar import Grammar
-from gobjcreator2.input.grammar.tokens import TOKEN_TYPES
+from tbparser.grammar import Grammar, Switch
+from gobjcreator2.input.grammar.tokens import *
 from gobjcreator2.input.grammar.package_def import PackageDef
 from gobjcreator2.input.grammar.class_def import ClassDef
 from gobjcreator2.input.grammar.intf_def import InterfaceDef
@@ -19,17 +19,16 @@ class GOCGrammar(Grammar):
         
     def expand(self, start, end, context):
         
-        self._connect_branch(PackageDef(), start, end)
-        self._connect_branch(ClassDef(), start, end)
-        self._connect_branch(InterfaceDef(), start, end)
-        self._connect_branch(ErrorDomainDef(), start, end)
-        self._connect_branch(EnumerationDef(), start, end)
-        self._connect_branch(FlagsDef(), start, end)
-        self._connect_branch(TypeDecl(), start, end)
-        self._connect_branch(IncludeStmt(), start, end)
+        switch = Switch({
+                         PACKAGE: PackageDef(),
+                         GOBJECT: ClassDef(),
+                         GINTERFACE: InterfaceDef(),
+                         ERROR_DOMAIN: ErrorDomainDef(),
+                         ENUMERATION: EnumerationDef(),
+                         FLAGS: FlagsDef(),
+                         GTYPE: TypeDecl(),
+                         INCLUDE: IncludeStmt()
+                         })
         
-    def _connect_branch(self, branch, start, end):
-        
-        start.connect(branch)
-        branch.connect(end)
-        branch.connect(start)
+        start.connect(switch).connect(start)
+        start.connect(end)
