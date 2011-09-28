@@ -74,6 +74,26 @@ class Scope(EnumRule):
         values = [INSTANCE, STATIC]
         EnumRule.__init__(self, 'scope', SCOPE, values, ident)
         
+class Prefix(Rule):
+    
+    def __init__(self, ident=''):
+        
+        Rule.__init__(self, 'prefix', ident)
+        
+    def expand(self, start, end, context):
+        
+        start\
+        .connect(tnode(PREFIX))\
+        .connect(tnode(ID, 'id'))\
+        .connect(tnode(SEMICOLON))\
+        .connect(end)
+        
+    def transform(self, astNode):
+        
+        idNode = astNode.getChildById('id')
+        
+        return AstNode(self.getName(), idNode.getText())
+        
 ArgType = defineRule('argType')
 
 @expand(ArgType)

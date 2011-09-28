@@ -6,17 +6,18 @@
 gtype GError;
 
 package audio {
+
+	/*
     
-    /*
     gerror Error {
-	code INVALID_STATUS;
-	code URI_NOT_FOUND;
-	code UNKNOWN_FORMAT;
+		code INVALID_STATUS;
+		code URI_NOT_FOUND;
+		code UNKNOWN_FORMAT;
     }
 	
     genum Format {
     	code MP3;
-	code OGG_VORBIS;
+		code OGG_VORBIS;
     }
 	
     genum PlayerStatus {
@@ -24,6 +25,8 @@ package audio {
     	code PLAYING;
     	code PAUSED;
     }
+    
+    */
     
     ginterface IPlayer {
     
@@ -51,8 +54,6 @@ package audio {
         }
     
     }
-    
-    */
     
     gobject OggPlayer {
     

@@ -43,22 +43,6 @@ def prop_expand(start, end, context):
                      })
     
     start_.connect(switch).connect(start_)
-    
-#    
-#    start_.connect(_PropType('type')).connect(start_)
-#    start_.connect(_Access('access')).connect(start_)
-#    start_.
-#    .connect(tnode(DESCRIPTION))\
-#    .connect(tnode(COLON))\
-#    .connect(tnode(LITERAL, 'description'))\
-#    .connect(tnode(SEMICOLON))\
-#    .connect(start_)
-#    start_.connect(_PropGType('gtype')).connect(start_)
-#    start_.connect(_PropMax('max')).connect(start_)
-#    start_.connect(_PropMin('min')).connect(start_)
-#    start_.connect(_PropDefault('default')).connect(start_)
-#    start_.connect(tnode(AUTO_CREATE, 'auto')).connect(start_)
-
     start_.connect(end_)
         
     end_.connect(tnode(BRACE_CLOSE)).connect(end)
@@ -85,6 +69,10 @@ def prop_transform(astNode):
     util.addOptionalChild(astNode, res, 'max')
     util.addOptionalChild(astNode, res, 'min')
     util.addOptionalChild(astNode, res, 'default')
+    
+    node = astNode.getChildById('auto')
+    if node:
+        res.addChild(AstNode('autoCreate'))
     
     return res
 

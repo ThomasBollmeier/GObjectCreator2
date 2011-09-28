@@ -3,11 +3,11 @@
 from tbparser.grammar import Rule, tokenNode as tnode, connector, oneToMany, Switch
 from tbparser.parser import AstNode
 from gobjcreator2.input.grammar.tokens import *
-from gobjcreator2.input.grammar.method import Method, Parameter
+from gobjcreator2.input.grammar.method import Method, Parameter, Signal
 from gobjcreator2.input.grammar.attribute import Attribute
 from gobjcreator2.input.grammar.property import Property
 from gobjcreator2.input.grammar.type_name import TypePath
-from gobjcreator2.input.grammar.misc_rules import ComposedId, LiteralOrCode
+from gobjcreator2.input.grammar.misc_rules import ComposedId, LiteralOrCode, Prefix
 import gobjcreator2.input.grammar.util as util
 
 class ClassDef(Rule):
@@ -36,7 +36,8 @@ class ClassDef(Rule):
                          METHOD: Method('method'),
                          OVERRIDE: Override('override'),
                          ATTRIBUTE: Attribute('attr'),
-                         PROPERTY: Property('prop')
+                         PROPERTY: Property('prop'),
+                         SIGNAL: Signal('signal')
                          })
         start_.connect(switch).connect(start_)
         start_.connect(end_)
@@ -59,6 +60,7 @@ class ClassDef(Rule):
         self._addOptionalChildren(res, astNode, 'override')
         self._addOptionalChildren(res, astNode, 'attr')
         self._addOptionalChildren(res, astNode, 'prop')
+        self._addOptionalChildren(res, astNode, 'signal')
         
         return res
     
@@ -108,26 +110,6 @@ class Abstract(Rule):
         
         return AstNode(self.getName())
     
-class Prefix(Rule):
-    
-    def __init__(self, ident=''):
-        
-        Rule.__init__(self, 'prefix', ident)
-        
-    def expand(self, start, end, context):
-        
-        start\
-        .connect(tnode(PREFIX))\
-        .connect(tnode(ID, 'id'))\
-        .connect(tnode(SEMICOLON))\
-        .connect(end)
-        
-    def transform(self, astNode):
-        
-        idNode = astNode.getChildById('id')
-        
-        return AstNode(self.getName(), idNode.getText())
-        
 class Implements(Rule):
     
     def __init__(self, ident=''):

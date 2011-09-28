@@ -1,12 +1,13 @@
 #! coding=UTF-8
 
 from tbparser.grammar import Rule, tokenNode as tnode, \
-connector, sequence, zeroToOne, Switch
+connector, sequence, zeroToOne, Switch, oneToMany
 from tbparser.parser import AstNode
 from gobjcreator2.input.grammar.tokens import *
 from gobjcreator2.input.grammar.type_name import TypeName
 from gobjcreator2.input.grammar.misc_rules import ComposedId, \
 Visibility, Inheritance, Scope, Type
+import gobjcreator2.input.grammar.util as util
 
 class Method(Rule):
     
@@ -43,30 +44,45 @@ class Method(Rule):
         
         nameNode = AstNode('name', astNode.getChildById('name').getText())
         res.addChild(nameNode)
-        
-        for param in astNode.getChildrenById('parameter'):
-            param.setId('')
-            res.addChild(param)
             
-        node = astNode.getChildById('result')
-        if node:
-            node.setId('')
-            res.addChild(node)
+        util.addOptionalChildren(astNode, res, 'parameter')
+        util.addOptionalChild(astNode, res, 'result')
+        util.addOptionalChild(astNode, res, 'visi')
+        util.addOptionalChild(astNode, res, 'inh')
+        util.addOptionalChild(astNode, res, 'scope')
+ 
+        return res
+    
+class Signal(Rule):
+    
+    def __init__(self, ident=''):
         
-        node = astNode.getChildById('visi')
-        if node:
-            node.setId('')
-            res.addChild(node)
-
-        node = astNode.getChildById('inh')
-        if node:
-            node.setId('')
-            res.addChild(node)
+        Rule.__init__(self, 'signal', ident)
         
-        node = astNode.getChildById('scope')
-        if node:
-            node.setId('')
-            res.addChild(node)
+    def expand(self, start, end, context):
+        
+        branches = {
+                    PARAMETER: Parameter('parameter'),
+                    RESULT: Result('result')
+                    }       
+        
+        start\
+        .connect(tnode(SIGNAL))\
+        .connect(ComposedId('name'))\
+        .connect(tnode(BRACE_OPEN))\
+        .connect(oneToMany(Switch(branches)))\
+        .connect(tnode(BRACE_CLOSE))\
+        .connect(end)
+        
+    def transform(self, astNode):
+        
+        res = AstNode(self.getName())
+        
+        nameNode = AstNode('name', astNode.getChildById('name').getText())
+        res.addChild(nameNode)
+        
+        util.addOptionalChild(astNode, res, 'result')
+        util.addOptionalChildren(astNode, res, 'parameter')
         
         return res
     
