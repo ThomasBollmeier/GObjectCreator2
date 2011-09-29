@@ -17,9 +17,5 @@ class TypeDecl(Rule):
         
     def transform(self, astNode):
         
-        res = AstNode(self.getName())
+        return AstNode(self.getName(), astNode.getChildById('name').getText())
         
-        nameNode = astNode.getChildById('name')
-        res.addChild(AstNode('name', nameNode.getText()))
-        
-        return res

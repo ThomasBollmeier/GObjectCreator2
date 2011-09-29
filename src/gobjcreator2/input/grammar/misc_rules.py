@@ -186,3 +186,43 @@ def _lc_transform(astNode):
         return res
     
     raise Exception('Literal or code cannot be transformed')
+
+Code = defineRule('code')
+
+@expand(Code)
+def _code_expand(start, end, context):
+    
+    start_ = connector()
+    
+    start\
+    .connect(tnode(CODE))\
+    .connect(tnode(ID, 'name'))\
+    .connect(start_)
+    
+    start_.connect(tnode(SEMICOLON)).connect(end)
+    
+    if context.getEnvVar('ENUMERATION'):
+        
+        start_\
+        .connect(tnode(BRACE_OPEN))\
+        .connect(tnode(VALUE))\
+        .connect(tnode(COLON))\
+        .connect(tnode(INT, 'value'))\
+        .connect(tnode(SEMICOLON))\
+        .connect(tnode(BRACE_CLOSE))\
+        .connect(end)
+
+@transform(Code)
+def _code_transform(astNode):
+    
+    nameNode = astNode.getChildById('name')
+    valNode = astNode.getChildById('value')
+    
+    if not valNode:
+        res = AstNode('code', nameNode.getText())
+    else:
+        res = AstNode('code')
+        res.addChild(AstNode('name', nameNode.getText()))
+        res.addChild(AstNode('value', valNode.getText()))
+    
+    return res

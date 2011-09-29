@@ -13,6 +13,8 @@ class InterfaceDef(Rule):
         
         Rule.__init__(self, 'ginterface', ident)
         
+        self.setEnvVar('INTERFACE', True)
+    
     def expand(self, start, end, context):
         
         branches = {

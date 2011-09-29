@@ -74,9 +74,12 @@ REF = addKeyword('ref')
 LIST = addKeyword('list')
 BIND_PROPERTY = addKeyword('bind_property')
 INIT_PROPERTIES = addKeyword('init_properties')
+CODE = addKeyword('code')
+VALUE = addKeyword('value')
 
 ID = register(Word('[a-zA-Z_][a-zA-Z_0-9]*'))
 LITERAL = register(Literal.get())
+INT = register(Word('[0-9]+'))
 ANY = register(Word('.*'))
 
 DOT = register(Separator('.', False))

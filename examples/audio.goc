@@ -6,8 +6,6 @@
 gtype GError;
 
 package audio {
-
-	/*
     
     gerror Error {
 		code INVALID_STATUS;
@@ -21,12 +19,10 @@ package audio {
     }
 	
     genum PlayerStatus {
-    	code READY;
+    	code READY { value: 100; }
     	code PLAYING;
     	code PAUSED;
     }
-    
-    */
     
     ginterface IPlayer {
     
