@@ -61,8 +61,7 @@ def prop_transform(astNode):
     
     node = astNode.getChildById('description')
     if node:
-        text = node.getText()[1:-1]
-        res.addChild(AstNode('description', text))
+        res.addChild(AstNode('description', node.getText()))
         
     util.addOptionalChild(astNode, res, 'gtype')
     

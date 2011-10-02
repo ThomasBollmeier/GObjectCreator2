@@ -1,19 +1,36 @@
 goc2dir = $(pkgpythondir)
 inputdir = $(goc2dir)/input
+grammardir = $(inputdir)/grammar
 metadefdir = $(goc2dir)/metadef
 outputdir = $(goc2dir)/output
 
 goc2_PYTHON = __init__.py
 
 input_PYTHON = \
-input/GOCLexer.py \
-input/GOCParser.py \
-input/goc_recognizer.py \
-input/GOC.tokens \
-input/goc_tree_adaptor.py \
-input/goc_visitor.py \
 input/__init__.py \
+input/goc_parser.py \
+input/goc_recognizer.py \
+input/goc_visitor.py \
 input/reader.py
+
+grammar_PYTHON = \
+input/grammar/__init__.py \
+input/grammar/attribute.py \
+input/grammar/class_def.py \
+input/grammar/enumeration_def.py \
+input/grammar/error_domain_def.py \
+input/grammar/flags_def.py \
+input/grammar/goc_grammar.py \
+input/grammar/include_stmt.py \
+input/grammar/intf_def.py \
+input/grammar/method.py \
+input/grammar/misc_rules.py \
+input/grammar/package_def.py \
+input/grammar/property.py \
+input/grammar/tokens.py \
+input/grammar/type_decl.py \
+input/grammar/type_name.py \
+input/grammar/util.py
 
 metadef_PYTHON = \
 metadef/attribute.py \

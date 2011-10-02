@@ -17,7 +17,7 @@ fi
 
 # Checks for libraries.
 
-GOC2_CHECK_FOR_TBPARSER
+GOC2_CHECK_FOR_TBPARSER([1.0.12])
 
 # Checks for header files.
 
@@ -27,7 +27,6 @@ GOC2_CHECK_FOR_TBPARSER
 
 AC_CONFIG_FILES([
 Makefile
-data/Makefile
 examples/Makefile
 src/Makefile
 src/gobjcreator2/Makefile

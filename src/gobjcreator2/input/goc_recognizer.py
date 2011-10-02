@@ -17,7 +17,6 @@
 # along with GObjectCreator2.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-
 from gobjcreator2.input.reader import Reader
 from gobjcreator2.input.goc_visitor import VisitorStep1, VisitorStep2, VisitorStep3
 from gobjcreator2.metadef.package import Package
@@ -30,15 +29,14 @@ class GOCRecognizer(object):
 
     def add_include_path(self, path):
 
-        self._reader.add_include_path(path)
+        self._reader.addIncludePath(path)
 
     def process_file(self, file_name):
 
-        self._reader.read_file(file_name)
-        self._reader.set_main_goc_file(file_name)
-        
-        self._reader.walk_syntax_tree(VisitorStep1())
-        self._reader.walk_syntax_tree(VisitorStep2())
-        self._reader.walk_syntax_tree(VisitorStep3())
+        self._reader.readFile(file_name)
+       
+        self._reader.walk(VisitorStep1())
+        self._reader.walk(VisitorStep2())
+        self._reader.walk(VisitorStep3())
 
         return Package.get_top()

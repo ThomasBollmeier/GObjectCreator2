@@ -19,7 +19,7 @@ class IncludeStmt(Rule):
         res = AstNode(self.getName())
         
         fileNode = astNode.getChildById('file')
-        fileName = fileNode.getText().strip('"')
+        fileName = fileNode.getText().strip('"').strip("'")
         res.addChild(AstNode('file', fileName))
         
         return res

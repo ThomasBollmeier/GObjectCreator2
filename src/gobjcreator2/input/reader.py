@@ -17,461 +17,419 @@
 # along with GObjectCreator2.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-
-import antlr3
-from gobjcreator2.input.GOCLexer import GOCLexer
-from gobjcreator2.input.GOCParser import *
-from gobjcreator2.input.goc_tree_adaptor import GOCTreeAdaptor
 import os
+from goc_parser import GOCParser
 
 class Reader(object):
 
     def __init__(self):
-
-        self._walk_method = {
-            PACKAGE: self._walk_package,
-            GOBJECT: self._walk_gobject,
-            GINTERFACE: self._walk_ginterface,
-            GTYPE: self._walk_gtype,
-            ERROR_DOMAIN: self._walk_error_domain,
-            ENUMERATION: self._walk_enumeration,
-            FLAGS: self._walk_flags,
-            METHOD: self._walk_method,
-            CONSTRUCTOR: self._walk_constructor,
-            OVERRIDE: self._walk_override,
-            ATTRIBUTE: self._walk_attribute,
-            PROPERTY: self._walk_property,
-            SIGNAL: self._walk_signal
-        }
-
-        self._adaptor = GOCTreeAdaptor()
-        self._root_node = None
-        self._include_paths = [os.curdir]
-        self._main_goc_file = ""
-
-    def add_include_path(self, path):
-
-        self._include_paths.append(path)
-
-    def read_file(self, file_path):
-
-        self._syntax_tree = {}
-        self._root_node = self._create_ast_from_file(file_path)
         
-    def set_main_goc_file(self, path):
+        self._inclPaths = [os.curdir]
+        self._root = None
         
-        self._main_goc_file = os.path.abspath(path)
+    def addIncludePath(self, path):
 
-    def walk_syntax_tree(self, visitor):
-
-        if self._root_node is None:
-            return
-
-        for child in self._root_node.getChildren():
-            self._walk(child, visitor)
-            
-    def _is_external(self, node):
+        self._inclPaths.append(path)
         
-        return os.path.normpath(node.goc_file_path) != \
-            os.path.normpath(self._main_goc_file)
-            
-    def _create_ast_from_file(self, filename):
-        """
-        read file and return abstract syntax tree (AST)
-        """
-        for path in self._include_paths:
-            file_path = path + os.sep + filename
-            file_path = os.path.abspath(file_path)
-            if os.path.exists(file_path):
-                break
-            else:
-                file_path = ""
-                continue
-            
-        if file_path in self._syntax_tree:
-            return self._syntax_tree[file_path]
-
-        stream = antlr3.ANTLRFileStream(file_path)
-        lexer = GOCLexer(stream)
-        tokens = antlr3.CommonTokenStream(lexer)
-        parser = GOCParser(tokens)
-        parser.adaptor = self._adaptor
-
-        # Set path of currently processed file to separate
-        # external(=included) model parts from the parts in the main file:
-        self._adaptor.set_goc_file_path(file_path)
-        res = parser.defFile().tree
-        self._adaptor.set_goc_file_path("")
-                
-        self._syntax_tree[file_path] = res
-        self._resolve_includes(res)
-
-        return res
-
-    def _resolve_includes(self, tree):
-
-        top_nodes = tree.getChildren()
-
-        for top_node in top_nodes:
-
-            if top_node.getType() == INCLUDE:
-                filename = top_node.getChildren()[0].getText().strip('"')
-                if not filename in self._syntax_tree:
-                    included_tree = self._create_ast_from_file(filename)
-                    new_tree = self._adaptor.nil()
-                    for child in included_tree.getChildren():
-                        new_tree.addChild(child)
-                    index = top_node.getChildIndex()
-                    tree.replaceChildren(index, index, new_tree)
-                else:
-                    # include has already been resolved
-                    tree.deleteChild(top_node.getChildIndex())
-
-    def _walk(self, node, visitor):
+    def readFile(self, fileName):
         
-        type = node.getType()
-
-        try:
-            method = self._walk_method[type]
-            method(node, visitor)
-        except KeyError:
-            for child in node.getChildren():
-                self._walk(child, visitor)
-
-    def _walk_package(self, node, visitor):
-
-        children = node.getChildren()
-        name = children[0].getText()
-
-        visitor.package_begin(name, self._is_external(node))
-
-        for child in children[1:]:
-            self._walk(child, visitor)
+        self._asTrees = {}
+        self._createAst(fileName, True)
         
-        visitor.package_end(name)
-
-    def _walk_gobject(self, node, visitor):
-
-        children = node.getChildren()
-        name = children[0].getText()
-        super = ""
-        interfaces = []
-        attrs = {}
-        other_children = []
-        for child in children[1:]:
-            type  = child.getType()
-            if type == SUPER:
-                super = self._get_type_name(child.children[0])
-            elif type == IMPLEMENTS:
-                interfaces.append(self._get_type_name(child.children[0]))
-            elif type == ABSTRACT:
-                attrs["abstract"] = True
-            elif type == PREFIX:
-                attrs["prefix"] = child.getChildren()[0].getText()
-            else:
-                other_children.append(child)
+    def walk(self, visitor):
         
-        visitor.gobject_begin(name, super, interfaces, 
-                              attrs, self._is_external(node))
-
-        for child in other_children:
-            self._walk(child, visitor)
-
-        visitor.gobject_end(name)
-
-    def _walk_ginterface(self, node, visitor):
-
-        children = node.getChildren()
-        name = children[0].getText()
-        attrs = {}
-        other_children = []
-
-        for child in children[1:]:
-            type = child.getType()
-            if type == PREFIX:
-                attrs["prefix"] = child.getChildren()[0].getText()
-            else:
-                other_children.append(child)
-
-        visitor.ginterface_begin(name, attrs, self._is_external(node))
-
-        for child in other_children:
-            self._walk(child, visitor)
-
-        visitor.ginterface_end(name)
-
-    def _walk_gtype(self, node, visitor):
-
-        name = node.getChildren()[0].getText()
-
-        visitor.gtype(name, self._is_external(node))
-
-    def _walk_error_domain(self, node, visitor):
-
-        name = node.getChildren()[0].getText()
-        codes = []
-        for child in node.getChildren()[1:]:
-            codes.append(child.getText())
-
-        visitor.error_domain(name, codes, self._is_external(node))
-
-    def _walk_enumeration(self, node, visitor):
-
-        name = node.getChildren()[0].getText()
-        codevals = []
-        for child in node.getChildren()[1:]:
-            children = child.getChildren()
-            code = children[0].getText()
+        if not self._root:
+            raise Exception('No syntax tree has been created')
+        
+        self._walkGrammar(visitor)
+        
+    def _walkGrammar(self, visitor):
+        
+        methods = {
+                   'package': self._walkPackage,
+                   'gobject': self._walkGObject,
+                   'ginterface': self._walkGInterface,
+                   'gerror': self._walkGError,
+                   'genum': self._walkGEnum,
+                   'gflags': self._walkGFlags,
+                   'gtype': self._walkGType
+                   }
+        
+        for child in self._root.getChildren():
             try:
-                value = children[1].getText()
-            except IndexError:
-                value = None
-            codevals.append((code, value))
-
-        visitor.enumeration(name, codevals, self._is_external(node))
-
-    def _walk_flags(self, node, visitor):
-
-        name = node.getChildren()[0].getText()
-        codes = []
-        for child in node.getChildren()[1:]:
-            codes.append(child.getText())
-
-        visitor.flags(name, codes, self._is_external(node))
-
-    def _walk_method(self, node, visitor):
-
-        name = node.getChildren()[0].getText()
-        attrs = {}
-        result_info = None
-        parameters = []
-
-        for child in node.getChildren()[1:]:
-            type = child.getType()
-            if type == VISIBILITY:
-                attrs["visibility"] = child.getChildren()[0].getText()
-            elif type == SCOPE:
-                attrs["scope"] = child.getChildren()[0].getText()
-            elif type == INHERITANCE:
-                attrs["inheritance"] = child.getChildren()[0].getText()
-            elif type == RESULT:
-                result_type_node = child.getChildren()[0]
-                result_type_info = self._get_type_info(result_type_node)
-                try:
-                    modifiers_node = child.getChildren()[1]
-                    modifiers = self._get_modifiers(modifiers_node)
-                except IndexError:
-                    modifiers = []
-                result_info = ParamInfo("", result_type_info, modifiers)
-            elif type == PARAMETER:
-                param_name = child.getChildren()[0].getText()
-                param_type_info = self._get_type_info(child.getChildren()[1])
-                try:
-                    modifiers = self._get_modifiers(child.getChildren()[2])
-                except IndexError:
-                    modifiers = []
-                parameters.append(ParamInfo(param_name, param_type_info, modifiers))
-
-        visitor.method_begin(name, attrs, result_info)
-
-        for param_info in parameters:
-            visitor.parameter(param_info)
-
-        visitor.method_end(name)
-
-    def _walk_constructor(self, node, visitor):
-
-        parameters = []
-        prop_inits = {}
-
-        for child in node.getChildren():
-            type = child.getType()
-            if type == PARAMETER:
-                param_name = child.getChildren()[0].getText()
-                param_type_info = self._get_type_info(child.getChildren()[1])
-                modifiers = []
-                bind_to = ""
-                try:
-                    for node in child.getChildren()[2:]:
-                        if node.getType() == MODIFIERS:
-                            modifiers = self._get_modifiers(node)
-                        elif node.getType() == BIND_PROPERTY:
-                            bind_to = self._get_prop_id(node.getChildren()[0])
-                except IndexError:
-                    pass
-                parameters.append(ConstructorParamInfo(
-                        param_name, param_type_info, modifiers, bind_to
-                        ))
-            elif type == INIT_PROPERTIES:
-                props = child.getChildren()
-                for prop in props:
-                    name = self._get_prop_id(prop.getChildren()[0])
-                    args = prop.getChildren()[1:]
-                    if len(args) == 1:
-                        value_name = args[0].getText()
-                        is_code = False
-                    else:
-                        value_name = self._get_type_name(args[0])
-                        value_name += "." + args[1].getText()
-                        is_code = True
-                    prop_inits[name] = PropInitValue(value_name, is_code)
+                methods[child.getName()](child, visitor)
+            except KeyError:
+                pass
+        
+    def _walkPackage(self, package, visitor):
+        
+        methods = {
+                   'package': self._walkPackage,
+                   'gobject': self._walkGObject,
+                   'ginterface': self._walkGInterface,
+                   'gerror': self._walkGError,
+                   'genum': self._walkGEnum,
+                   'gflags': self._walkGFlags,
+                   'gtype': self._walkGType
+                   }
+        
+        name = package.getChild('name').getText()
+        
+        visitor.package_begin(name, self._isExternal(package))
+        
+        for child in package.getChildren():
+            
+            childName = child.getName()
+            if childName in methods:
+                methods[childName](child, visitor)
                     
-        visitor.constructor_begin(prop_inits)
-
-        for param_info in parameters:
-            visitor.parameter(param_info)
-
+        visitor.package_end(name)
+    
+    def _walkGObject(self, gobject, visitor):
+        
+        name = gobject.getChild('name').getText()
+        
+        node = gobject.getChild('super')
+        if node:
+            super = node.getText()
+        else:
+            super = ''
+        
+        interfaces = []
+        for node in gobject.getChildrenByName('implements'):
+            interfaces.append(node.getText())
+        
+        attrs = {}
+        self._addAttr(attrs, gobject, 'abstract')
+        self._addAttr(attrs, gobject, 'prefix')
+                
+        visitor.gobject_begin(name,
+                              super,
+                              interfaces,
+                              attrs,
+                              self._isExternal(gobject)
+                              )
+        
+        methods = {
+                   'constructor': self._walkConstructor,
+                   'method': self._walkMethod,
+                   'override': self._walkOverride,
+                   'attribute': self._walkAttribute,
+                   'property': self._walkProperty,
+                   'signal': self._walkSignal
+                   }
+        
+        for child in gobject.getChildren():
+            
+            childName = child.getName()
+            if childName in methods:
+                methods[childName](child, visitor)
+            
+        visitor.gobject_end(name)
+        
+    def _walkConstructor(self, constructor, visitor):
+        
+        propInits = {}
+        node = constructor.getChild('initProperties')
+        if node:
+            for child in node.getChildren():
+                propName = child.getChild('name').getText()
+                value = child.getChild('value')
+                if value:
+                    valueName = value.getText()
+                    isCode = False
+                else:
+                    codeValue = child.getChild('codeValue')
+                    valueName = codeValue.getChild('enum').getText()
+                    valueName += '.' + codeValue.getChild('code').getText()
+                    isCode = True
+                propInits[propName] = PropInitValue(valueName, isCode)
+        
+        visitor.constructor_begin(propInits)
+        
+        for paramInfo in self._getParameters(constructor, isConstructor=True):
+            visitor.parameter(paramInfo)
+                
         visitor.constructor_end()
-
-    def _walk_signal(self, node, visitor):
-
-        children = node.getChildren()
-
-        signal_parts = children[0].getChildren()
-        name = ""
-        for signal_part in signal_parts:
-            if name:
-                name += "-"
-            name += signal_part.getText()
-        result_type = None
-        result_modifiers = []
-        args = []
-
-        for child in children[1:]:
-            type = child.getType()
-            if type == RESULT:
-                children = child.getChildren()
-                result_type = self._get_type_info(children[0])
-                if len(children) == 1:
-                    result_modifiers = []
-                else:
-                    result_modifiers = self._get_modifiers(children[1])
-            elif type == PARAMETER:
-                children = child.getChildren()
-                arg_name = children[0].getText()
-                arg_type = self._get_type_info(children[1])
-                if len(children) == 2:
-                    arg_modifiers = []
-                else:
-                    arg_modifiers = self._get_modifiers(children[2])
-                args.append((arg_name, arg_type, arg_modifiers))
-
-        visitor.signal(name, result_type, result_modifiers, args)
-
-    def _walk_override(self, node, visitor):
-
-        method_name = node.getChildren()[0].getText()
-
-        visitor.override(method_name)
-
-    def _walk_attribute(self, node, visitor):
-
-        children = node.getChildren()
-        name = children[0].getText()
-        type_info = self._get_type_info(children[1])
+        
+    def _walkMethod(self, method, visitor):
+        
+        name = method.getChild('name').getText()
         attrs = {}
-
-        for child in children[2:]:
-            token_type = child.getType()
-            if token_type == SCOPE:
-                attrs["scope"] = child.getChildren()[0].getText()
-            elif token_type == VISIBILITY:
-                attrs["visibility"] = child.getChildren()[0].getText()
-
-        visitor.attribute(name, type_info, attrs)
-
-    def _walk_property(self, node, visitor):
-
-        children = node.getChildren()
-        name = self._get_prop_id(children[0])
+        resultNode = method.getChild('result')
+        if resultNode:
+            typeNode = self._getTypeNode(resultNode)
+            resultTypeInfo = typeNode and self._getTypeInfo(typeNode) or None
+            modifiers = self._getModifiers(resultNode)
+            resultInfo = ParamInfo('', resultTypeInfo, modifiers)
+        else:
+            resultInfo = None
+            
+        self._addAttr(attrs, method, 'scope')
+        self._addAttr(attrs, method, 'visibility')
+        self._addAttr(attrs, method, 'inheritance')
+        
+        visitor.method_begin(name, attrs, resultInfo)
+        
+        for paramInfo in self._getParameters(method):
+            visitor.parameter(paramInfo)
+        
+        visitor.method_end(name)
+        
+    def _walkOverride(self, override, visitor):
+        
+        visitor.override(override.getText())
+        
+    def _walkAttribute(self, attribute, visitor):
+        
+        name = attribute.getChild('name').getText()
+        typeInfo = self._getTypeInfo(self._getTypeNode(attribute))
         attrs = {}
-
-        for child in children[1:]:
-            token_type = child.getType()
-            if token_type == PROP_TYPE:
-                attrs["type"] = child.getChildren()[0].getText()
-            elif token_type == PROP_GTYPE:
-                arg = child.getChildren()[0]
-                if not arg.getType() == GTYPENAME:
-                    type_value = GTypeValue(arg.getText())
-                else:
-                    type_name = self._get_type_name(arg.getChildren()[0])
-                    is_typename = True
-                    type_value = GTypeValue(type_name, is_typename)
-                attrs["gtype"] = type_value
-            elif token_type == PROP_ACCESS:
-                attrs["access"] = child.getChildren()[0].getText()
-            elif token_type == PROP_DESC:
-                attrs["description"] = child.getChildren()[0].getText()
-            elif token_type == PROP_MIN:
-                attrs["min"] = self._get_prop_value(child)
-            elif token_type == PROP_MAX:
-                attrs["max"] = self._get_prop_value(child)
-            elif token_type == PROP_DEFAULT:
-                attrs["default"] = self._get_prop_value(child)
-            elif token_type == AUTO_CREATE:
-                attrs["auto_create"] = True
-
+        self._addAttr(attrs, attribute, 'scope')
+        self._addAttr(attrs, attribute, 'visibility')
+        
+        visitor.attribute(name, typeInfo, attrs)
+        
+    def _walkProperty(self, prop, visitor):
+        
+        name = prop.getChild('name').getText()
+        
+        attrs = {}
+        
+        self._addAttr(attrs, prop, 'type')
+        self._addAttr(attrs, prop, 'access')
+        self._addAttr(attrs, prop, 'description')
+        
+        gtypeNode = prop.getChild('gtype')
+        if gtypeNode:
+            if gtypeNode.hasChildren():
+                gtypeName = gtypeNode.getChild('typeName').getText()
+                nameIsTypeName = True
+            else:
+                gtypeName = gtypeNode.getText()
+                nameIsTypeName = False 
+            attrs['gtype'] = GTypeValue(gtypeName, nameIsTypeName)
+            
+        for childName in ['min', 'max', 'default']:
+            child = prop.getChild(childName)
+            if child:
+                attrs[childName] = self._getPropValue(child)
+                
+        if prop.getChild('autoCreate'):
+            attrs['auto_create'] = True
+        
         visitor.property(name, attrs)
-
-    def _get_type_info(self, type_arg_node):
-
-        token_type = type_arg_node.getType()
-        if token_type == TYPE_NAME:
-            return TypeInfo(self._get_type_name(type_arg_node))
-        elif token_type == REF_TO:
-            ref_type_node = type_arg_node.getChildren()[0]
-            return RefTypeInfo(self._get_type_info(ref_type_node))
-        elif token_type == LIST_OF:
-            line_type_node = type_arg_node.getChildren()[0]
-            return ListTypeInfo(self._get_type_info(line_type_node))
-        else:
-            return None
         
-    def _get_type_name(self, type_node):
+    def _getPropValue(self, node):
+        
+        valueNode = node.getChild('value')
+        if valueNode:
+            value = valueNode.getText()
+            valueIsCodename = False
+        else:
+            codeValueNode = node.getChild('codeValue')
+            value = codeValueNode.getChild('enum').getText()
+            value += '.' + codeValueNode.getChild('code').getText()
+            valueIsCodename = True
+            
+        return CodeValue(value, valueIsCodename)
+    
+    def _walkSignal(self, signal, visitor):
+        
+        name = signal.getChild('name').getText()
+        
+        resultNode = signal.getChild('result')
+        if resultNode:
+            typeNode = self._getTypeNode(resultNode)
+            resultType = typeNode and self._getTypeInfo(typeNode) or None        
+            resultModifiers = self._getModifiers(signal)
+        else:
+            resultType = None
+            resultModifiers = []
+            
+        parameters = []
+        for param in signal.getChildrenByName('parameter'):
+            parName = param.getChild('name').getText()
+            parType = self._getTypeInfo(self._getTypeNode(param))
+            parModifiers = self._getModifiers(param)
+            parameters.append((parName, parType, parModifiers))
+        
+        visitor.signal(name, resultType, resultModifiers, parameters)
+    
+    def _walkGInterface(self, ginterface, visitor):
+        
+        name = ginterface.getChild('name').getText()
+        attrs = {}
+        self._addAttr(attrs, ginterface, 'prefix')
+        
+        visitor.ginterface_begin(name,
+                                 attrs,
+                                 self._isExternal(ginterface)
+                                 )
 
-        res = ""
-        for child in type_node.getChildren():
-            res += child.getText()
+        methods = {
+                   'method': self._walkMethod,
+                   'signal': self._walkSignal
+                   }
+        
+        for child in ginterface.getChildren():
+            
+            childName = child.getName()
+            if childName in methods:
+                methods[childName](child, visitor)
+        
+        visitor.ginterface_end(name)
+        
+    def _walkGError(self, gerror, visitor):
+        
+        name = gerror.getChild('name').getText()
+        codes = [child.getText() for child in gerror.getChildrenByName('code')]
+        
+        visitor.error_domain(name, codes, self._isExternal(gerror))
+    
+    def _walkGEnum(self, genum, visitor):
+        
+        name = genum.getChild('name').getText()
+        
+        codeValues = []
+        for child in genum.getChildrenByName('code'):
+            if not child.hasChildren():
+                code = child.getText()
+                value = None
+            else:
+                code = child.getChild('name').getText()
+                value = child.getChild('value').getText()
+            codeValues.append((code, value))
+        
+        visitor.enumeration(name, codeValues, self._isExternal(genum))
+            
+    def _walkGFlags(self, gflags, visitor):
+        
+        name = gflags.getChild('name').getText()
+        codes = [child.getText() for child in gflags.getChildrenByName('code')]
+        
+        visitor.flags(name, codes, self._isExternal(gflags))
+    
+    def _walkGType(self, gtype, visitor):
+        
+        visitor.gtype(gtype.getText(), self._isExternal(gtype))
+              
+    def _createAst(self, fileName, isMainGOCFile):
+        
+        filePath = ''
+        for inclPath in self._inclPaths:
+            path = inclPath + os.sep + fileName
+            path = os.path.abspath(path)
+            if os.path.exists(path):
+                filePath = path
+                break
+            
+        if not filePath:
+            raise Exception("File '%s' could not be found" % fileName)
+        
+        if filePath in self._asTrees:
+            # File has already been processed:
+            return self._asTrees[filePath]
+        
+        res = GOCParser().parseFile(filePath)
+        if isMainGOCFile:
+            self._root = res
 
+        self._resolveIncludes(res, isMainGOCFile)
+        
+        self._asTrees[filePath] = res
+        
         return res
+        
+    def _resolveIncludes(self, root, isMainRoot):
+        
+        tmp = []
+        
+        for child in root.getChildren():
+            
+            if not child.getName() == 'include':
+                child.external = not isMainRoot
+                tmp.append(child)
+            else:
+                fileName = child.getChild('file').getText()
+                ast = self._createAst(fileName, False)
+                for child2 in ast.getChildren():
+                    child2.external = True
+                    tmp.append(child2)
+        
+        root.removeChildren()        
+        for child in tmp:
+            root.addChild(child)
+            
+    def _isExternal(self, node):
+        
+        curNode = node
+        while curNode and ( not curNode is self._root ):
+            try:
+                return curNode.external
+            except AttributeError:
+                pass
+            curNode = curNode.getParent()
+            
+        return False
     
-    def _get_prop_id(self, prop_id_node):
+    def _addAttr(self, attrs, objNode, attrName, childName=''):
         
-        prop_id = ""
-        children = prop_id_node.getChildren()
-        for child in children:
-            if prop_id:
-                prop_id += "-"
-            prop_id += child.getText()
+        child = objNode.getChild(childName or attrName)
+        if child:
+            attrs[attrName] = child.getText() or True
             
-        return prop_id
-    
-    def _get_prop_value(self, prop_value_node):
+    def _getParameters(self, method, isConstructor=False):
         
-        children = prop_value_node.getChildren()
-        
-        if len(children) == 1: # string literal
-            value = children[0].getText()
-            if value[0] == '"':
-                value = value[1:]
-            if value[-1] == '"':
-                value = value[:-1]
-            is_codename = False
-        else:
-            value = self._get_type_name(children[0]) + "." + children[1].getText()
-            is_codename = True
-            
-        return CodeValue(value, is_codename)
-            
-    def _get_modifiers(self, modifiers_node):
-
         res = []
-        for child in modifiers_node.getChildren():
-            res.append(child.getText())
-
+        
+        for param in method.getChildrenByName('parameter'):
+            name = param.getChild('name').getText()
+            typeInfo = self._getTypeInfo(self._getTypeNode(param))
+            modifiers = self._getModifiers(param)
+            if not isConstructor:
+                res.append(ParamInfo(name, typeInfo, modifiers))
+            else:
+                node = param.getChild('bindProperty')
+                bindTo = node and node.getText() or ''
+                res.append(ConstructorParamInfo(name, typeInfo, modifiers, bindTo))
+                    
         return res
-
+    
+    def _getModifiers(self, node):
+        
+        res = []
+        if node.getChild('const'):
+            res.append('const')
+            
+        return res
+    
+    def _getTypeNode(self, node):
+        
+        for name in ['type', 'reference', 'list']:
+            typeNode = node.getChild(name)
+            if typeNode:
+                return typeNode
+            
+        return None
+    
+    def _getTypeInfo(self, typeNode):
+        
+        name = typeNode.getName()
+        
+        if name == 'type':
+            return TypeInfo(typeNode.getText())
+        elif name == 'reference':
+            node = typeNode.getChildren()[0]
+            refType = self._getTypeInfo(node)
+            return RefTypeInfo(refType)
+        elif name == 'list':
+            node = typeNode.getChildren()[0]
+            lineType = self._getTypeInfo(node)
+            return ListTypeInfo(lineType)
+        else:
+            raise Exception('Cannot determine type info')
+            
 class TypeInfo(object):
 
     def __init__(self, name):
