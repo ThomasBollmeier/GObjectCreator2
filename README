@@ -1,0 +1,14 @@
+1. Introduction
+
+GObjectCreator is a command line tool that assists in the creation
+of GObject related files.
+
+2. Installation
+
+see INSTALL file
+
+3. Dependencies
+
+GObjectCreator requires the tbparser library to be installed. You
+can get the latest version of that library at
+https://github.com/ThomasBollmeier/TBParser
