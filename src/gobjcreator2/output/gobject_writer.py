@@ -678,7 +678,7 @@ class GObjectWriter(ClassIntfWriter):
                 self.unindent()
                 self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_dup_string(value);")
-        self.writeln('g_object_notify(obj, "%s");' % prop_name)
+        self.writeln('g_object_notify(obj, "%s");' % prop.name)
         lines = self.get_output().get_lines()
         
         self.set_output(save_out)
@@ -928,15 +928,16 @@ class GObjectWriter(ClassIntfWriter):
         for prop in self._gobj.properties:
             if not prop.auto_create:
                 continue
+            prop_name = prop.name.replace("-", "_")
             line = ""
             if prop.type == PropType.BOOLEAN:
-                line = "self->priv->%s = FALSE;" % prop.name
+                line = "self->priv->%s = FALSE;" % prop_name
             elif prop.type == PropType.INTEGER:
-                line = "self->priv->%s = 0;" % prop.name 
+                line = "self->priv->%s = 0;" % prop_name 
             elif prop.type == PropType.FLOAT or prop.type == PropType.DOUBLE:
-                line = "self->priv->%s = 0.0;" % prop.name 
+                line = "self->priv->%s = 0.0;" % prop_name 
             elif prop.type == PropType.STRING:
-                line = "self->priv->%s = NULL;" % prop.name
+                line = "self->priv->%s = NULL;" % prop_name
             lines.append(line)
             
         self.user_section("instance_init", 
