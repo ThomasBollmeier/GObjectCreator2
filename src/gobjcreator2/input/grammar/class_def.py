@@ -1,6 +1,7 @@
 #! coding=UTF-8
 
-from tbparser.grammar import Rule, tokenNode as tnode, connector, oneToMany, Switch
+from tbparser.grammar import Rule, tokenNode as tnode, connector, oneToMany, \
+Switch, Condition
 from tbparser.parser import AstNode
 from gobjcreator2.input.grammar.tokens import *
 from gobjcreator2.input.grammar.method import Method, Parameter, Signal
@@ -21,9 +22,14 @@ class ClassDef(Rule):
         start_ = connector()
         end_ = connector()
         
+        clsNameNode = tnode(ID, 'classname')
+        clsNameNode.setEnvChange(self._onClassNameAccepted, 
+                                 self._onClassNameRejected
+                                 )
+        
         start\
         .connect(tnode(GOBJECT))\
-        .connect(tnode(ID, 'classname'))\
+        .connect(clsNameNode)\
         .connect(tnode(BRACE_OPEN))\
         .connect(start_)
         
@@ -32,7 +38,7 @@ class ClassDef(Rule):
                          ABSTRACT: Abstract('abstract'),
                          PREFIX: Prefix('prefix'),
                          IMPLEMENTS: Implements('implements'),
-                         CONSTRUCTOR: Constructor('constructor'),
+                         #CONSTRUCTOR: Constructor('constructor'),
                          METHOD: Method('method'),
                          OVERRIDE: Override('override'),
                          ATTRIBUTE: Attribute('attr'),
@@ -40,6 +46,7 @@ class ClassDef(Rule):
                          SIGNAL: Signal('signal')
                          })
         start_.connect(switch).connect(start_)
+        start_.connect(Constructor('constructor')).connect(start_)
         start_.connect(end_)
                  
         end_.connect(tnode(BRACE_CLOSE)).connect(end)
@@ -77,7 +84,17 @@ class ClassDef(Rule):
         for node in nodes:
             node.setId('')
             parent.addChild(node)      
-      
+            
+    def _onClassNameAccepted(self, envVars, token, node):
+        
+        if token:
+            envVars['GOBJECT'] = token.getText()
+    
+    def _onClassNameRejected(self, envVars, token, node):
+        
+        if token:
+            envVars['GOBJECT'] = ''
+          
 class Super(Rule):
     
     def __init__(self, ident=''):
@@ -139,11 +156,14 @@ class Constructor(Rule):
         self.setEnvVar('CONSTRUCTOR', True)
         
     def expand(self, start, end, context):
-        
+                
         start_ = connector()
         end_ = connector()
+        braceOpen = tnode(BRACE_OPEN)
         
-        start.connect(tnode(CONSTRUCTOR)).connect(tnode(BRACE_OPEN)).connect(start_)
+        start.connect(tnode(CONSTRUCTOR)).connect(braceOpen)
+        start.connect(Condition(self._isConstructorName)).connect(tnode(ID)).connect(braceOpen)
+        braceOpen.connect(start_)
         
         start_.connect(Parameter('parameter')).connect(start_)
         start_.connect(InitProperties('initProps')).connect(start_)
@@ -165,6 +185,13 @@ class Constructor(Rule):
             res.addChild(node)
         
         return res
+    
+    def _isConstructorName(self, context):
+        
+        if context.token:
+            return context.token.getText() == context.getEnvVar('GOBJECT')
+        else:
+            return False
     
 class InitProperties(Rule):
     
