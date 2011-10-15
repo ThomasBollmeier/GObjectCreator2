@@ -3,7 +3,7 @@
 from tbparser.grammar import Rule, tokenNode as tnode, sequence, zeroToOne, zeroToMany
 from tbparser.parser import AstNode
 from gobjcreator2.input.grammar.tokens import ID, NAMESPACE_SEP, NAMESPACE_ROOT_SEP, \
-UNSIGNED, INTEGER, LONG, NULL, BOOLEAN, STRING, FLOAT, DOUBLE, POINTER
+UNSIGNED, INTEGER, LONG, NULL, BOOLEAN, BYTE, STRING, FLOAT, DOUBLE, POINTER
 
 class TypeName(Rule):
     
@@ -18,6 +18,7 @@ class TypeName(Rule):
         start.connect(zeroToOne(tnode(UNSIGNED, 'unsigned'))).connect(tnode(LONG,'long')).connect(end)
         start.connect(tnode(NULL, 'null')).connect(end)
         start.connect(tnode(BOOLEAN, 'boolean')).connect(end)
+        start.connect(tnode(BYTE, 'byte')).connect(end)
         start.connect(tnode(STRING, 'string')).connect(end)
         start.connect(tnode(FLOAT, 'float')).connect(end)
         start.connect(tnode(DOUBLE, 'double')).connect(end)
@@ -30,6 +31,7 @@ class TypeName(Rule):
                        'long': lambda node: self._get_int_or_long(node, astNode),
                        'null': lambda node: node.getText(),
                        'boolean': lambda node: node.getText(),
+                       'byte': lambda node: node.getText(),
                        'string': lambda node: node.getText(),
                        'float': lambda node: node.getText(),
                        'double': lambda node: node.getText(),

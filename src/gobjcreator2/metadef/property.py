@@ -45,6 +45,7 @@ class Property(object):
 class PropType:
 
     BOOLEAN = 1
+    BYTE = 9
     INTEGER = 2
     FLOAT = 3
     DOUBLE = 4
@@ -52,6 +53,7 @@ class PropType:
     POINTER = 6
     OBJECT = 7
     ENUMERATION = 8
+    UNKNOWN = 10 # <--erhoehen, falls neue Typen vergeben werden muessen
 
 class PropAccess:
 

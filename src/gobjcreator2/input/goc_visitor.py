@@ -137,14 +137,16 @@ class VisitorStep2(GOCVisitor):
             "long": LONG,
             "unsigned long": UNSIGNED_LONG,
             "boolean": BOOL,
-            "string": STRING,
-            "float": FLOAT,
+			"byte": BYTE,
+			"string": STRING,
+			"float": FLOAT,
             "double": DOUBLE,
             "pointer": POINTER
         }
 
         self._prop_types = {
             "boolean": PropType.BOOLEAN,
+			"byte": PropType.BYTE,
             "integer": PropType.INTEGER,
             "float": PropType.FLOAT,
             "double": PropType.DOUBLE,

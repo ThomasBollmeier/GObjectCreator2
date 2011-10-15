@@ -338,6 +338,7 @@ class GObjectWriter(ClassIntfWriter):
         
         propspec_write = {
                           PropType.BOOLEAN: self._write_propspec_boolean,
+                          PropType.BYTE: self._write_propspec_byte,
                           PropType.INTEGER: self._write_propspec_integer,
                           PropType.FLOAT: self._write_propspec_float,
                           PropType.DOUBLE: self._write_propspec_double,
@@ -380,6 +381,30 @@ class GObjectWriter(ClassIntfWriter):
         self._write_propspec_name_descr(prop)
         if prop.default is None:
             default = "FALSE"
+        else:
+            default = self._prop_value_to_string(prop, "default")
+        self.writeln(default + ",")
+        self._write_propspec_flags(prop)
+        self.writeln(");")
+        self.unindent()
+        
+    def _write_propspec_byte(self, prop):
+        
+        self.writeln("pspec_%s = g_param_spec_uchar(" % prop.name.replace("-", "_").lower())
+        self.indent()
+        self._write_propspec_name_descr(prop)
+        if prop.min is None:
+            min = "0"
+        else:
+            min = self._prop_value_to_string(prop, "min")
+        self.writeln(min + ",")
+        if prop.max is None:
+            max = "255"
+        else:
+            max = self._prop_value_to_string(prop, "max")
+        self.writeln(max + ",")
+        if prop.default is None:
+            default = "0"
         else:
             default = self._prop_value_to_string(prop, "default")
         self.writeln(default + ",")
@@ -662,6 +687,9 @@ class GObjectWriter(ClassIntfWriter):
             if prop.type == PropType.BOOLEAN:
                 self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_get_boolean(value);")
+            elif prop.type == PropType.BYTE:
+                self.write("self->priv->%s = " % prop_name)
+                self.writeln("g_value_get_uchar(value);")
             elif prop.type == PropType.INTEGER:
                 self.write("self->priv->%s = " % prop_name)
                 self.writeln("g_value_get_int(value);")
@@ -697,6 +725,8 @@ class GObjectWriter(ClassIntfWriter):
         if prop.auto_create:
             if prop.type == PropType.BOOLEAN:
                 self.writeln("g_value_set_boolean(value, self->priv->%s);" % prop_name)
+            elif prop.type == PropType.BYTE:
+                self.writeln("g_value_set_uchar(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.INTEGER:
                 self.writeln("g_value_set_int(value, self->priv->%s);" % prop_name)
             elif prop.type == PropType.FLOAT:
@@ -932,6 +962,8 @@ class GObjectWriter(ClassIntfWriter):
             line = ""
             if prop.type == PropType.BOOLEAN:
                 line = "self->priv->%s = FALSE;" % prop_name
+            if prop.type == PropType.BYTE:
+                line = "self->priv->%s = 0;" % prop_name
             elif prop.type == PropType.INTEGER:
                 line = "self->priv->%s = 0;" % prop_name 
             elif prop.type == PropType.FLOAT or prop.type == PropType.DOUBLE:
@@ -958,7 +990,7 @@ class GObjectWriter(ClassIntfWriter):
         self.writeln()
         self.indent()
         
-        self.writeln("static type_id = 0;")
+        self.writeln("static GType type_id = 0;")
         self.writeln()
         
         self.writeln("if (type_id == 0) {")

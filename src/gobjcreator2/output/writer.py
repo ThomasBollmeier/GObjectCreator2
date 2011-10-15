@@ -217,6 +217,8 @@ class Writer(object):
             res = self.typename(type.line_type) + "*"
         elif type is types.BOOL:
             res = "gboolean"
+        elif type is types.BYTE:
+            res = "guchar"
         elif type is types.INT:
             res = "gint"
         elif type is types.UNSIGNED_INT:

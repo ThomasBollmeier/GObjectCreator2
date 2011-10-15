@@ -80,6 +80,7 @@ class _PropType(EnumRule):
     def __init__(self, ident=''):
         
         values = [BOOLEAN,
+                  BYTE,
                   INTEGER,
                   FLOAT,
                   DOUBLE,

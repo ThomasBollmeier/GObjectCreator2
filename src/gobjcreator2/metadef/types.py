@@ -94,6 +94,14 @@ class Boolean(SimpleType):
         SimpleType.__init__(self, "bool")
 
 BOOL = Boolean()
+
+class Byte(SimpleType):
+    
+    def __init__(self):
+        
+        SimpleType.__init__(self, "byte")
+        
+BYTE = Byte()
     
 class Integer(SimpleType):
 

@@ -18,7 +18,8 @@
 #
 
 from gobjcreator2.metadef.clif import ClsIntf
-from gobjcreator2.metadef.types import Type, BOOL, INT, FLOAT, DOUBLE, STRING
+from gobjcreator2.metadef.types import Type, BOOL, BYTE, INT,\
+FLOAT, DOUBLE, STRING
 from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method_info import MethodInfo
 from gobjcreator2.metadef.constants import MethodInheritance
@@ -92,6 +93,7 @@ class GObject(ClsIntf):
             if not hasattr(self, "_prop_type_map"):
                 self._prop_type_map = {
                                        PropType.BOOLEAN: BOOL,
+                                       PropType.BYTE: BYTE,
                                        PropType.INTEGER: INT,
                                        PropType.FLOAT: FLOAT,
                                        PropType.DOUBLE: DOUBLE,

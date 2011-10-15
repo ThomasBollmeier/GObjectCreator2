@@ -27,6 +27,8 @@ def gtypename(type):
     
         if type is types.BOOL:
             res = "G_TYPE_BOOLEAN"
+        elif type is types.BYTE:
+            res = "G_TYPE_UCHAR"
         elif type is types.INT:
             res = "G_TYPE_INT"
         elif type is types.UNSIGNED_INT:
