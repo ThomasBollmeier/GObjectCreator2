@@ -19,7 +19,7 @@ fi
 
 GOC2_CHECK_FOR_TBPARSER(
 	[1.0.14],
-	[m4/check_tbparser_version.py]
+	[$srcdir/m4/check_tbparser_version.py]
 	)
 
 # Checks for header files.
