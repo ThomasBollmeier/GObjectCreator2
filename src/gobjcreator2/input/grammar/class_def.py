@@ -36,6 +36,7 @@ class ClassDef(Rule):
         switch = Switch({
                          SUPER: Super('super'),
                          ABSTRACT: Abstract('abstract'),
+                         FINAL: Final('final'),
                          PREFIX: Prefix('prefix'),
                          IMPLEMENTS: Implements('implements'),
                          #CONSTRUCTOR: Constructor('constructor'),
@@ -60,6 +61,7 @@ class ClassDef(Rule):
         
         self._addOptionalChild(res, astNode, 'super')
         self._addOptionalChild(res, astNode, 'abstract')
+        self._addOptionalChild(res, astNode, 'final')
         self._addOptionalChild(res, astNode, 'prefix')
         self._addOptionalChildren(res, astNode, 'implements')
         self._addOptionalChild(res, astNode, 'constructor')
@@ -122,6 +124,20 @@ class Abstract(Rule):
     def expand(self, start, end, context):
         
         start.connect(tnode(ABSTRACT)).connect(tnode(SEMICOLON)).connect(end)
+        
+    def transform(self, astNode):
+        
+        return AstNode(self.getName())
+
+class Final(Rule):
+    
+    def __init__(self, ident=''):
+        
+        Rule.__init__(self, 'final', ident)
+        
+    def expand(self, start, end, context):
+        
+        start.connect(tnode(FINAL)).connect(tnode(SEMICOLON)).connect(end)
         
     def transform(self, astNode):
         

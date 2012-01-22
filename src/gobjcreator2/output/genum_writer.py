@@ -91,7 +91,7 @@ class GEnumWriter(Writer):
         self._write_comment()
         self.writeln()
         
-        self.writeln('#include "%s.h"' % self._filename_base(self._enum))
+        self.writeln('#include "%s"' % self._file_name_manager.get_header_name(self._enum))
         self.writeln()
         self.writeln("GType")
         self.writeln("%(prefix)s_get_type() {" % self._vars)

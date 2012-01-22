@@ -101,6 +101,7 @@ class Reader(object):
         
         attrs = {}
         self._addAttr(attrs, gobject, 'abstract')
+        self._addAttr(attrs, gobject, 'final')
         self._addAttr(attrs, gobject, 'prefix')
                 
         visitor.gobject_begin(name,

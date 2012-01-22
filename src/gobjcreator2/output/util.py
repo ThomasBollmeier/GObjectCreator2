@@ -59,12 +59,20 @@ def gtypename(type):
     
 def camelcase_to_underscore(name):
 
+    return _convert_camelcase(name, '_')
+
+def camelcase_to_hyphen(name):
+
+    return _convert_camelcase(name, '-')
+
+def _convert_camelcase(name, sep):
+
     res = ""
     lastChar = ""
     for ch in name:
         if lastChar:
-            if lastChar == lastChar.lower() and ch == ch.upper() and ch != "_":
-                res += "_"
+            if lastChar == lastChar.lower() and ch == ch.upper() and ch != sep:
+                res += sep
         res += ch.upper()
         lastChar = ch
         

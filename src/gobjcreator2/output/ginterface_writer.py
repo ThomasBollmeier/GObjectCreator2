@@ -77,13 +77,13 @@ class GInterfaceWriter(ClassIntfWriter):
         self._write_comment()
         self.writeln()
         
-        self.writeln('#include "%s.h"' % self._filename_base(self._obj))
+        self.writeln('#include "%s"' % self._file_name_manager.get_header_name(self._obj))
         self.writeln()
         
         lines = []
         if self._obj.signals:
-            lines.append('#include "%s_marshaller.h"' % \
-                         self._filename_base(self._obj))
+            lines.append('#include "%s"' % \
+                         self._file_name_manager.get_marshaller_header_name(self._obj))
         lines.append("/* add further includes... */")
         self.user_section("source_top", lines, indent_level = -1)
         self.writeln()

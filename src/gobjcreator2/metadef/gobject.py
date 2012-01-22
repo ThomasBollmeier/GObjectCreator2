@@ -22,7 +22,7 @@ from gobjcreator2.metadef.types import Type, BOOL, BYTE, INT,\
 FLOAT, DOUBLE, STRING
 from gobjcreator2.metadef.exceptions import DefinitionError
 from gobjcreator2.metadef.method_info import MethodInfo
-from gobjcreator2.metadef.constants import MethodInheritance
+from gobjcreator2.metadef.constants import MethodInheritance, Visibility
 from gobjcreator2.metadef.constructor import Constructor
 from gobjcreator2.metadef.attribute import Attribute
 from gobjcreator2.metadef.property import PropType
@@ -40,6 +40,7 @@ class GObject(ClsIntf):
         
         self._super_class = super_class
         self.abstract = False
+        self.final = False
         self.prefix = name # prefix to be used in functions
 
         self._interfaces = {}
@@ -68,9 +69,22 @@ class GObject(ClsIntf):
         self._interfaces[interface.name] = interface
 
     def add_attribute(self, attribute):
+        
+        if self.final and attribute.visibility == Visibility.PROTECTED:
+            raise DefinitionError("Final classes must not have protected attributes")
 
         self._attributes[attribute.name] = attribute
         
+    def add_method(self, method):
+        
+        if self.final:
+            if method.visibility == Visibility.PROTECTED:
+                raise DefinitionError("Final classes must not have protected methods")
+            elif method.inheritance_mode != MethodInheritance.FINAL:
+                raise DefinitionError("Final classes must not have abstract or virtual methods")
+                
+        ClsIntf.add_method(self, method)
+                        
     def override(self, method_name):
 
         method_info = self.lookup_method(method_name)

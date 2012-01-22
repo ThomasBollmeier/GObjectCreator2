@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([gobjcreator2], [1.3.1], [TBollmeier@web.de])
+AC_INIT([gobjcreator2], [1.3.2], [TBollmeier@web.de])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE
 AM_PATH_PYTHON
@@ -17,7 +17,10 @@ fi
 
 # Checks for libraries.
 
-GOC2_CHECK_FOR_TBPARSER([1.0.14])
+GOC2_CHECK_FOR_TBPARSER(
+	[1.0.14],
+	[m4/check_tbparser_version.py]
+	)
 
 # Checks for header files.
 

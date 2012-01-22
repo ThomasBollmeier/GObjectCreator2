@@ -57,6 +57,7 @@ output_PYTHON = \
 output/annotations.py \
 output/class_intf_writer.py \
 output/error_domain_writer.py \
+output/file_name_manager.py \
 output/func_name_creator.py \
 output/genum_writer.py \
 output/gflags_writer.py \

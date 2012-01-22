@@ -137,16 +137,16 @@ class VisitorStep2(GOCVisitor):
             "long": LONG,
             "unsigned long": UNSIGNED_LONG,
             "boolean": BOOL,
-			"byte": BYTE,
-			"string": STRING,
-			"float": FLOAT,
+	    "byte": BYTE,
+	    "string": STRING,
+	    "float": FLOAT,
             "double": DOUBLE,
             "pointer": POINTER
         }
 
         self._prop_types = {
             "boolean": PropType.BOOLEAN,
-			"byte": PropType.BYTE,
+	    "byte": PropType.BYTE,
             "integer": PropType.INTEGER,
             "float": PropType.FLOAT,
             "double": PropType.DOUBLE,
@@ -226,12 +226,14 @@ class VisitorStep2(GOCVisitor):
         for interface in interfaces:
             intf = package[interface]
             cls.implement(intf)
-
-        for attr in attrs:
-            if attr == "abstract":
-                cls.abstract = attrs[attr]
-            elif attr == "prefix":
-                cls.prefix = attrs[attr]
+    
+	for attr in attrs:
+	    if attr == "abstract":
+		cls.abstract = attrs[attr]
+	    elif attr == "final":
+		cls.final = attrs[attr]
+	    elif attr == "prefix":
+		cls.prefix = attrs[attr]
 
         self._stack.append(cls)
 

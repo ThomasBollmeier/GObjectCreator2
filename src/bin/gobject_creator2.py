@@ -36,6 +36,7 @@ from gobjcreator2.output.genum_writer import GEnumWriter
 from gobjcreator2.output.gflags_writer import GFlagsWriter
 from gobjcreator2.output.error_domain_writer import ErrorDomainWriter
 from gobjcreator2.output.marshaller_generator import MarshallerGenerator
+from gobjcreator2.output.file_name_manager import get_file_name_manager, FileNameStyle
 from gobjcreator2 import VERSION
 
 def _create_option_parser():
@@ -80,6 +81,13 @@ def _create_option_parser():
                    metavar = "FILE",
                    help = "add header comment from FILE to generated code"
                    )
+    
+    res.add_option("", "--filename-style",
+                   dest = "filename_style",
+                   default = "underscore",
+                   metavar = "STYLE",
+                   help = "set STYLE for names of generated files (values: underscore (=default), hyphen)"
+                   )
             
     return res
 
@@ -89,6 +97,7 @@ class CodeGenerator(object):
         
         self._outdir = os.curdir
         self._comment_lines = []
+        self._file_name_manager = get_file_name_manager()
         self.verbose = False
         
     def set_output_dir(self, outdir):
@@ -106,10 +115,16 @@ class CodeGenerator(object):
         
         f.close()
         
+    def set_file_name_manager(self, file_name_manager):
+        
+        self._file_name_manager = file_name_manager
+        
     def _init_writer(self, writer):
         
         if self._comment_lines:
             writer.set_header_comment(self._comment_lines)
+            
+        writer.set_file_name_manager(self._file_name_manager)
 
     def create_code(self, elem):
         
@@ -144,17 +159,21 @@ class CodeGenerator(object):
                 
     def _create_code_object(self, elem):
         
-        writer = GObjectWriter(elem)
+        gobj = elem
+        
+        writer = GObjectWriter(gobj)
         self._init_writer(writer)
         
-        self._write_header(writer, elem)
-        self._write_protected_header(writer, elem)
+        self._write_header(writer, gobj)
         
-        self._write_source(writer, elem)
+        if not gobj.final:
+            self._write_protected_header(writer, gobj)
         
-        if elem.signals:
-            self._write_marshaller_code(writer, elem, for_header = True)
-            self._write_marshaller_code(writer, elem, for_header = False)
+        self._write_source(writer, gobj)
+        
+        if gobj.signals:
+            self._write_marshaller_code(writer, gobj, for_header = True)
+            self._write_marshaller_code(writer, gobj, for_header = False)
                             
     def _create_code_interface(self, elem):
         
@@ -194,8 +213,8 @@ class CodeGenerator(object):
         
     def _write_header(self, writer, elem):
         
-        basename = writer.file_basename(elem)
-        file_path = self._outdir + os.sep + basename + ".h"
+        file_name = self._file_name_manager.get_header_name(elem)
+        file_path = self._outdir + os.sep + file_name
         
         if self.verbose:
             print "generating file %s..." % file_path,
@@ -218,8 +237,8 @@ class CodeGenerator(object):
 
     def _write_protected_header(self, writer, elem):
         
-        basename = writer.file_basename(elem)
-        file_path = self._outdir + os.sep + basename + "_prot.h"
+        file_name = self._file_name_manager.get_protected_header_name(elem)
+        file_path = self._outdir + os.sep + file_name
 
         if self.verbose:
             print "generating file %s..." % file_path,
@@ -242,8 +261,8 @@ class CodeGenerator(object):
 
     def _write_source(self, writer, elem):
         
-        basename = writer.file_basename(elem)
-        file_path = self._outdir + os.sep + basename + ".c"
+        file_name = self._file_name_manager.get_source_name(elem)
+        file_path = self._outdir + os.sep + file_name
 
         if self.verbose:
             print "generating file %s..." % file_path,
@@ -269,12 +288,13 @@ class CodeGenerator(object):
       
     def _write_marshaller_code(self, writer, elem, for_header):
         
-        basename = writer.file_basename(elem)
         if for_header:
-            file_path = self._outdir + os.sep + basename + "_marshaller.h"
+            file_name = self._file_name_manager.get_marshaller_header_name(elem)
+            file_path = self._outdir + os.sep + file_name
             file_out = FileOut(file_path)
         else:
-            file_path = self._outdir + os.sep + basename + "_marshaller.c"
+            file_name = self._file_name_manager.get_marshaller_header_name(elem)
+            file_path = self._outdir + os.sep + file_name
             file_out = FileOut(file_path)
 
         if self.verbose:
@@ -324,7 +344,11 @@ code_gen.set_output_dir(options.outdir)
 code_gen.verbose = options.verbose
 if options.header_comment_file:
     code_gen.set_header_comment_from_file(options.header_comment_file)
-    
+if options.filename_style == "underscore":
+    code_gen.set_file_name_manager(get_file_name_manager(FileNameStyle.UNDERSCORE))
+elif options.filename_style == "hyphen":
+    code_gen.set_file_name_manager(get_file_name_manager(FileNameStyle.HYPHEN))
+        
 code_gen.create_code(root_elem)
     
 exit(0)

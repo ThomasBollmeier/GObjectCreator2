@@ -69,11 +69,11 @@ class GObjectWriter(ClassIntfWriter):
         self.writeln()
 
         if self._gobj.super_class:
-            self.writeln('#include "%s_prot.h"' % \
-                         self._filename_base(self._gobj.super_class))
+            self.writeln('#include "%s"' % \
+                         self._file_name_manager.get_protected_header_name(self._gobj.super_class))
 
         for intf in self._gobj.interfaces:
-            self.writeln('#include "%s.h"' % self._filename_base(intf))
+            self.writeln('#include "%s"' % self._file_name_manager.get_header_name(intf))
         self.writeln()
 
         self.user_section("header_top", "/* add includes here... */")
@@ -120,7 +120,7 @@ class GObjectWriter(ClassIntfWriter):
         self.writeln()
         self.writeln("G_BEGIN_DECLS")
         self.writeln()
-        self.writeln('#include "%s.h"' % self._filename_base(self._gobj))
+        self.writeln('#include "%s"' % self._file_name_manager.get_header_name(self._gobj))
         self.writeln()
         self.user_section("header_top")
         self.writeln()
@@ -137,15 +137,8 @@ class GObjectWriter(ClassIntfWriter):
             self.unindent()
             self.writeln("};")
             self.writeln()
-
-        self._write_init_methods_prot()
-
-        self.writeln("void")
-        self.writeln("%(prefix)s_dispose(GObject* obj);" % self._vars)
-        self.writeln()
-        self.writeln("void")
-        self.writeln("%(prefix)s_finalize(GObject* obj);" % self._vars)
-        self.writeln()
+            
+        self._write_lifecycle_methods() # <-- init, dispose, finalize
         
         self._write_method_decls(Visibility.PROTECTED)
 
@@ -161,13 +154,16 @@ class GObjectWriter(ClassIntfWriter):
         self._write_comment()
         self.writeln()
 
-        self.writeln("#include \"%s_prot.h\"" % self._filename_base(self._gobj))
+        if not self._gobj.final:
+            self.writeln('#include "%s"' % self._file_name_manager.get_protected_header_name(self._gobj))
+        else:
+            self.writeln('#include "%s"' % self._file_name_manager.get_header_name(self._gobj))
         self.writeln()
         
         default_lines = []
         if self._gobj.signals:
-            default_lines.append('#include "%s_marshalller.h"' % \
-                                 self._filename_base(self._gobj))
+            default_lines.append('#include "%s"' % \
+                                 self._file_name_manager.get_marshaller_header_name(self._gobj))
         default_lines.append("/* add further includes ...*/")
         
         self.user_section("source_top", default_lines, indent_level=-1)
@@ -190,6 +186,9 @@ class GObjectWriter(ClassIntfWriter):
         self._write_virtual_defs()    
         self._write_overridden_defs()
         self._write_method_decls(Visibility.PRIVATE, define_as_static=True)
+        
+        if self._gobj.final:
+            self._write_lifecycle_methods()
         
         self.user_section("private_methods", "/* define further methods...*/")
         self.writeln()
@@ -223,6 +222,17 @@ class GObjectWriter(ClassIntfWriter):
         self._write_overridden_impls()
         
         self.user_section("source_bottom")
+        self.writeln()
+        
+    def _write_lifecycle_methods(self):
+        
+        self._write_init_methods_prot()
+
+        self.writeln("void")
+        self.writeln("%(prefix)s_dispose(GObject* obj);" % self._vars)
+        self.writeln()
+        self.writeln("void")
+        self.writeln("%(prefix)s_finalize(GObject* obj);" % self._vars)
         self.writeln()
                     
     def _write_struct(self):

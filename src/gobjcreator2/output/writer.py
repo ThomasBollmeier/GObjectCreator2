@@ -24,6 +24,7 @@ from gobjcreator2.metadef.ginterface import GInterface
 from gobjcreator2.metadef.package import PackageElement, Package
 import gobjcreator2.output.util as util
 from gobjcreator2.output.user_content import UserContent
+from gobjcreator2.output.file_name_manager import get_file_name_manager
 
 class Output(object):
     
@@ -102,6 +103,7 @@ class Writer(object):
         self._output = StdOut()
         self._user_content = None
         self._header_comment = []
+        self._file_name_manager = get_file_name_manager()
 
     def set_output(self, output):
 
@@ -120,6 +122,10 @@ class Writer(object):
     def set_user_content(self, file_path):
         
         self._user_content = UserContent.create_from_file(file_path)
+        
+    def set_file_name_manager(self, file_name_manager):
+        
+        self._file_name_manager = file_name_manager
         
     def set_tab_size(self, size):
 

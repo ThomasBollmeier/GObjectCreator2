@@ -4,7 +4,7 @@ AC_DEFUN([GOC2_CHECK_FOR_TBPARSER],[
 
 	AC_MSG_CHECKING([for tbparser library >= $1])
 
-	installed_version=`$PYTHON m4/check_tbparser_version.py $1`
+	installed_version=`$PYTHON $2 $1`
 	case $? in
 		0)
 		AC_MSG_RESULT([yes])
