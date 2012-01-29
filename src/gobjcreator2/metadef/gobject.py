@@ -44,7 +44,7 @@ class GObject(ClsIntf):
         self.prefix = name # prefix to be used in functions
 
         self._interfaces = {}
-        self._attributes = {}
+        self._attributes = []
         self.constructor = Constructor(self)
         self._overridden = {} # method info for overridden methods
         self._properties = {}
@@ -73,7 +73,7 @@ class GObject(ClsIntf):
         if self.final and attribute.visibility == Visibility.PROTECTED:
             raise DefinitionError("Final classes must not have protected attributes")
 
-        self._attributes[attribute.name] = attribute
+        self._attributes.append(attribute)
         
     def add_method(self, method):
         
@@ -155,11 +155,11 @@ class GObject(ClsIntf):
 
     def has_attributes(self, visibility, scope=None):
 
-        for value in self._attributes.values():
-            if value.visibility == visibility:
+        for attr in self._attributes:
+            if attr.visibility == visibility:
                 if scope is None:
                     return True
-                elif value.scope == scope:
+                elif attr.scope == scope:
                     return True
             
         return False
@@ -174,7 +174,7 @@ class GObject(ClsIntf):
 
     def _get_attributes(self):
 
-        return [value for value in self._attributes.values()]
+        return self._attributes[:]
 
     attributes = property(_get_attributes)
 
