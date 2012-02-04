@@ -290,12 +290,11 @@ class CodeGenerator(object):
         
         if for_header:
             file_name = self._file_name_manager.get_marshaller_header_name(elem)
-            file_path = self._outdir + os.sep + file_name
-            file_out = FileOut(file_path)
         else:
-            file_name = self._file_name_manager.get_marshaller_header_name(elem)
-            file_path = self._outdir + os.sep + file_name
-            file_out = FileOut(file_path)
+            file_name = self._file_name_manager.get_marshaller_source_name(elem)
+            
+        file_path = self._outdir + os.sep + file_name
+        file_out = FileOut(file_path)
 
         if self.verbose:
             print "generating file %s..." % file_path,
