@@ -1,4 +1,6 @@
-dist_bin_SCRIPTS = bin/gobject_creator2.py
+dist_bin_SCRIPTS = \
+bin/gobject_creator2.py \
+bin/goc_strip_edit_section_comments
 
 SUBDIRS = gobjcreator2
 

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Strip enclosing comments that mark
+# code sections to be edited by a user.
+
+# ATTENTION: This script should only be run
+# to prepare files for distribution. If files 
+# with striped edit section comments should 
+# ever be target of a regeneration all
+# manually edited coding will get lost!
+
+input_goc_file=$1
+
+sed -e '/^[ ]*\/\* UserCode [^}]*{ \*\//d' < $input_goc_file | \
+sed -e '/^[ ]*\/\* } UserCode \*\//d'
