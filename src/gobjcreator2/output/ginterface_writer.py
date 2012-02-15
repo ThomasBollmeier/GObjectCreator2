@@ -53,6 +53,8 @@ class GInterfaceWriter(ClassIntfWriter):
         self.writeln("#ifndef %(INTERFACE)s_H" % self._vars)
         self.writeln("#define %(INTERFACE)s_H" % self._vars)
         self.writeln()
+        if self._gobj.supports_further_params():
+            self.writeln('#include <stdarg.h>')
         self.writeln('#include "glib-object.h"')
         self.writeln()
         self.writeln("G_BEGIN_DECLS")

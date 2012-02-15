@@ -169,6 +169,7 @@ class Reader(object):
         self._addAttr(attrs, method, 'scope')
         self._addAttr(attrs, method, 'visibility')
         self._addAttr(attrs, method, 'inheritance')
+        self._addAttr(attrs, method, 'further_params')
         
         visitor.method_begin(name, attrs, resultInfo)
         

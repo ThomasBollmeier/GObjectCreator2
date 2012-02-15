@@ -36,7 +36,10 @@ class Method(Rule):
         .connect(start_)
         
         start_.connect(Switch(branches)).connect(start_)
-        start_.connect(tnode(BRACE_CLOSE)).connect(end)
+        start_\
+        .connect(zeroToOne(sequence(tnode(FURTHER_PARAMETERS, 'further_params'), tnode(SEMICOLON))))\
+        .connect(tnode(BRACE_CLOSE))\
+        .connect(end)
     
     def transform(self, astNode):
         
@@ -50,6 +53,10 @@ class Method(Rule):
         util.addOptionalChild(astNode, res, 'visi')
         util.addOptionalChild(astNode, res, 'inh')
         util.addOptionalChild(astNode, res, 'scope')
+
+        node = astNode.getChildById('further_params')
+        if node:
+            res.addChild(AstNode('further_params'))
  
         return res
     

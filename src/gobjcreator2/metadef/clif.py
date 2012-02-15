@@ -42,6 +42,14 @@ class ClsIntf(PackageElement, Type):
         self._methods[method.name] = method
         self._method_order.append(method)
 
+    def supports_further_params(self):
+
+        for method in self._methods.values():
+            if method.supportsFurtherParams:
+                return True
+            
+        return False
+
     def _get_methods(self):
         
         return self._method_order[:]

@@ -103,6 +103,11 @@ class ClassIntfWriter(Writer):
                     first_line_break = False
                 args = ""
 
+        if method.supportsFurtherParams:
+            if args:
+                args += ", "
+            args += "..."
+
         if args:
             self.write(args)
             

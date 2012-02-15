@@ -40,6 +40,7 @@ class Method(object):
         self.scope = scope
         self.inheritance_mode = inheritance_mode
         self.parameters = []
+        self.supportsFurtherParams = False
 
     def add_parameter(self, param):
 
