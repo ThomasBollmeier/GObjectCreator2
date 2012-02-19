@@ -59,7 +59,7 @@ class GInterfaceWriter(ClassIntfWriter):
         self.writeln()
         self.writeln("G_BEGIN_DECLS")
         self.writeln()
-        self.user_section("header_top", "/* add further includes.../")
+        self.user_section("header_top", "/* add further includes... */")
         self.writeln()
         self._write_struct_defs()
         self.writeln("GType")
