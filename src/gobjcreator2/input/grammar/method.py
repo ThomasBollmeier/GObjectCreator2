@@ -1,7 +1,7 @@
 #! coding=UTF-8
 
 from tbparser.grammar import Rule, tokenNode as tnode, \
-connector, sequence, zeroToOne, Switch, oneToMany
+connector, sequence, zeroToOne, Switch, oneToMany, zeroToMany
 from tbparser.parser import AstNode
 from gobjcreator2.input.grammar.tokens import *
 from gobjcreator2.input.grammar.type_name import TypeName
@@ -77,7 +77,7 @@ class Signal(Rule):
         .connect(tnode(SIGNAL))\
         .connect(ComposedId('name'))\
         .connect(tnode(BRACE_OPEN))\
-        .connect(oneToMany(Switch(branches)))\
+        .connect(zeroToMany(Switch(branches)))\
         .connect(tnode(BRACE_CLOSE))\
         .connect(end)
         
